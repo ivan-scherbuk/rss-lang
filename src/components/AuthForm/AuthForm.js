@@ -29,7 +29,7 @@ const AuthForm = (props) => {
         className={classes?.AuthInput}
         type={"text"}
         name={"email"}
-        label={`Login: `}
+        label={`Email: `}
         onChange={changeHandler}
 
       />
@@ -38,7 +38,7 @@ const AuthForm = (props) => {
         className={classes?.AuthInput}
         type={"password"}
         name={"password"}
-        label={'Password: '}
+        label={'Пароль '}
         onChange={changeHandler}
       />
       <div className={classes?.AuthButtonSet}>
