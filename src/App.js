@@ -10,7 +10,6 @@ function App() {
 
 	const navigationClasses = [classesCss.Navigation, classesCss.NavigationCloud]
 
-
 	return (
 		<div>
 			<NavigationBar className={navigationClasses.join(' ')}>

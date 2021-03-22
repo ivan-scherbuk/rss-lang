@@ -13,6 +13,7 @@ export default function AuthBlock({children, classes, className, styles}) {
 	if(modalIsOpen) {
 		modalClasses.push(classes.modalActive, classesCss.ModalActive)
 		buttonClasses.push(classes.authButtonActive)
+
 	}
 
 	return (
