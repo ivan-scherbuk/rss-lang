@@ -1,0 +1,339 @@
+<!-- START WRAPPER -->
+<div id="wrapper">
+	<!-- START ILLUSTRATION -->
+	<div class="frame">
+		<div class="illustration">
+			<div class="lamp-glass">
+				<div class="wrap">
+					<div class="fx"></div>
+					<div class="lava">
+						<ul>
+							<div class="top"></div>
+							<li class="drop1 anin1"></li>
+							<li class="drop2 anin2"></li>
+							<li class="drop3 anin3"></li>
+							<li class="drop4 anin4"></li>
+							<li class="drop5 anin5" style="margin-left:60%;"></li>
+							<li class="drop6 anin6" style="margin-left:5%;"></li>
+							<li class="drop6 anin7" style="margin-left:10%;"></li>
+							<li class="drop5 anin8" style="margin-left:50%;"></li>
+							<div class="bottom"></div>
+						</ul>
+					</div>
+					<div class="crystal"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END ILLUSTRATION -->
+
+	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800">
+	<defs>
+		<filter id="goo">
+			<feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+			<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 16 -6" result="goo" />
+			<feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+		</filter>
+	</defs>
+	</svg> </div>
+<!-- END WRAPPER -->
+
+
+
+
+
+
+/*--------------------------------------------------
+ // RESET
+---------------------------------------------------*/
+
+*, *:after, *:before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+.clear:after {
+	clear: both;
+	content: "";
+	display: block;
+}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0px;
+	padding: 0px;
+	border: 0px;
+	border-collapse: separate;
+	border-spacing: 0px;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	text-decoration: none;
+}
+/*--------------------------------------------------
+  // TEMPLATE
+---------------------------------------------------*/
+html, body {
+	width:100%;
+	height:100%;
+}
+html {
+	display:table;
+}
+body {
+	display:table-cell;
+	text-align:center;
+	vertical-align:middle;
+
+	min-width: 320px;
+	zoom: 1;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizelegibility;
+	background-color: #1f2543;
+}
+
+
+/*--------------------------------------------------
+  // GLASS + LAVA
+---------------------------------------------------*/
+.lamp-glass {
+	width:142px;
+	height:300px;
+	float:left;
+	margin-left:60px;
+	position:relative;
+	z-index:40;
+	overflow:hidden;
+}
+.lamp-glass .wrap {
+	width:64px;
+	height:300px;
+	float:left;
+	margin-left:39px;
+	position:relative;
+}
+.lamp-glass .fx {
+	width:32px;
+	height:300px;
+	top:0;
+	right:0;
+	position:absolute;
+	background-color:#000;
+	z-index:20;
+	opacity: 0.1;
+    filter: alpha(opacity=10);
+}
+.lamp-glass .fx:after {
+	width: 0;
+	height: 0;
+	position:absolute;
+	content: "";
+	border-bottom: 300px solid #000;
+	top:0;
+}
+.lamp-glass .fx:after {
+	right:-39px;
+	border-right: 39px solid transparent;
+}
+
+.lamp-glass .crystal {
+	width:64px;
+	height:300px;
+	float:left;
+	position:relative;
+	z-index:10;
+	background-color:#d7d8d7;
+	opacity: 0.2;
+    filter: alpha(opacity=20);
+}
+.lamp-glass .crystal:before, .lamp-glass .crystal:after {
+	width: 0;
+	height: 0;
+	position:absolute;
+	content: "";
+	border-bottom: 300px solid #d7d8d7;
+	top:0;
+}
+.lamp-glass .crystal:after {
+	right:-39px;
+	border-right: 39px solid transparent;
+}
+.lamp-glass .crystal:before {
+	left:-39px;
+	border-left: 39px solid transparent;
+}
+.lava {
+	width:64px;
+	height:300px;
+	position:absolute;
+	z-index:5;
+}
+.lava ul {
+	width:64px;
+	height:300px;
+	float:left;
+	position:relative;
+	list-style:none;
+	-webkit-filter: url("#goo");
+	filter: url("#goo");
+}
+svg {
+  position: absolute;
+  z-index: -100;
+  left:0;
+  top:0;
+  pointer-events: none;
+  background: transparent;
+}
+.lava .top, .lava li, .lava .bottom {
+	position:absolute;
+	background-color:#e54833;
+
+
+	-webkit-border-radius:50%;
+	-moz-border-radius:50%;
+	-o-webkit-border-radius:50%;
+	-ms-webkit-border-radius:50%;
+	border-radius:50%;
+	-khtml-border-radius:50%;
+}
+.lava .top {
+	width:100%;
+	height:30px;
+	margin-top:-20px;
+}
+.lava .bottom {
+	width:142px;
+	height:40px;
+	bottom:-32px;
+	left:-39px;
+}
+.lava li.drop1 {
+	width:38px;
+	height:46px;
+}
+.lava li.drop2 {
+	width:32px;
+	height:36px;
+}
+.lava li.drop3 {
+	width:22px;
+	height:18px;
+}
+.lava li.drop4 {
+	width:54px;
+	height:60px;
+}
+
+.lava li.drop5 {
+	width:10px;
+	height:14px;
+}
+.lava li.drop6 {
+	width:8px;
+	height:12px;
+}
+.anin1 {
+    -webkit-animation: drop1-nanimate 32s linear infinite;
+    animation: drop1-nanimate 32s linear infinite;
+}
+@-webkit-keyframes drop1-nanimate {
+    0% {margin-top:-80px; margin-left:20px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:430px; margin-left:0px; -webkit-transform: rotate(180deg); transform: rotate(180deg);}
+}
+@keyframes drop1-nanimate {
+    0% {margin-top:-80px; margin-left:20px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:430px; margin-left:0px; -webkit-transform: rotate(180deg); transform: rotate(180deg);}
+}
+
+.anin2 {
+    -webkit-animation: drop2-nanimate 44s linear infinite;
+    animation: drop2-nanimate 44s linear infinite;
+}
+@-webkit-keyframes drop2-nanimate {
+    0% {margin-top:380px; margin-left:0px;}
+    100% {margin-top:-70px; margin-left:20px;}
+}
+@keyframes drop2-nanimate {
+    0% {margin-top:380px; margin-left:0px;}
+    100% {margin-top:-70px; margin-left:20px;}
+}
+
+.anin3 {
+    -webkit-animation: drop3-nanimate 42s linear infinite;
+    animation: drop3-nanimate 42s linear infinite;
+}
+@-webkit-keyframes drop3-nanimate {
+    0% {margin-top:-70px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:400px; -webkit-transform: rotate(270deg); transform: rotate(270deg);}
+}
+@keyframes drop3-nanimate {
+    0% {margin-top:-70px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:400px; -webkit-transform: rotate(270deg); transform: rotate(270deg);}
+}
+
+.anin4 {
+    -webkit-animation: drop4-nanimate 26s linear infinite;
+    animation: drop4-nanimate 26s linear infinite;
+}
+@-webkit-keyframes drop4-nanimate {
+    0% {margin-top:370px;}
+    100% {margin-top:-70px;}
+}
+@keyframes drop4-nanimate {
+    0% {margin-top:370px;}
+    100% {margin-top:-70px;}
+}
+
+.anin5 {
+    -webkit-animation: drop5-nanimate 32s linear infinite;
+    animation: drop5-nanimate 32s linear infinite;
+}
+@-webkit-keyframes drop5-nanimate {
+   0% {margin-top:340px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:-20px; -webkit-transform: rotate(180deg); transform: rotate(180deg);}
+}
+@keyframes drop5-nanimate {
+   0% {margin-top:340px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:-20px; -webkit-transform: rotate(180deg); transform: rotate(180deg);}
+}
+
+.anin6 {
+    -webkit-animation: drop6-nanimate 30s linear infinite;
+    animation: drop6-nanimate 30s linear infinite;
+}
+@-webkit-keyframes drop6-nanimate {
+    0% {margin-top:460px;}
+    100% {margin-top:-190px;}
+}
+@keyframes drop6-nanimate {
+    0% {margin-top:460px;}
+    100% {margin-top:-190px;}
+}
+
+.anin7 {
+    -webkit-animation: drop7-nanimate 32s linear infinite;
+    animation: drop7-nanimate 32s linear infinite;
+}
+@-webkit-keyframes drop7-nanimate {
+    0% {margin-top:-30px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:340px; -webkit-transform: rotate(420deg); transform: rotate(420deg);}
+}
+@keyframes drop7-nanimate {
+    0% {margin-top:-30px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:340px; -webkit-transform: rotate(420deg); transform: rotate(420deg);}
+}
+
+.anin8 {
+    -webkit-animation: drop8-nanimate 40s linear infinite;
+    animation: drop8-nanimate 40s linear infinite;
+}
+@-webkit-keyframes drop8-nanimate {
+    0% {margin-top:-120px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:420px; -webkit-transform: rotate(180deg); transform: rotate(180deg);}
+}
+@keyframes drop8-nanimate {
+    0% {margin-top:-120px; -webkit-transform: rotate(0deg); transform: rotate(0deg);}
+    100% {margin-top:420px; -webkit-transform: rotate(180deg); transform: rotate(180deg);}
+}
+
