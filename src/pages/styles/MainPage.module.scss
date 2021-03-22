@@ -1,0 +1,104 @@
+.MainPage {
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  //background: linear-gradient(#f87e44,#ffc764);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1;
+
+  $bgGradColor1: "%23ff7b43";
+  $bgGradColor2: "%23e34e2d";
+
+
+  .Bg{
+    top: 0;
+    width: 100%;
+    height: 85%;
+    position: absolute;
+    background-image: url("data:image/svg+xml,"
+    +"%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E"
+    +"%3Cdefs%3E"
+    +"%3ClinearGradient id='Grad' x1='0' x2='0' y1='0' y2='1' %3E"
+    +"%3Cstop offset='0%' stop-color='"+ $bgGradColor1 +"'/%3E%"
+    +"3Cstop offset='100%' stop-color='"+ $bgGradColor2 +"'/%3E"
+    +"%3C/linearGradient%3E"
+    +"%3C/defs%3E"
+    +"%3Cg%3E"
+    +"%3Cpath fill='url(%23Grad)' d='M0,0H1920V316c0,17.2,4.24,102.781-2,110q-16.005,2.5-32,5c-33.87,9.055-58.57,24.7-75,51-42.79,68.48-38.41,188.536-101,237-41.87,32.424-111.24,14.641-161,1-23.08-6.328-58.26-13.3-80,0-51.85,31.719-42.56,143.624-83,194-53.43,66.558-112.44-7.48-181,13-40.89,12.215-55.5,49.306-79,79-24.85,31.4-68.4,52.76-111,66-24.733,7.68-54.408,10.81-80,3-41.186-12.56-68.66-37.4-111-48-90.761-22.72-170.29,6.92-214-67-17.6-29.755-14.8-62.739-22-106-8.411-50.52-23.21-95.047-56-121-29.047-22.99-64.057-23.28-109-33-41.524-8.981-84.623-18.921-117-38-49.981-29.453-58.426-89.644-93-134-11.5-14.749-30.006-26.933-52-31-20.732-3.834-39.72,3.486-54,7-34.905,8.589-70.349.263-90-15-5.965-4.633-14.677-11.2-17-19V0ZM418,453'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center 120%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 600px;
+  }
+
+  .Girl {
+    z-index: 3;
+    width: 20%;
+    min-width: 200px;
+
+    > div {
+      padding-top: 72.7%;
+      background-size: cover;
+      box-sizing: border-box;
+
+    }
+  }
+
+  .WaveWrapper {
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+
+    .Wave {
+      width: 1400px;
+      height: 1400px;
+      position: absolute;
+      top: -25%;
+      left: 50%;
+      margin-left: -500px;
+      margin-top: -700px;
+      border-radius: 45%;
+      background-image: linear-gradient(to bottom, #f87e44 0%, #f05d3b 100%);
+      transform: rotate(45deg);
+      animation: wave-rotate 5s infinite linear, wave-deform 15s infinite;
+
+    }
+  }
+}
+
+@keyframes wave-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wave-deform {
+  0% {
+    width: 1050px;
+    height: 950px;
+    margin-top: -380px;
+  }
+  50%{
+    width: 1000px;
+    height: 1000px;
+    margin-top: -300px;
+  }
+  100%{
+    width: 1050px;
+    height: 950px;
+    margin-top: -380px;
+  }
+}

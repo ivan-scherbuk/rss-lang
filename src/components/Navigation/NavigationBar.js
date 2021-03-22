@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function NavigationBar({children}){
+export default function NavigationBar({children, className}){
 		return(
-				<div>
+				<div className={className}>
 						{children}
 				</div>
 		)
