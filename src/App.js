@@ -7,6 +7,10 @@ import Button from "./components/Buttons/Button";
 import classesCss from "./styles/App.module.scss";
 import { NavLink, Route } from "react-router-dom";
 import BookPage from "./pages/BookPage";
+import GamesPage from "./pages/GamesPage"
+import Sprint from "./pages/Games/Sprint"
+import AudioCall from "./pages/Games/Audiocall"
+import Savannah from "./pages/Games/Savannah"
 
 function App() {
   const navigationClasses = [classesCss.Navigation, classesCss.NavigationCloud];
@@ -94,11 +98,15 @@ function App() {
                 ].join(" ")}
               />
             </NavigationBar>
-            <MainPage></MainPage>
           </div>
         )}
       />
-      <Route path="/book" render={() => <BookPage />} />
+      <Route path="/" exact><MainPage /></Route>
+      <Route path="/book"><BookPage /></Route>
+      <Route path="/games" exact><GamesPage/></Route>
+      <Route path="/games/savannah"><Savannah /></Route>
+      <Route path="/games/audiocall"><AudioCall /></Route>
+      <Route path="/games/sprint"><Sprint /></Route>
     </div>
   );
 }
