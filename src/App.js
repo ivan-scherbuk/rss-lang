@@ -20,7 +20,8 @@ function App() {
 						authButtonActive: classesCss.Active,
 						loginButton: classesCss.LoginButton,
 						modal: classesCss.AuthModal,
-						modalActive: classesCss.Active
+						modalActive: classesCss.Active,
+						avatar: classesCss.Avatar,
 					}}
 					styles={{
 						authButton: {

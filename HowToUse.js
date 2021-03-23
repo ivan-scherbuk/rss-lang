@@ -52,6 +52,9 @@ const res = getWordsChunk(group, page)
 //когда придет ответ с сервера в currentWords запишется текущий чанк, а флаг onLoading будет установлен
 //в false.
 
+//Если вы используете getWordsChunk c currentWords - не вызвыйте getWordsChunk  в теле функции, только
+//на ивентах или в useEffect иначе это вызовет бесконечное зацикливание и приведет к ошибке
+
 
 
 

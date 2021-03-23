@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback} from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getWords } from "../redux/actions"
 
@@ -14,7 +14,7 @@ export default function useWords(){
 	const [currentRequest, setCurrentRequest] = useState(initialRequest)
 	const [onLoading, setOnLoading] = useState(false)
 
-	function getWordsChunk(group, page){
+	const getWordsChunk = useCallback((group, page) => {
 		if (words[group] && words[group][page]) {
 			setCurrentWords(words[group][page])
 			return words[group][page]
@@ -24,7 +24,7 @@ export default function useWords(){
 			setOnLoading(true)
 			return "loading"
 		}
-	}
+	}, [dispatch, words])
 
 	useEffect(() => {
 		if (words[currentRequest.group] && words[currentRequest.group][currentRequest.page]) {
@@ -32,7 +32,7 @@ export default function useWords(){
 			setCurrentRequest(initialRequest)
 			setOnLoading(false)
 		}
-	}, [words])
+	}, [words, currentRequest.group, currentRequest.page])
 
 	return {currentWords, getWordsChunk, onLoading}
 }

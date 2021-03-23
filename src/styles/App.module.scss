@@ -38,6 +38,8 @@ body{
       border-radius: 50%;
       box-sizing: border-box;
       padding: 0;
+      visibility: hidden;
+      opacity: 0;
       box-shadow:
               0 1px 2px rgba(0,0,0,0.3),
               0 2px 4px rgba(0,0,0,0.25),
@@ -45,8 +47,10 @@ body{
               0 8px 16px rgba(0,0,0,0.2);
       transition:
               width .5s,
+              visibility 0s 0.5s,
               height .5s,
               padding .5s,
+              opacity .5s,
               top .5s,
               left .5s;
       top: 0;
@@ -62,6 +66,16 @@ body{
         z-index: 1;
         top: -50px;
         left: -50px;
+        opacity: 100%;
+        visibility: visible;
+        transition:
+                width .5s,
+                visibility 0s 0s,
+                height .5s,
+                padding .5s,
+                opacity .5s,
+                top .5s,
+                left .5s;
 
         > * {
           visibility: visible;
@@ -103,6 +117,11 @@ body{
                 opacity .5s,
                 visibility 0s .5s;
       }
+    }
+
+    .Avatar{
+      height: $bubbleButtonDefSize;
+      width: $bubbleButtonDefSize;
     }
   }
 
