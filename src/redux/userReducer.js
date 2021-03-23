@@ -1,5 +1,9 @@
 import { LOADING, SIGN_IN, SIGN_OUT, ADD_WORD_TO_USER, SET_USER_WORDS } from "./types"
 
+function getInitialUser(){
+
+}
+
 const initialState = {
 	id: null,
 	email: null,

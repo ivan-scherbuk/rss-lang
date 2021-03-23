@@ -147,6 +147,19 @@ body{
     font-weight: bold;
   }
 
+  .StatisticButton{
+    position: absolute;
+    height: 120px;
+    width: 120px;
+    top: 190px;
+    left: 40px;
+    font-size: 18px;
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+  }
+
   .GameButton{
     position: absolute;
     height: 80px;
@@ -173,7 +186,7 @@ body{
     &.Sprint{
       top: 115px;
       right: 10px;
-      background-position: -14px -5px;
+      background-position: center;
       background-size: 80px;
     }
 
