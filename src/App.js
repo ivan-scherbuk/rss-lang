@@ -10,7 +10,6 @@ function App() {
 
 	const navigationClasses = [classesCss.Navigation, classesCss.NavigationCloud]
 
-
 	return (
 		<div>
 			<NavigationBar className={navigationClasses.join(' ')}>
@@ -21,7 +20,8 @@ function App() {
 						authButtonActive: classesCss.Active,
 						loginButton: classesCss.LoginButton,
 						modal: classesCss.AuthModal,
-						modalActive: classesCss.Active
+						modalActive: classesCss.Active,
+						avatar: classesCss.Avatar,
 					}}
 					styles={{
 						authButton: {

@@ -1,2 +1,6 @@
 export const LOADING = "auth/loading"
 export const SIGN_IN = "auth/signIn"
+export const SIGN_OUT = "auth/signOut"
+export const ADD_WORDS_CHUNK = "words/addWordsChunk"
+export const SET_USER_WORDS = "user/setWords"
+export const ADD_WORD_TO_USER = "user/addWord"
