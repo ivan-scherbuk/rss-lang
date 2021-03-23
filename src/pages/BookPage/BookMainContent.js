@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
-import useWords from "./../hooks/useWords";
-import classesCss from "./styles/BookPage.module.scss";
+import useWords from "../../hooks/useWords";
+import classesCss from "./../styles/BookPage.module.scss";
 
-import { useDispatch, useSelector } from "react-redux";
-
-export default function BookPage() {
-  const [currentGroup, setCurrentGroup] = useState(0);
+export default function BookMainContent({ currentGroup }) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentGroupOfPages, setCurrentGroupOfPages] = useState(1);
-  const words = useSelector((state) => state.words);
   const { currentWords, getWordsChunk, onLoading } = useWords();
 
   let pages = [];
@@ -38,7 +34,7 @@ export default function BookPage() {
     getWordsChunk(currentGroup, currentPage);
   }, [currentPage, getWordsChunk, currentGroup]);
   return (
-    <div className={classesCss.BookPage}>
+    <div>
       {currentWords &&
         currentWords.map((word) => {
           return <div key={word.id}>{word.word}</div>;
