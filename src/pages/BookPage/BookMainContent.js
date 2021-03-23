@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useWords from "../../hooks/useWords";
 import classesCss from "./../styles/BookPage.module.scss";
+import WordCard from "../../components/WordCard/WordCard.js"
 
 export default function BookMainContent({ currentGroup }) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
@@ -33,11 +34,12 @@ export default function BookMainContent({ currentGroup }) {
   useEffect(() => {
     getWordsChunk(currentGroup, currentPage);
   }, [currentPage, getWordsChunk, currentGroup]);
+
   return (
     <div>
       {currentWords &&
         currentWords.map((word) => {
-          return <div key={word.id}>{word.word}</div>;
+          return <div key={word.id}><WordCard cardInfo = {word}/></div>;
         })}
       <div className={classesCss.pagination}>
         <div onClick={turnGroupOfPagesBack}>-</div>
@@ -51,7 +53,7 @@ export default function BookMainContent({ currentGroup }) {
                 {page}
               </div>
             );
-          }
+          } else return null;
         })}
         <div onClick={turnGroupOfPagesForward}>+</div>
       </div>
