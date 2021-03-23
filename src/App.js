@@ -6,7 +6,7 @@ import MainPage from "./pages/MainPage";
 import Button from "./components/Buttons/Button";
 import classesCss from "./styles/App.module.scss";
 import { NavLink, Route } from "react-router-dom";
-import BookPage from "./pages/BookPage";
+import BookPage from "./pages/BookPage/BookPage";
 
 function App() {
   const navigationClasses = [classesCss.Navigation, classesCss.NavigationCloud];
