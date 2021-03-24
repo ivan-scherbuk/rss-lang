@@ -1,5 +1,6 @@
 import React from "react"
 import { Route, Switch, useLocation } from "react-router-dom"
+import { TransitionGroup, CSSTransition } from "react-transition-group"
 import NavigationBar from "./components/Navigation/NavigationBar"
 import MainPage from "./pages/MainPage"
 import BookPage from "./pages/BookPage/BookPage"
@@ -8,15 +9,15 @@ import Sprint from "./pages/Games/Sprint"
 import AudioCall from "./pages/Games/Audiocall"
 import Savannah from "./pages/Games/Savannah"
 import StatisticPage from "./pages/StatisticPage"
-import { TransitionGroup, CSSTransition } from "react-transition-group"
+import PuzzleGame from "./pages/Games/PuzzleGame"
 import classesCss from "./styles/App.module.scss"
 import "./styles/effect.scss"
+
 
 
 function App(){
 
 	const location = useLocation()
-
 
 	return (
 		<div>
@@ -33,6 +34,7 @@ function App(){
 					<Route path="/games/savannah"><Savannah/></Route>
 					<Route path="/games/audiocall"><AudioCall/></Route>
 					<Route path="/games/sprint"><Sprint/></Route>
+					<Route path="/games/puzzle"><PuzzleGame/></Route>
 					<Route path="/games" exact><GamesPage/></Route>
 					<Route path="/" exact><MainPage/></Route>
 				</Switch>

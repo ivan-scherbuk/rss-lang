@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useWords from "../../hooks/useWords";
+import { useWords } from "../../hooks/hooks.words";
 import classesCss from "./../styles/BookPage.module.scss";
 import WordCard from "../../components/WordCard/WordCard.js"
 
