@@ -36,7 +36,7 @@ dispatch(getWords(group, page))
 //1.2 Оптимизированный способ:
 //использование хука useWords
 
-import useWords from "./src/hooks/useWords"
+import useWords from "./src/hooks/hooks.words"
 const {currentWords, getWordsChunk, onLoading} = useWords()
 
 //если используется этот хук то диспатч и юзселектор использовать не надо

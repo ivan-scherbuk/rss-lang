@@ -6,8 +6,7 @@ const initialRequest = {
 	group: null,
 	page: null,
 }
-export default function useWords(){
-
+export function useWords(){
 
 	const dispatch = useDispatch()
 	const words = useSelector(state => state.words)
@@ -31,8 +30,8 @@ export default function useWords(){
 	useEffect(() => {
 		if (words[currentRequest.group]
 			&& words[currentRequest.group][currentRequest.page]
-			&& currentRequest.page
-			&& currentRequest.group) {
+			&& currentRequest.page !== null
+			&& currentRequest.group !== null) {
 			setCurrentWords(words[currentRequest.group][currentRequest.page])
 			setCurrentRequest(initialRequest)
 		}
@@ -44,6 +43,10 @@ export default function useWords(){
 const initialGroupRequest = {
 	group: null,
 }
+
+
+//Using
+//{currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
 
 export function useWordsGroup(){
 
@@ -67,12 +70,12 @@ export function useWordsGroup(){
 			setCurrentWordsGroup(words[group])
 			return words[group]
 		}
-	}, [dispatch, words])
+	}, [words, dispatch])
 
 	useEffect(() => {
 		if (words[currentRequest.group]
-			&& Object.keys(words[currentRequest.group]).length === 30``
-			&& currentRequest.group) {
+			&& Object.keys(words[currentRequest.group]).length >= 30
+			&& currentRequest.group !== null) {
 			setGroupLoading(false)
 			setCurrentWordsGroup(words[currentRequest.group])
 			setCurrentRequest(initialGroupRequest)

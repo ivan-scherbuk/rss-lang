@@ -94,7 +94,7 @@ export default function NavigationBar(){
 					].join(" ")}
 				/>
 			</NavLink>
-			<NavLink to="/games/game">
+			<NavLink to={{pathname: "/games/puzzle", state: {go: "go"}}}>
 				<Button
 					label={"Игра"}
 					style={{
