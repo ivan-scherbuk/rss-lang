@@ -9,13 +9,7 @@ import App from "./App";
 import { getUserWords } from "./redux/actions"
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 const enhancers = [applyMiddleware(thunk)];
-
-if (window.__REDUX_DEVTOOLS_EXTENSION__) {
-  enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__());
-}
-
 const store = createStore(
   rootReducer,
   composeEnhancers(
