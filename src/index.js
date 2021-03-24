@@ -6,26 +6,21 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer from "./redux/rootReducer";
 import App from "./App";
-import { getUserWords } from "./redux/actions"
+import { getUserWords } from "./redux/actions";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancers = [applyMiddleware(thunk)];
-const store = createStore(
-  rootReducer,
-  composeEnhancers(
-    ...enhancers
-  )
-);
+const store = createStore(rootReducer, composeEnhancers(...enhancers));
 
-if(store.getState().user.token){
-  store.dispatch(getUserWords())
+if (store.getState().user.token) {
+  store.dispatch(getUserWords());
 }
 
 ReactDOM.render(
-    <BrowserRouter>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </BrowserRouter>,
+  <BrowserRouter>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </BrowserRouter>,
   document.getElementById("root")
 );
