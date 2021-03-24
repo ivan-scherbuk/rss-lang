@@ -8,11 +8,14 @@ export default function BookNavbar() {
   for (let i = 1; i <= totalGroupsCount; i++) {
     groups.push(i);
   }
+  const onGroupChanged = () => {
+    sessionStorage.removeItem("currentPage");
+  };
   return (
     <div className={classesCss.BookNavbar}>
       {groups.map((group) => {
         return (
-          <div>
+          <div key={group} onClick={onGroupChanged}>
             <NavLink to={"/book/group/" + group}>Group {group}</NavLink>
           </div>
         );
