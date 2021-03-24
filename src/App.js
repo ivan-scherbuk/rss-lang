@@ -12,10 +12,10 @@ import { TransitionGroup, CSSTransition } from "react-transition-group"
 import classesCss from "./styles/App.module.scss"
 import "./styles/effect.scss"
 
+
 function App(){
 
 	const location = useLocation()
-
 
 
 	return (

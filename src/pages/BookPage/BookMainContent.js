@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import useWords from "../../hooks/useWords";
+import useWords, { useWordsGroup } from "../../hooks/useWords"
 import classesCss from "./../styles/BookPage.module.scss";
 
 export default function BookMainContent({ currentGroup }) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentGroupOfPages, setCurrentGroupOfPages] = useState(1);
-  const { currentWords, getWordsChunk, onLoading } = useWords();
+  const { currentWords, getWordsChunk, onLoading} = useWords();
+  const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
 
   let pages = [];
 
@@ -32,7 +33,12 @@ export default function BookMainContent({ currentGroup }) {
 
   useEffect(() => {
     getWordsChunk(currentGroup, currentPage);
+
   }, [currentPage, getWordsChunk, currentGroup]);
+
+  useEffect(() => {
+    getWordsGroup(2)
+  }, [])
   return (
     <div>
       {currentWords &&

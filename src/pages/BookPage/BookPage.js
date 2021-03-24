@@ -7,6 +7,7 @@ export default function BookPage() {
   const [currentGroup, setCurrentGroup] = useState(
     localStorage.getItem("group") || 0
   );
+
   return (
     <div className={classesCss.BookPage}>
       <BookHeader />
