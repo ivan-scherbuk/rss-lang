@@ -1,4 +1,4 @@
-import { ADD_WORD_TO_USER, ADD_WORDS_CHUNK, LOADING, SIGN_IN, SET_USER_WORDS } from "./types"
+import { ADD_WORD_TO_USER, ADD_WORDS_CHUNK, LOADING, SIGN_IN, SET_USER_WORDS, LOG_OUT } from "./types"
 
 const server = "https://rss-words-3.herokuapp.com"
 
@@ -32,6 +32,7 @@ const userWordsRequest = async ({token, id, method, wordId, word = {}}) => {
 
 const setLoading = status => ({type: LOADING, payload: status ?? true})
 const setUser = userData => ({type: SIGN_IN, payload: userData})
+const unsetUser = () => ({type: LOG_OUT})
 const addWordsChunk = wordsChunk => ({type: ADD_WORDS_CHUNK, payload: wordsChunk})
 const addWordToUser = word => ({type: ADD_WORD_TO_USER, payload: word})
 const serUserWords = wordSet => ({type: SET_USER_WORDS, payload: wordSet})
@@ -64,10 +65,24 @@ export function signIn(user, onLoading = false){
 			})
 			if(userRawData.ok){
 				const userData = await userRawData.json()
-				dispatch(setUser({...userAuthData, ...userData}))
+				const fullUserData = {...userAuthData, ...userData}
+				dispatch(setUser(fullUserData))
+				try{
+					localStorage.setItem("userData", JSON.stringify(fullUserData))
+				}catch(e){}
+				dispatch(getUserWords())
 			}
 		}
 		dispatch(setLoading(false))
+	}
+}
+
+export function logOut(){
+	return dispatch => {
+		try{
+			localStorage.setItem("userData", "")
+		} catch(e){}
+		dispatch(unsetUser())
 	}
 }
 
@@ -95,7 +110,6 @@ export function getUserWords(){
 export function addUserWord(word, data = {}){
 	return async (dispatch, getState) => {
 		const {token, id} = getState().user
-		console.log(getState().user)
 		const userWord = {
 			difficulty: data.difficulty || "normal",
 			optional:{

@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer from "./redux/rootReducer";
 import App from "./App";
+import { getUserWords } from "./redux/actions"
 
 const store = createStore(
   rootReducer,
@@ -15,13 +16,15 @@ const store = createStore(
   )
 );
 
+if(store.getState().user.token){
+  store.dispatch(getUserWords())
+}
+
 ReactDOM.render(
-  <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
         <App />
       </Provider>
-    </BrowserRouter>
-  </React.StrictMode>,
+    </BrowserRouter>,
   document.getElementById("root")
 );

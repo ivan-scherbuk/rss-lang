@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import BookHeader from "./BookHeader.js";
 import BookMainContent from "./BookMainContent.js";
-import BookNavbar from "./BookNavbar.js";
 import classesCss from "./../styles/BookPage.module.scss";
 
 export default function BookPage() {
@@ -11,7 +10,7 @@ export default function BookPage() {
   return (
     <div className={classesCss.BookPage}>
       <BookHeader />
-      <BookNavbar setCurrentGroup={setCurrentGroup} />
+      {/*<BookNavbar setCurrentGroup={setCurrentGroup} />*/}
       <div className={classesCss.BookMainContent}>
         <BookMainContent currentGroup={currentGroup} />
       </div>
