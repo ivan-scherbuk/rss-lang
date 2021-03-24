@@ -3,17 +3,18 @@ import BookHeader from "./BookHeader.js";
 import BookMainContent from "./BookMainContent.js";
 import BookNavbar from "./BookNavbar.js";
 import classesCss from "./../styles/BookPage.module.scss";
+import { Route } from "react-router";
 
 export default function BookPage() {
-  const [currentGroup, setCurrentGroup] = useState(
-    localStorage.getItem("group") || 0
-  );
   return (
     <div className={classesCss.BookPage}>
       <BookHeader />
-      <BookNavbar setCurrentGroup={setCurrentGroup} />
+      <BookNavbar />
       <div className={classesCss.BookMainContent}>
-        <BookMainContent currentGroup={currentGroup} />
+        <Route
+          path={"/book/group/:currentGroup"}
+          render={() => <BookMainContent />}
+        />
       </div>
     </div>
   );

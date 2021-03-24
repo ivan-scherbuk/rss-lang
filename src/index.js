@@ -15,12 +15,7 @@ if (window.__REDUX_DEVTOOLS_EXTENSION__) {
   enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__());
 }
 
-const store = createStore(
-  rootReducer,
-  composeEnhancers(
-    ...enhancers
-  )
-);
+const store = createStore(rootReducer, composeEnhancers(...enhancers));
 
 ReactDOM.render(
   <React.StrictMode>
