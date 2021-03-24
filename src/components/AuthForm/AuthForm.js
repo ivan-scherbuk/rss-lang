@@ -16,8 +16,7 @@ const AuthForm = (props) => {
     password: "",
   });
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
-  const {onLoading} = useSelector(state => state.request)
+  const {onLoading} = useSelector(state => state.user)
 
   const changeHandler = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -34,7 +33,6 @@ const AuthForm = (props) => {
         name={"email"}
         label={`Email: `}
         onChange={changeHandler}
-
       />
       <Input
         autoComplete={"off"}
@@ -47,7 +45,6 @@ const AuthForm = (props) => {
       <div className={classes?.AuthButtonSet}>
         <Button
           onClick={() => {
-            console.log(form)
             dispatch(signIn(form))
           }}
           disabled={onLoading}
@@ -57,7 +54,6 @@ const AuthForm = (props) => {
 
         <Button
           onClick={() => {
-            console.log(form)
             dispatch(createUser(form))
           }}
           disabled={onLoading}
