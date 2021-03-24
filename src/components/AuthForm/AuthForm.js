@@ -15,6 +15,7 @@ const AuthForm = (props) => {
     email: "",
     password: "",
   });
+  
   const dispatch = useDispatch()
   const {onLoading} = useSelector(state => state.user)
 

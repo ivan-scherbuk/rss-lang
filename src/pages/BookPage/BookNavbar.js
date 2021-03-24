@@ -11,7 +11,11 @@ export default function BookNavbar() {
   return (
     <div className={classesCss.BookNavbar}>
       {groups.map((group) => {
-        return <NavLink to={"/book/group/" + group}>Group {group}</NavLink>;
+        return (
+          <div>
+            <NavLink to={"/book/group/" + group}>Group {group}</NavLink>
+          </div>
+        );
       })}
     </div>
   );

@@ -1,6 +1,6 @@
 import React from 'react'
 
 
-export default function GamesPage(){
+export default function AudioCall(){
 	return(<div/>)
 }

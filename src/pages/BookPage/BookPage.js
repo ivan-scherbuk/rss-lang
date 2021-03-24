@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import BookHeader from "./BookHeader.js";
 import BookMainContent from "./BookMainContent.js";
-import BookNavbar from "./BookNavbar.js";
 import classesCss from "./../styles/BookPage.module.scss";
 import { Route } from "react-router";
+import BookNavbar from "./BookNavbar.js";
 
 export default function BookPage() {
   return (
