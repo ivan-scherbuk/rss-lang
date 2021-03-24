@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import classesCss from "./../styles/BookPage.module.scss";
 
-export default function BookNavbar() {
+export default function BookNavbar({ classes }) {
   let groups = [];
   const totalGroupsCount = 6;
   for (let i = 1; i <= totalGroupsCount; i++) {
@@ -15,7 +15,11 @@ export default function BookNavbar() {
     <div className={classesCss.BookNavbar}>
       {groups.map((group) => {
         return (
-          <div key={group} onClick={onGroupChanged}>
+          <div
+            key={group}
+            onClick={onGroupChanged}
+            className={classes && classes.active}
+          >
             <NavLink to={"/book/group/" + group}>Group {group}</NavLink>
           </div>
         );
