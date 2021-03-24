@@ -56,6 +56,37 @@ const res = getWordsChunk(group, page)
 //на ивентах или в useEffect иначе это вызовет бесконечное зацикливание и приведет к ошибке
 
 
+//------------------------------------------------------------------------
+//Хук useWordsGroup аналогичный useWords:
+
+import { useWordsGroup } from "./hooks/useWords"
+
+const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
+
+//делает тоже самое только загружает целый раздел, getWordsGroup принимает номер раздела
+
+
+//-------------------------------------------------------------------------
+//Хук для нахождения пересечения с данными юзера:
+//Функции в этом хуке синхронные, данные они возвращают напрямую
+import { useUserWords } from "./src/hooks/hooks.user"
+{getUserWordsChunk,getUserWordsGroup,} = useUserWords()
+
+//getUserWordsChunk
+//принимает номер группы, номер страницы, опции, возвращает отфильтрованный массив слов
+const options = {
+	difficulty: "hard | normal | weak" | undefined, //ищет совпадения по сложности, возвращает все сложности
+	deleted: true | false | undefined //ищет удаленные пользователем значени
+	//если не задан не учитывает при фильтрации
+	//если false возвращает все значения БЕЗ удаленных
+	//если true возвращает ТОЛЬКО удаленные значения
+}
+const words = getUserWordsChunk(1,1,options)
+const wordsGroup = getUserWordsGroup(1,options)
+
+//перед использованием надо убедиться что пользователь аутентифицирован иначу вернут пустой массив
+//getUserWordsGroup работает точно также только принимает только номер группы и опции и возвращает ОБЪЕКТ с массивами
+
 
 
 

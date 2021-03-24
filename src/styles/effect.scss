@@ -1,0 +1,56 @@
+$duration: .8s;
+
+.transit-enter{
+  opacity: 0;
+  transition: opacity $duration;
+}
+
+.transit-enter.transit-enter-active{
+  opacity: 1;
+}
+
+
+.transit-exit{
+  position: absolute;
+  top: 0;
+  opacity: 1;
+  transition: opacity $duration;
+  &.main-page{
+    overflow-y: hidden;
+    .wave{
+      transition: top $duration;
+      top: 0;
+    }
+    .gradient{
+      transition: opacity $duration;
+      opacity: 1;
+    }
+    .girl{
+      transition: bottom $duration;
+      position: absolute;
+      bottom: 0;
+    }
+
+  }
+}
+
+.transit-exit.transit-exit-active{
+  opacity: 0;
+  position: absolute;
+  &.main-page{
+    opacity: 1;
+    background: linear-gradient(rgba(99, 201, 245, 0), rgba(255, 199, 100,0));
+
+    .wave{
+      top: -100%;
+    }
+
+    .gradient{
+      opacity: 0;
+    }
+    .girl{
+      position: absolute;
+      bottom: -400px;
+    }
+  }
+}
