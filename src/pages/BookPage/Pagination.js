@@ -14,7 +14,22 @@ export default function Pagination({
   };
 
   const deactivateEditMode = () => {
+    if (currentPage === "") {
+      setCurrentPage(0);
+    }
     setEditMode(false);
+  };
+
+  const turnPageBack = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const turnPageForward = () => {
+    if (currentPage < totalPagesCount - 1) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   const turnToStart = () => {
@@ -26,8 +41,9 @@ export default function Pagination({
   };
   return (
     <div className={classesCss.pagination}>
-      <div onClick={turnToStart}>-</div>
-      Page:{" "}
+      <div onClick={turnToStart}>{"<<"}</div>
+      <div onClick={turnPageBack}>{"<"}</div>
+      Page:
       {!editMode && (
         <span onClick={activateEditMode}>
           {typeof currentPage === "number" ? currentPage + 1 : ""}
@@ -35,14 +51,16 @@ export default function Pagination({
       )}
       {editMode && (
         <input
+          className={classesCss.selectedInput}
           value={typeof currentPage === "number" ? currentPage + 1 : ""}
           onChange={onPageChanged}
           autoFocus={true}
           onBlur={deactivateEditMode}
         ></input>
-      )}{" "}
+      )}
       of {totalPagesCount}
-      <div onClick={turnToEnd}>+</div>
+      <div onClick={turnPageForward}>{">"}</div>
+      <div onClick={turnToEnd}>{">>"}</div>
     </div>
   );
 }
