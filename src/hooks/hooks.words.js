@@ -59,11 +59,13 @@ export function useWordsGroup(){
 	const getWordsGroup = useCallback((group) => {
 		if (!words[group] || Object.keys(words[group]).length < 30) {
 			setGroupLoading(true)
+			const pageQueue = []
 			for (let i = 0; i < 30; i++) {
 				if (!words[group] || !(i in words[group])) {
-					dispatch(getWords(group, i))
+					pageQueue.push(i)
 				}
 			}
+			dispatch(getWords(group, pageQueue))
 			setCurrentRequest({group})
 			return "loading"
 		} else {

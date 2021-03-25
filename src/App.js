@@ -10,7 +10,6 @@ import AudioCall from "./pages/Games/Audiocall"
 import Savannah from "./pages/Games/Savannah"
 import StatisticPage from "./pages/StatisticPage"
 import PuzzleGame from "./pages/Games/PuzzleGame"
-import classesCss from "./styles/App.module.scss"
 import "./styles/effect.scss"
 
 
