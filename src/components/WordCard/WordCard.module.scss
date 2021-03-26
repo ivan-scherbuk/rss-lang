@@ -15,6 +15,11 @@
     font-size: 30px;
 }
 
+.icon:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
 .word-text {
     text-align: center;
     margin: 10px 0 10px 0;
