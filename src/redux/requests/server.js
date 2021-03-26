@@ -38,6 +38,20 @@ export const userWordsRequest = async ({token, id, method, wordId, word = {}}) =
 	return await fetch(request, requestData)
 }
 
+export const tokenRequest = async ({token, id}) => {
+
+	const requestData = {
+		method: "GET",
+		withCredentials: true,
+		headers: {
+			"Authorization": `Bearer ${token}`,
+			"Accept": "application/json",
+			"Content-Type": "application/json",
+		}
+	}
+	return await fetch(`${server}/users/${id}/tokens`, requestData)
+}
+
 export const wordsRequest = async(group, page) => {
 	return await fetch(`${server}/words?page=${page}&group=${group}`)
 }

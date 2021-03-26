@@ -4,6 +4,7 @@ const initialState = {
 	id: null,
 	email: null,
 	token: null,
+	tokenExpire: null,
 	isLogged : false,
 	onLoading: false,
 	words: {}
@@ -13,7 +14,7 @@ function getInitialUser(){
 	const savedData = localStorage.getItem("userData")
 	if(savedData){
 		const parsedData = JSON.parse(savedData)
-		return {initialState, ...parsedData, isLogged: !!parsedData?.token}
+		return {...initialState, ...parsedData, isLogged: !!parsedData?.token}
 	}
 	return initialState
 }
@@ -53,7 +54,13 @@ export default function userReducer(state = getInitialUser(), action){
 			} else {
 				const wordIndex = userWords[group][page].findIndex((word) => word.id === action.payload)
 				if(wordIndex >= 0){
-					userWords[group][page][wordIndex] = action.payload
+					userWords[group][page][wordIndex] = {
+						...userWords[group][page][wordIndex],
+						...action.payload,
+						optional:{
+							...userWords[group][page][wordIndex].optional,
+							...action.payload.optional
+						}}
 				} else {
 					userWords[group][page].push(action.payload)
 				}
