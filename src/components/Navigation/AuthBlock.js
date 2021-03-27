@@ -4,7 +4,7 @@ import AuthModal from "../AuthForm/AuthModal"
 import classesCss from './Navigation.module.scss'
 import Avatar from "@material-ui/core/Avatar"
 import { useDispatch, useSelector } from "react-redux"
-import { logOut } from "../../redux/actions"
+import { logOut } from "../../redux/actions.auth"
 
 
 export default function AuthBlock({children, classes, className, styles}) {

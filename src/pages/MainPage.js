@@ -12,7 +12,7 @@ export default function MainPage(){
 
 	return (
 		<>
-			<NavigationBar/>
+			{/*<NavigationBar/>*/}
 			<div className={[classesCss.MainPage, "main-page"].join(" ")}>
 				<div className={classesCss.Bg}>
 					<div className={[classesCss.Wave, "wave"].join(" ")}/>

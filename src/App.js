@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Route, Switch, useLocation } from "react-router-dom"
 import { TransitionGroup, CSSTransition } from "react-transition-group"
 import NavigationBar from "./components/Navigation/NavigationBar"
@@ -9,33 +9,48 @@ import Sprint from "./pages/Games/Sprint"
 import AudioCall from "./pages/Games/Audiocall"
 import Savannah from "./pages/Games/Savannah/Savannah"
 import StatisticPage from "./pages/StatisticPage"
-import PuzzleGame from "./pages/Games/PuzzleGame"
+import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame"
 import "./styles/effect.scss"
 import "./styles/App.module.scss"
+import { useDispatch, useSelector } from "react-redux"
+import { getUserWords } from "./redux/actions.user"
+import { syncUserWords } from "./redux/actions.words"
 
 function App(){
 
+	const dispatch = useDispatch()
+
 	const location = useLocation()
+	const {words} = useSelector(store => store.user)
+	console.log(words)
+
+	useEffect (() => {
+		async function syncUser(){
+			await dispatch(getUserWords())
+			await dispatch(syncUserWords())
+		}
+		syncUser()
+	}, [dispatch])
 
 	return (
 		<div>
-			{/*<NavigationBar />*/}
+			<NavigationBar />
 			<TransitionGroup>
 				<CSSTransition
 					timeout={800}
 					classNames="transit"
 					key={location.key || location.pathname}
 				>
-				<Switch location={location}>
-					<Route path="/book"><BookPage/></Route>
-					<Route path="/statistic"><StatisticPage/></Route>
-                    <Route path="/games/savannah" exact component={Savannah}/>
-                    <Route path="/games/audiocall"><AudioCall/></Route>
-					<Route path="/games/sprint"><Sprint/></Route>
-					<Route path="/games/puzzle"><PuzzleGame/></Route>
-					<Route path="/games" exact><GamesPage/></Route>
-					<Route path="/" exact><MainPage/></Route>
-				</Switch>
+					<Switch location={location}>
+						<Route path="/book"><BookPage/></Route>
+						<Route path="/statistic"><StatisticPage/></Route>
+						<Route path="/games/savannah" exact component={Savannah}/>
+						<Route path="/games/audiocall"><AudioCall/></Route>
+						<Route path="/games/sprint"><Sprint/></Route>
+						<Route path="/games/puzzle"><PuzzleGame/></Route>
+						<Route path="/games" exact><GamesPage/></Route>
+						<Route path="/" exact><MainPage/></Route>
+					</Switch>
 				</CSSTransition>
 			</TransitionGroup>
 		</div>

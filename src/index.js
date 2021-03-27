@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import rootReducer from "./redux/rootReducer";
 import App from "./App";
-import { getUserWords } from "./redux/actions";
+import { getUserWords } from "./redux/actions.user";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const enhancers = [applyMiddleware(thunk)];
