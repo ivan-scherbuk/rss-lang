@@ -1,5 +1,7 @@
 import React from "react"
 import classesCss from "./styles/MainPage.module.scss"
+import "../styles/effect.scss"
+import NavigationBar from "../components/Navigation/NavigationBar";
 
 
 export default function MainPage(){
@@ -9,12 +11,17 @@ export default function MainPage(){
 	}
 
 	return (
-		<div className={classesCss.MainPage}>
-			<div className={classesCss.Bg}>
-				<div className={classesCss.Girl}>
-					<div style={girlStyle}/>
+		<>
+			{/*<NavigationBar/>*/}
+			<div className={[classesCss.MainPage, "main-page"].join(" ")}>
+				<div className={classesCss.Bg}>
+					<div className={[classesCss.Wave, "wave"].join(" ")}/>
+					<div className={[classesCss.Gradient, "gradient"].join(" ")}/>
+					<div className={[classesCss.Girl, "girl"].join(" ")}>
+						<div style={girlStyle}/>
+					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	)
 }

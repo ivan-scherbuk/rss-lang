@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import Button from "../Buttons/Button"
 import Input from "../Forms/Input/Input"
 import { useDispatch, useSelector } from "react-redux"
-import { createUser, signIn } from "../../redux/actions"
+import { createUser, signIn } from "../../redux/actions.auth"
 
 const AuthForm = (props) => {
 
@@ -15,6 +15,7 @@ const AuthForm = (props) => {
     email: "",
     password: "",
   });
+  
   const dispatch = useDispatch()
   const {onLoading} = useSelector(state => state.user)
 

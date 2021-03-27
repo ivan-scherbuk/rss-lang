@@ -1,21 +1,31 @@
-import { LOADING, SIGN_IN, SIGN_OUT, ADD_WORD_TO_USER, SET_USER_WORDS } from "./types"
+import { LOADING, SIGN_IN, LOG_OUT, ADD_WORD_TO_USER, SET_USER_WORDS } from "./types"
 
 const initialState = {
 	id: null,
 	email: null,
 	token: null,
+	tokenExpire: null,
 	isLogged : false,
 	onLoading: false,
 	words: {}
 }
 
-export default function userReducer(state = initialState, action){
+function getInitialUser(){
+	const savedData = localStorage.getItem("userData")
+	if(savedData){
+		const parsedData = JSON.parse(savedData)
+		return {...initialState, ...parsedData, isLogged: !!parsedData?.token}
+	}
+	return initialState
+}
+
+export default function userReducer(state = getInitialUser(), action){
 	switch (action.type){
 		case SIGN_IN: {
 			return {...state, ...action.payload, isLogged: !!action.payload.token}
 		}
 
-		case SIGN_OUT: {
+		case LOG_OUT: {
 			return {...state, ...initialState}
 		}
 
@@ -44,7 +54,13 @@ export default function userReducer(state = initialState, action){
 			} else {
 				const wordIndex = userWords[group][page].findIndex((word) => word.id === action.payload)
 				if(wordIndex >= 0){
-					userWords[group][page][wordIndex] = action.payload
+					userWords[group][page][wordIndex] = {
+						...userWords[group][page][wordIndex],
+						...action.payload,
+						optional:{
+							...userWords[group][page][wordIndex].optional,
+							...action.payload.optional
+						}}
 				} else {
 					userWords[group][page].push(action.payload)
 				}

@@ -1,8 +1,9 @@
+
 //1. Как брать данные о словах
 //1.1 Нерптимизированный способ:
 
-import { useDispatch, useSelector } from "react-redux"
 
+import { useDispatch, useSelector } from "react-redux"
 const dispatch = useDispatch()
 const words = useSelector(state => state.words)
 
@@ -26,7 +27,7 @@ const wordTreeFormat = {
 //для того чтобы получить значение вы использовать экшн getWords и передавать в него номер группы и номер страницы
 //после выполнения запроса в words появится соответствующий чанк слова
 
-import { getWords } from "../redux/actions"
+//import { getWords } from "../redux/actions.words"
 dispatch(getWords(group, page))
 
 //минус такого подхода заключается в том что getWords делает запрос к базе данных каждый раз, независимо оттого есть
@@ -36,7 +37,7 @@ dispatch(getWords(group, page))
 //1.2 Оптимизированный способ:
 //использование хука useWords
 
-import useWords from "./src/hooks/useWords"
+//import useWords from "./src/hooks/hooks.words"
 const {currentWords, getWordsChunk, onLoading} = useWords()
 
 //если используется этот хук то диспатч и юзселектор использовать не надо
@@ -55,6 +56,82 @@ const res = getWordsChunk(group, page)
 //Если вы используете getWordsChunk c currentWords - не вызвыйте getWordsChunk  в теле функции, только
 //на ивентах или в useEffect иначе это вызовет бесконечное зацикливание и приведет к ошибке
 
+
+//------------------------------------------------------------------------
+//Хук useWordsGroup аналогичный useWords:
+
+//import { useWordsGroup } from "./hooks/hooks.words"
+
+const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
+
+//делает тоже самое только загружает целый раздел, getWordsGroup принимает номер раздела
+
+
+//-------------------------------------------------------------------------
+//Хук для нахождения пересечения с данными юзера:
+// if user and words array have words in requested words - will be set immediately
+// getUserWordsChunk return this value too
+// if user have, but words array doesn't have requested words - will be set after response come from server
+// and getUserWordsChunk return Promise
+// if user doesn't have requested words - will never set for this group-page
+// and getUserWordsChunk return False
+// BUT when user get at least one word on this page, value will be set in subscribedUserWords
+//перед использованием надо убедиться что пользователь аутентифицирован иначу вернут пустой массив
+//import {useUserWords} from "../../../hooks/hooks.user"
+const {currentUserWords, getUserWordsChunk, subscribedUserWords, onLoading: onUserLoading} = useUserWords()
+
+const filters = {
+	difficulty: "hard | normal | weak" | undefined, //ищет совпадения по сложности, возвращает все сложности
+	deleted: true | false | undefined //ищет удаленные пользователем значени
+}
+getUserWordsChunk(group, page, filters)
+
+
+const user = useSelector(state => state.user)
+useEffect(() => {
+	if(user.words){
+		getUserWordsChunk(group, page, filters)
+	}
+}, [user])
+
+
+useEffect(() => {
+	if(currentUserWords){
+		console.log(currentUserWords)
+	}
+}, [currentUserWords])
+
+useEffect(() => {
+	if(subscribedUserWords){
+		console.log(`ВЫ ИЗУЧИЛИ СЛОВО ${subscribedUserWords[0].name}`)
+	}
+}, [subscribedUserWords])
+
+//Тоже самое для группы
+//Usage
+import {useUserWordsGroup} from './src/hooks/hooks.user'
+const {getUserWordsGroup, subscribedUserWordsGroup, onLoading, currentUserWordsGroup} = useUserWordsGroup()
+
+
+//-------------------------------------------------------------------------
+//Хук для обновления данных о слове юзера
+import {useUserWordUpdate} from './src/hooks/hooks.user'
+const { update, updatedWord, onError } = useUserWordUpdate()
+
+// update get word object from words array (not user array) and additional data
+const data = {
+ difficulty: weak | normal | hard,
+	successCounter: Number,
+	failCounter: Number,
+	deleted: Boolean,
+}
+update(word, data)
+
+//Если такое слово у пользователя уже есть, то обновляет его исходя из параметров и немедленно возвращает
+//вернет Promise
+//когда слово будет записано в базу, обновленное слово запишется в updatedWord
+//если произойдет ошибка то в onError запишется объект в который будет записано слово и ошибка
+//Если у пользователя такого слова нет то добавит его ему и произведет такие же действия как при апдейте
 
 
 
