@@ -5,7 +5,7 @@ import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import Pagination from "./Pagination";
 
-export default function BookMainContent() {
+export default function BookMainContent({ setIsBook }) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(
     +sessionStorage.getItem("currentPage") || 0
@@ -13,6 +13,9 @@ export default function BookMainContent() {
   const { currentWords, getWordsChunk, onLoading } = useWords();
   const { currentGroup } = useParams();
 
+  useEffect(() => {
+    setIsBook(true);
+  }, []);
   const onPageChanged = (e) => {
     if (e.target.value > 0 && e.target.value <= totalPagesCount) {
       setCurrentPage(e.target.value - 1);
