@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import classesCss from "../Games.module.scss"
-import { useTimerGenerator } from "../../../hooks/hooks.game"
+import { useTimer, useTimerGenerator } from "../../../hooks/hooks.game"
 import {getUserWordsChunk, createRandomChunkFromGroup, getUserWordsGroup } from "../../../helpers/utils.words"
 import { useSelector } from "react-redux"
 import PuzzleField from "./PuzzleField"
@@ -13,12 +13,19 @@ export default function PuzzleGame(){
 	const words = useSelector(store => store.words)
 	const user = useSelector(store => store.user)
 	const {update, updatedWord} = useUserWordUpdate()
-	const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
+	const {currentWordsGroup, getWordsGroup} = useWordsGroup()
 	const {currentUserWords, getUserWordsChunk} = useUserWords()
+	const [countdown, setCountdown] = useState(50)
 
 	const timer = useTimerGenerator(() => {
 		setCurrentWord(currentWord + 1)
-	}, 500, currentChunk && currentWord < currentChunk.length)
+		setCountdown(50)
+	}, 50000, currentChunk && currentWord < currentChunk.length, 250)
+
+	// useTimer(() => {
+	// 	console.log(111)
+	// 	setCountdown(state => state - 1)
+	// }, 1000, !!currentChunk && currentWord < currentChunk.length && countdown > 0, currentChunk)
 
 
 	useEffect(() => {
@@ -54,20 +61,13 @@ export default function PuzzleGame(){
 				currentChunk && currentWord+1 <= currentChunk.length ?
 					(
 						<>
-							<div>
-								<span>{currentChunk[currentWord].word}</span>
+							<div className={classesCss.CurrentWord}>
+								<div className={classesCss.Word}><h3>{currentChunk[currentWord].word}</h3></div>
+								<div className={classesCss.Countdown}>{countdown >=0 ? countdown : 0}</div>
 							</div>
-							<div>
-								<span>{currentChunk[currentWord].textExampleTranslate} {currentChunk[currentWord].textExample}</span>
+							<div className={classesCss.Translation}>
+								<span>{currentChunk[currentWord].textExampleTranslate}</span>
 							</div>
-							<button onClick={async () => {
-								//console.log(currentChunk[currentWord])
-								update(currentChunk[currentWord])
-
-								//await dispatch(addUserWord(currentChunk[currentWord]))
-								timer.reset()
-							}}>RESET
-							</button>
 							<PuzzleField text={currentChunk[currentWord].textExample}/>
 						</>
 					) : <div>ЗАГРУЗКА</div>

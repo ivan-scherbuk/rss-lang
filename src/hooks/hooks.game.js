@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from "react"
+
 
 export function useTimer(generateFn, checkInterval  = 50, condition = true, ...dependencies) {
 

@@ -11,7 +11,8 @@
   height: 60px;
   position: absolute;
   z-index:3;
-  transition: width $duration, margin-left $duration, left $duration, top $duration;
+  transition: width $duration, margin-left $duration, left $duration, top $duration, display 0 0.8s;
+  display: none;
 
 
   &.NavigationCloud{
@@ -20,6 +21,7 @@
     width: 35%;
     left: 50%;
     margin-left: -17.5%;
+    display: block;
   }
 
 
