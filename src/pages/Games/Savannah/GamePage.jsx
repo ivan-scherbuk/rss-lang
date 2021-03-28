@@ -62,15 +62,14 @@ const Savannah = () => {
         },
         []);
 
-    useEffect(() => {
-        const words = getWordsChunk(activeLevel - 1, 0);
-        console.log(words);
+    useEffect(async () => {
+        const words = await getWordsChunk(activeLevel - 1, 0);
+        console.log(words, onLoading);
         //console.log(activeLevel);
 
-        if (words !== "loading" && gettingWords && livesCount && wordCounter) {
+        if (!onLoading && gettingWords && livesCount && wordCounter) {
             const randomNumberOne = getRandomNumber(0, words.length - 1);
             const randomNumberTwo = getRandomNumber(0, words.length - 1);
-
             const translatedWordId = words[randomNumberOne].id;
             const wordInArrId = statisticsArr.find((word) => word.id === translatedWordId);
 
@@ -95,7 +94,7 @@ const Savannah = () => {
         return () => {
             setGettingWords(false);
         };
-    }, [gettingWords, livesCount, wordCounter, getWordsChunk, statisticsArr, handleGameOver, activeLevel]);
+    }, [gettingWords, livesCount, wordCounter, getWordsChunk, statisticsArr, handleGameOver, activeLevel, onLoading]);
 
     const updateStats = useCallback((isCorrect) => {
         setStatisticsArr([...statisticsArr, {

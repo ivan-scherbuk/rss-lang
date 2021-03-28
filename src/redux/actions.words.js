@@ -9,13 +9,14 @@ export function syncUserWords(){
 	return async (dispatch, getState) => {
 		const {user, words} = getState()
 		for (let groupIndex in user.words) {
-			if (user.words.hasOwnProperty(groupIndex))
+			if (user.words.hasOwnProperty(groupIndex)) {
+				const pages = []
 				for (let pageIndex in user.words[groupIndex]) {
 					if (user.words[groupIndex].hasOwnProperty(pageIndex)
-						&& (!words[groupIndex] || !words[groupIndex][pageIndex]?.length)) {
-						dispatch(getWords(groupIndex, pageIndex))
-					}
+						&& (!words[groupIndex] || !words[groupIndex][pageIndex]?.length)) pages.push(pageIndex)
 				}
+				dispatch(getWords(groupIndex, pages))
+			}
 		}
 	}
 }

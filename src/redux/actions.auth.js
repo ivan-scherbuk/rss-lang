@@ -3,13 +3,14 @@ import { getUserWords } from "./actions.user"
 import { syncUserWords } from "./actions.words"
 import { authRequest, tokenRequest, userDataRequest } from "./requests/server"
 import { LOADING, LOG_OUT, SIGN_IN } from "./types"
+import { TOKEN_EXPIRE_TIME, TOKEN_START_REFRESH } from "./config.store"
 
 const setLoading = status => ({type: LOADING, payload: status ?? true})
 const setUser = userData => ({type: SIGN_IN, payload: userData})
 const unsetUser = () => ({type: LOG_OUT})
 
 
-const getNextExpireTime = () => moment().add(10, "seconds").toISOString()
+const getNextExpireTime = () => moment().add(TOKEN_EXPIRE_TIME, "hours").toISOString()
 
 
 export function createUser(user){
@@ -63,20 +64,24 @@ export function logOut(){
 export function checkToken(){
 	return async (dispatch, getState) => {
 		const {token, id, tokenExpire, refreshToken} = getState().user
-		if (moment().isAfter(tokenExpire)) {
-			const rawRes = await tokenRequest({token: refreshToken, id})
-			const res = await rawRes.json()
-			const updateUserData = {
-				...res,
-				tokenExpire: getNextExpireTime()
+		const timeToStartRefresh = moment(tokenExpire).subtract(TOKEN_START_REFRESH, "hours")
+		if (moment().isBefore(tokenExpire)) {
+			if (moment().isAfter(timeToStartRefresh)) {
+				const rawRes = await tokenRequest({token: refreshToken, id})
+				const res = await rawRes.json()
+				const updateUserData = {
+					...res,
+					tokenExpire: getNextExpireTime(),
+				}
+				localStorage.setItem("userData", JSON.stringify({
+					...JSON.parse(localStorage.getItem("userData")),
+					...updateUserData,
+				}))
+				dispatch(setUser(updateUserData))
+				return updateUserData.token
 			}
-			localStorage.setItem("userData", JSON.stringify({
-				...JSON.parse(localStorage.getItem("userData")),
-				...updateUserData
-			}))
-			dispatch(setUser(updateUserData))
-			return updateUserData.token
+			return token
 		}
-		return token
+		return false
 	}
 }

@@ -39,7 +39,7 @@
         max-width:140px;
         height: 70px;
         &:not(:first-child){
-          margin-left: 5px;
+          margin-left: 10px;
         }
       }
       .Symbol{
@@ -63,8 +63,12 @@
         border-radius: 15px;
         padding: 10px;
         box-sizing: border-box;
+        cursor: pointer;
+        margin-bottom: 15px;
+
+
         &:not(:first-child){
-          margin-left: 5px;
+          margin-left: 10px;
         }
       }
     }

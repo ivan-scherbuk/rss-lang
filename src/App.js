@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { Route, Switch, useLocation } from "react-router-dom"
 import { TransitionGroup, CSSTransition } from "react-transition-group"
+import moment from "moment"
 import NavigationBar from "./components/Navigation/NavigationBar"
 import MainPage from "./pages/MainPage"
 import BookPage from "./pages/BookPage/BookPage"
@@ -15,22 +16,32 @@ import "./styles/App.module.scss"
 import { useDispatch, useSelector } from "react-redux"
 import { getUserWords } from "./redux/actions.user"
 import { syncUserWords } from "./redux/actions.words"
+import { checkToken, logOut } from "./redux/actions.auth"
 
 function App(){
 
 	const dispatch = useDispatch()
-
 	const location = useLocation()
-	const {words} = useSelector(store => store.user)
-	console.log(words)
+	const user = useSelector(store => store.user)
+	const words = useSelector(store => store.words)
 
-	useEffect (() => {
-		async function syncUser(){
+
+	async function syncUser(){
+		const token = await dispatch(checkToken())
+		if(token){
 			await dispatch(getUserWords())
 			await dispatch(syncUserWords())
+		} else{
+			await dispatch(logOut())
 		}
-		syncUser()
-	}, [dispatch])
+	}
+
+	useEffect (() => {
+		if(user.isLogged && moment()){
+			syncUser()
+		}
+	}, [dispatch, user.isLogged
+	])
 
 	return (
 		<div>
