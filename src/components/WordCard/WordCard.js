@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import classesCss from "./WordCard.module.scss";
+import {useUserWordUpdate} from '../../hooks/hooks.user'
+
+
 
 export default function WordCard(props) {
     let {id, group, page, word, image, audio, audioMeaning, audioExample, textMeaning, textExample, transcription, wordTranslate, textMeaningTranslate, textExampleTranslate} = props.cardInfo
+    // let {failedCounter, successCounter} = props.optional
+    const { update, updatedWord, onError } = useUserWordUpdate()
     const audioPlayer = new Audio();
     audioPlayer.volume = 0.1;
 
@@ -48,8 +53,12 @@ export default function WordCard(props) {
                     playAudio(audio)
 
                 }>volume_up</div>
-                <div className={classesCss['icon']}>add_alert</div>
-                <div className={classesCss['icon']}>delete_forever</div>
+                <div className={classesCss['icon']} onClick = {() =>
+                  update(props.cardInfo, {difficulty: 'hard'}) }>add_alert</div>
+                <div className={classesCss['icon']} onClick ={() =>
+                  update(props.cardInfo, {deleted: true})
+
+                }>delete_forever</div>
             </div>
             <div className={classesCss['contetnt-wrapper']}>
                 <div className={classesCss['word-text']}>{word}</div>
@@ -60,7 +69,19 @@ export default function WordCard(props) {
                 <div  dangerouslySetInnerHTML={{__html: textExample}} className={classesCss['word-content']}></div>
                 <div className={classesCss['word-content']}>{textExampleTranslate}</div>
             </div>
-            <div className={classesCss['icon']}>notification_important</div>
+            <div className={classesCss['notification-wrapper']}>
+                <div className={classesCss['icon']}>notification_important</div>
+                <div className={classesCss['result-container']}>
+                  <div className={classesCss['result-wrapper']}>
+                      {/* <span className={`${classesCss['icon']} ${classesCss['icon-succsess']}`}>thumb_up_off_alt</span><span className={classesCss['result-counter']}>{`:${successCounter}`}</span> */}
+                  </div>
+
+                  <div className={classesCss['result-wrapper']}>
+                      {/* <span className={`${classesCss['icon']} ${classesCss['icon-failture']}`}>thumb_down_off_alt</span><span className={classesCss['result-counter']}>{`:${failedCounter}`}</span> */}
+                  </div>
+                </div>
+
+            </div>
         </div>
     )
 }
