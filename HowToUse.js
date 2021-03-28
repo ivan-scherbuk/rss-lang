@@ -133,7 +133,33 @@ update(word, data)
 //если произойдет ошибка то в onError запишется объект в который будет записано слово и ошибка
 //Если у пользователя такого слова нет то добавит его ему и произведет такие же действия как при апдейте
 
+//-------------------------------------------------------------------------
+//statusGameSelector //setStatusGame action
+// бывает true/false в зависимости от того, вошли мы в игру или нет
 
+const statusGame = useSelector(statusGameSelector);
+
+return (
+	<div>
+		{statusGame ? (<GamePage />) : (<StartPage />)}
+	</div>
+);
+// при нажатии кнопки начать игру на странице  StartPage
+const handleStart = useCallback(() => {
+	dispatch(setStatusGame(true));
+}, [dispatch]);
+
+// при окончании игры на стр GamePage
+const HandleExit = useCallback(() => {
+	dispatch(setStatusGame(false));
+}, [dispatch]);
+
+//levelSelector //setLevel action
+const activeLevel = useSelector(levelSelector);
+
+dispatch(setLevel(levelProps));
+// изменяем уровень
+//-------------------------------------------------------------------------
 
 
 

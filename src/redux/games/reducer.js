@@ -5,7 +5,7 @@ const initialState = {
   level: 1,
 };
 
-const savannahReducer = (state = initialState, action) => {
+const gameReducer = (state = initialState, action) => {
   const { type, ...payload } = action;
 
   switch (type) {
@@ -24,4 +24,4 @@ const savannahReducer = (state = initialState, action) => {
   }
 };
 
-export default savannahReducer;
+export default gameReducer;

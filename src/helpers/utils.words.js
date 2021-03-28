@@ -1,12 +1,12 @@
-import {getRandomNumber} from "./gameUtils"
+import { getRandomNumber } from "./gameUtils"
 
 export function createRandomChunkFromGroup(group, length = 20){
 	const chunk = []
 	const groupLength = Object.keys(group).length
-	while(chunk.length < length){
+	while (chunk.length < length) {
 		const randChunk = group[getRandomNumber(0, groupLength - 1)]
 		const randomWord = randChunk[getRandomNumber(0, randChunk.length - 1)]
-		if(chunk.findIndex(word => word.id === randomWord.id) === -1){
+		if (chunk.findIndex(word => word.id === randomWord.id) === -1) {
 			chunk.push({...randomWord})
 		}
 	}
@@ -26,15 +26,18 @@ export function getUserWordsChunk(chunk, userChunk, {difficulty, deleted, ...opt
 		if (difficulty) {
 			filteredWords = filteredWords.filter((word) => word.difficulty === difficulty)
 		}
-		return chunk.filter(({id}) => {
-			const wordIndex = filteredWords.findIndex((userWord) => userWord.wordId === id)
-			return !!(wordIndex + 1)
-		})
+		return chunk.map(el => {
+			const userWord = filteredWords.find(({wordId}) => wordId === el.id)
+			if (userWord) {
+				return {...el, difficulty: userWord.difficulty, optional: userWord.optional, userWord:true}
+			}
+			return el
+		}).filter(el => el.userWord)
 	}
 	return []
 }
 
-export function getUserWordsGroup (group, userGroup, {difficulty, deleted,...options} = {}){
+export function getUserWordsGroup(group, userGroup, {difficulty, deleted, ...options} = {}){
 	const crossedGroup = {}
 	if (userGroup) {
 		for (let page in userGroup) {

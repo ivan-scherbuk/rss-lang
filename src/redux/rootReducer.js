@@ -1,12 +1,12 @@
 import { combineReducers } from "redux"
 import userReducer from "./userReducer"
 import wordsReducer from "./wordsReducer"
-import savannahReducer from "./savannah/reducer"
+import gameReducer from "./games/reducer"
 
 const rootReducer = combineReducers({
 	user: userReducer,
 	words: wordsReducer,
-	savannahWords: savannahReducer,
+	gameWords: gameReducer,
 })
 
 export default rootReducer

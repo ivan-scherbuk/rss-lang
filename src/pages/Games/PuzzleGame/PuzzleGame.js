@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import classesCss from "../Games.module.scss"
+import classesCss from "./PuzzleGame.module.scss"
 import { useTimer, useTimerGenerator } from "../../../hooks/hooks.game"
 import {getUserWordsChunk, createRandomChunkFromGroup, getUserWordsGroup } from "../../../helpers/utils.words"
 import { useSelector } from "react-redux"
@@ -16,23 +16,21 @@ export default function PuzzleGame(){
 	const {currentWordsGroup, getWordsGroup} = useWordsGroup()
 	const {currentUserWords, getUserWordsChunk} = useUserWords()
 	const [countdown, setCountdown] = useState(50)
+	const [currentPage, setCurrentPage] = useState(0)
 
 	const timer = useTimerGenerator(() => {
 		setCurrentWord(currentWord + 1)
-		setCountdown(50)
-	}, 50000, currentChunk && currentWord < currentChunk.length, 250)
+		//setCountdown(50)
+	}, 60 * 1000, currentChunk && currentWord < currentChunk.length, 250)
 
-	// useTimer(() => {
-	// 	console.log(111)
-	// 	setCountdown(state => state - 1)
-	// }, 1000, !!currentChunk && currentWord < currentChunk.length && countdown > 0, currentChunk)
-
+	function onSuccessAssembly(){
+		timer.reset()
+	}
 
 	useEffect(() => {
 		if(currentWordsGroup){
 			setCurrentChunk(createRandomChunkFromGroup(currentWordsGroup))
 		}
-
 	}, [currentWordsGroup])
 
 	useEffect(() => {
@@ -49,11 +47,17 @@ export default function PuzzleGame(){
 	}, [])
 
 	useEffect(() => {
-		if(user.words){
-			getUserWordsChunk(1,5, {deleted:false})
+		if(user.words && currentPage <30){
+			getUserWordsChunk(1,currentPage, {deleted:false})
 		}
-	}, [user.words])
+	}, [user.words, getUserWordsChunk, currentPage])
 
+	useEffect(() => {
+		if(currentWord >= 19){
+			setCurrentPage(currentPage + 1)
+			setCurrentWord(0)
+		}
+	}, [currentPage, currentWord])
 
 	return (
 		<div className={classesCss.PuzzleGame}>
@@ -68,7 +72,10 @@ export default function PuzzleGame(){
 							<div className={classesCss.Translation}>
 								<span>{currentChunk[currentWord].textExampleTranslate}</span>
 							</div>
-							<PuzzleField text={currentChunk[currentWord].textExample}/>
+							<PuzzleField
+								text={currentChunk[currentWord].textExample}
+								onSuccess={onSuccessAssembly}
+							/>
 						</>
 					) : <div>ЗАГРУЗКА</div>
 			}
