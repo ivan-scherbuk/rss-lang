@@ -1,18 +1,11 @@
 import React, {useState} from "react"
-import classesCss from '../../Games.module.scss'
+import classesCss from '../PuzzleGame.module.scss'
 import {motion} from "framer-motion"
+import cx from "classnames"
 
-export default function PuzzleCard({word, index, onSelectSuccess, correctWord, onDrag}){
+export default function PuzzleCard({word, index, onClickWordSelect, onDragWordSelect, onDrag}){
 
 	const [onDragFlag, setOnDragFlag] = useState(false)
-
-
-
-	function onClickHandler(){
-		if(correctWord.text === word){
-			onSelectSuccess(index)
-		}
-	}
 
 	return (
 		<motion.div
@@ -26,16 +19,17 @@ export default function PuzzleCard({word, index, onSelectSuccess, correctWord, o
 			dragElastic={1}
 			onClick={() => {
 				if(!onDragFlag){
-					onClickHandler()
+					onClickWordSelect(index)
 				} else {
 					setOnDragFlag(false)
 				}
 			}}
 			onDrag={onDrag}
 			onDragStart={() => setOnDragFlag(true)}
-			className={classesCss.PuzzleCard}
+			onDragEnd={() => onDragWordSelect(index)}
+			className={cx(classesCss.PuzzlePiece, classesCss.PuzzleCard)}
 		>
-			{word}
+			{word.text}
 		</motion.div>
 	)
 }

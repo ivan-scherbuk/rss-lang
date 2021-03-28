@@ -1,0 +1,82 @@
+.PuzzleGame{
+  padding: 50px;
+  display:flex;
+  flex-direction: column;
+
+  .CurrentWord{
+    justify-content: center;
+    font-size: 40px;
+    display: flex;
+    margin-bottom: 20px;
+
+    .Word{
+      min-width: 350px;
+    }
+
+    .Countdown{
+      font-size: 80px;
+      display: flex;
+      align-items: center;
+      margin-left: 30px;
+    }
+  }
+
+  .Translation{
+    margin-bottom: 30px;
+    font-size: 30px;
+  }
+
+  .PuzzleField{
+
+
+    .PuzzlePieceWrap{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      &:not(:last-child){
+        margin-bottom: 10px;
+      }
+    }
+    .PuzzlePiece{
+      border-radius: 15px;
+      min-width: 70px;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      font-size: 30px;
+      justify-content: center;
+      align-items: center;
+      height: 70px;
+      display: flex;
+      padding: 10px;
+      &:not(:first-child){
+        margin-left: 10px;
+      }
+
+      &.PuzzleCell{
+        background-color: lightgrey;
+        max-width:140px;
+        color: transparent;
+        transition: background-color .5s, width .8s, max-width .8s, color .8s;
+
+        &.Selected{
+          max-width: 1000px;
+          color: inherit;
+        }
+
+        &.Hovered{
+          background-color: #d43d1e;
+        }
+      }
+
+      &.PuzzleCard{
+        background-color: #ffc764;
+        padding: 10px;
+        cursor: pointer;
+      }
+    }
+    .Symbol{
+      font-size: 60px;
+    }
+  }
+
+}

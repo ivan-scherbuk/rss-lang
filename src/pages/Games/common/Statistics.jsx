@@ -1,12 +1,11 @@
 import React, {useCallback} from 'react';
 import classNames from 'classnames';
-import Grid from "@material-ui/core/Grid";
-import {makeStyles} from '@material-ui/core/styles';
+import {createStyles, Grid, makeStyles} from "@material-ui/core";
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 import { useHistory} from 'react-router-dom';
-import {setStatusGame} from "../../../redux/savannah/actions";
+import {setStatusGame} from "../../../redux/games/actions";
 import {useDispatch} from "react-redux";
 import Button from "./Button";
 
@@ -81,7 +80,8 @@ const Statistics = (props) => {
         </Grid>
     );
 };
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) =>
+    createStyles({
     container: {
         width: '100%',
         height: '100%',
@@ -122,6 +122,10 @@ tableHeader: {
     "& tr": {
         display: 'flex',
         justifyContent: 'space-around',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '12px',
+            breakWord: 'word-break',
+        },
     },
 },
 scroll: {
@@ -177,7 +181,6 @@ scroll: {
             backgroundColor: '#e67353',
         },
     },
-
-
-});
+    }),
+);
 export default Statistics;

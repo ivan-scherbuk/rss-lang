@@ -31,13 +31,6 @@ function toRel(objRect){
     }
 }
 
-const initCorrection = Array(2).fill({
-    right: 0,
-    left: 0,
-    top: 0,
-    bottom: 0,
-})
-
 export function checkCollision(obj1, obj2, correction = null) {
     const relObj1 = toRel(obj1)
     const relObj2 = toRel(obj2)

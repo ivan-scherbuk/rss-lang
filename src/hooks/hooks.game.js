@@ -18,7 +18,6 @@ export const useTimerGenerator = (fn, generationTimeCount, condition = true, che
 	const [timeToNextGen, setTimeToNextGen] = useState(getGenerationTime(generationTimeCount))
 	const [walkCondition, setWalkCondition] = useState(true)
 
-
 	function getGenerationTime(generationTimeContainer){
 		if (Array.isArray(generationTimeContainer)) {
 			const minTime = generationTimeContainer[0]

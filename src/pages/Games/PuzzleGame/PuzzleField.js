@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import classesCss from "../Games.module.scss"
+import classesCss from "./PuzzleGame.module.scss"
 import PuzzleCell from "./components/PuzzleCell"
 import Symbol from "./components/Symbol"
 import PuzzleCard from "./components/PuzzleCard"
@@ -11,27 +11,52 @@ import { checkCollision, shuffle } from "../../../helpers/gameUtils"
 // Business was <b>worse</b> this, month than t, month.
 // Business was worse this, month than last, month.
 export default function PuzzleField({text, onSuccess}){
-
 	const [currentWord, setCurrentWord] = useState(0)
 	const [words, setWords] = useState({
 		cards: [],
 		cells: [],
 	})
 	const cellsRef = useRef(null)
-	const [dragIntersectWord, setDragIntersectWord] = useState(null)
+	const [currentIntersectWord, setCurrentIntersectWord] = useState(null)
 
-	function onWordSelectSuccess(index){
+	function onSuccessSelect(index){
 		const cards = [...words.cards]
 		const cells = [...words.cells]
-		const currentWordInCells = cells.findIndex(word => word.index === currentWord)
-		cells[currentWordInCells] = {...cells[currentWordInCells], visible: true}
+		cells[currentWord] = {...cells[currentWord], visible: true}
 		cards.splice(index, 1)
-		const nextInc = words.cells[currentWord+1].type === "symbol"? 2 : 1
-		console.log(nextInc)
+		let nextInc = 1
+		console.log(words.cells[currentWord + nextInc])
+		while (words.cells[currentWord + nextInc]
+		&& (words.cells[currentWord + nextInc].type === "symbol"
+			|| words.cells[currentWord + nextInc].visible)) {
+			nextInc++
+		}
 		setCurrentWord(currentWord + nextInc)
 		setWords({cards, cells})
+	}
 
+	function wordSelectHandler(index){
 
+	}
+
+	function onClickWordSelectHandler(index){
+		if (words.cells[currentWord].text === words.cards[index].text) onSuccessSelect(index)
+	}
+
+	function onDragWordSelectHandler(index){
+		if (currentIntersectWord === currentWord) {
+			onClickWordSelectHandler(index)
+		} else if (
+			currentIntersectWord !== null
+			&& !words.cells[currentIntersectWord].visible
+			&& words.cells[currentIntersectWord].text === words.cards[index].text){
+			const cards = [...words.cards]
+			const cells = [...words.cells]
+			cells[currentIntersectWord] = {...cells[currentIntersectWord], visible: true}
+			cards.splice(index, 1)
+			setWords({cards, cells})
+		}
+		if (currentIntersectWord !== null) setCurrentIntersectWord(null)
 	}
 
 	function onDrag(event){
@@ -39,19 +64,20 @@ export default function PuzzleField({text, onSuccess}){
 		const crossedWord = words.cells.findIndex((cell, index) => {
 			//we cant define children position one time in start, because this position depends on viewport,
 			//so we have to calculate on the fly
+			if(cell.type === "symbol") return false
 			const cellRect = cellsRef.current.children[index].getBoundingClientRect()
 			return checkCollision(cellRect, cardRect)
 		})
-		if (crossedWord+1) {
-			if(crossedWord !== dragIntersectWord)
-			setDragIntersectWord(crossedWord)
-		} else if(dragIntersectWord !== null){
-			setDragIntersectWord(null)
+		if (crossedWord + 1) {
+			if (crossedWord !== currentIntersectWord)
+				setCurrentIntersectWord(crossedWord)
+		} else if (currentIntersectWord !== null) {
+			setCurrentIntersectWord(null)
 		}
 	}
 
-
 	useEffect(() => {
+
 		if (words.cards.length <= 0 && currentWord > 0) {
 			onSuccess()
 		}
@@ -62,13 +88,19 @@ export default function PuzzleField({text, onSuccess}){
 			setCurrentWord(0)
 			const textWOTags = text.replace(/<\/?\w+>/g, "")
 			const textParts = [...textWOTags.matchAll(/((?:the |a |in |to |on )*[\w’]+(?: \w\.)?)+([.;,+"\-:]+)*/gi)]
-			const cards = []
-			const cells = []
-			textParts.forEach((word, index) => {
-				cards.push({text: word[1], index})
-				cells.push({type: "word", text: word[1], index, isFigured: false})
-				if (word[2]) cells.push({type: "symbol", text: word[2], visible: false})
-			})
+			const cells = textParts.reduce((result, elem, index) => {
+				result.push({
+					type: "text",
+					text: elem[1],
+					index,
+				})
+				if (elem[2]) result.push({
+					type: "symbol",
+					text: elem[2],
+				})
+				return result
+			}, [])
+			const cards = cells.filter(el => el.type === "text")
 			setWords({
 				cards: shuffle(cards),
 				cells,
@@ -76,21 +108,16 @@ export default function PuzzleField({text, onSuccess}){
 		}
 	}, [text])
 
-
-	console.log(words.cells[currentWord])
-
 	return (
 		<div className={classesCss.PuzzleField}>
-			<div className={classesCss.PuzzleCellsWrap} ref={cellsRef}>
+			<div className={classesCss.PuzzlePieceWrap} ref={cellsRef}>
 				{words.cells.map((el, index) => {
-					if (el.type === "word") {
+					if (el.type === "text") {
 						return (
 							<PuzzleCell
-								className={"puzzle-cell"}
-								word={el.text}
-								index={el.index}
+								word={el}
+								hovered={index === currentIntersectWord}
 								key={"cell" + index + el.index}
-								visible={el.visible}
 							/>
 						)
 					} else {
@@ -104,22 +131,19 @@ export default function PuzzleField({text, onSuccess}){
 
 				})}
 			</div>
-			<div className={classesCss.PuzzleCardsWrap}>
-				{
-					words.cards.map((el, index) => {
-						return (
-							<PuzzleCard
-								word={el.text}
-								currentInterSectWord = {dragIntersectWord}
-								onSelectSuccess={onWordSelectSuccess}
-								index={index}
-								correctWord={words.cells[currentWord]}
-								onDrag={onDrag}
-								key={"card" + el.index + index}
-							/>
-
-						)
-					})
+			<div className={classesCss.PuzzlePieceWrap}>
+				{words.cards.map((el, index) => {
+					return (
+						<PuzzleCard
+							word={el}
+							index={index}
+							onClickWordSelect={onClickWordSelectHandler}
+							onDragWordSelect={onDragWordSelectHandler}
+							onDrag={onDrag}
+							key={"card" + el.index + index}
+						/>
+					)
+				})
 				}
 			</div>
 		</div>

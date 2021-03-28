@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import classesCss from "../Games.module.scss"
+import classesCss from "./PuzzleGame.module.scss"
 import { useTimer, useTimerGenerator } from "../../../hooks/hooks.game"
 import {getUserWordsChunk, createRandomChunkFromGroup, getUserWordsGroup } from "../../../helpers/utils.words"
 import { useSelector } from "react-redux"
@@ -19,12 +19,9 @@ export default function PuzzleGame(){
 	const [currentPage, setCurrentPage] = useState(0)
 
 	const timer = useTimerGenerator(() => {
-		console.log(12345)
 		setCurrentWord(currentWord + 1)
-		setCountdown(50)
-	}, 60 * 1000, currentChunk && currentWord < currentChunk.length && false, 250)
-
-
+		//setCountdown(50)
+	}, 60 * 1000, currentChunk && currentWord < currentChunk.length, 250)
 
 	function onSuccessAssembly(){
 		timer.reset()
@@ -34,7 +31,6 @@ export default function PuzzleGame(){
 		if(currentWordsGroup){
 			setCurrentChunk(createRandomChunkFromGroup(currentWordsGroup))
 		}
-
 	}, [currentWordsGroup])
 
 	useEffect(() => {
@@ -62,9 +58,6 @@ export default function PuzzleGame(){
 			setCurrentWord(0)
 		}
 	}, [currentPage, currentWord])
-
-
-	console.log(currentWord)
 
 	return (
 		<div className={classesCss.PuzzleGame}>

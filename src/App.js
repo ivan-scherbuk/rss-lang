@@ -27,6 +27,8 @@ function App(){
 
 
 	async function syncUser(){
+		// if token OK or token pre-expire and can be refreshed - return token
+		// if token is expired - return false
 		const token = await dispatch(checkToken())
 		if(token){
 			await dispatch(getUserWords())
@@ -37,11 +39,10 @@ function App(){
 	}
 
 	useEffect (() => {
-		if(user.isLogged && moment()){
+		if(user.isLogged){
 			syncUser()
 		}
-	}, [dispatch, user.isLogged
-	])
+	}, [dispatch, user.isLogged])
 
 	return (
 		<div>
