@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import BookHeader from "./BookHeader.js";
 import BookMainContent from "./BookMainContent.js";
-import classesCss from "./../styles/BookPage.module.scss";
-import { Route } from "react-router";
+import classesCss from "./BookPage.module.scss";
+import { Route, useParams } from "react-router-dom";
 import BookNavbar from "./BookNavbar.js";
 import Vocabulary from "./Vocabulary/Vocabulary.js";
 import SettingsBook from "./SettingsBook.js";
 
+
 export default function BookPage() {
   const [isBook, setIsBook] = useState(true);
+
+
   return (
     <div className={classesCss.BookPage}>
       <BookHeader />
-      {isBook && <BookNavbar />}
+      {isBook && <BookNavbar/>}
       <div className={classesCss.BookMainContent}>
         <Route
           path={"/book/group/:currentGroup"}
