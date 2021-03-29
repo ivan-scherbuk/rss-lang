@@ -5,6 +5,7 @@ import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import Pagination from "./Pagination";
 import SettingsBook from "./SettingsBook";
+import { useUserWords } from "../../hooks/hooks.user";
 
 export default function BookMainContent({
   setIsBook,
@@ -16,6 +17,16 @@ export default function BookMainContent({
     +sessionStorage.getItem("currentPage") || 0
   );
   const { currentWords, getWordsChunk, onLoading } = useWords();
+  const {
+    currentUserWords,
+    getUserWordsChunk,
+    subscribedUserWords,
+    onLoading: onUserLoading,
+  } = useUserWords();
+  const filters = {
+    difficulty: "hard | normal | weak" | undefined,
+    deleted: true | false | undefined,
+  };
   const { currentGroup } = useParams();
 
   useEffect(() => {
@@ -32,6 +43,7 @@ export default function BookMainContent({
   useEffect(() => {
     getWordsChunk(currentGroup - 1, currentPage);
     sessionStorage.setItem("currentPage", currentPage);
+    getUserWordsChunk(currentGroup - 1, currentPage, filters);
   }, [currentPage, getWordsChunk, currentGroup]);
 
   return (
@@ -39,9 +51,14 @@ export default function BookMainContent({
       <div className={classesCss.test}>
         {currentWords &&
           currentWords.map((word) => {
+            const indexOfUserWord = currentUserWords.indexOf(word);
+            let currentWordInfo = word;
+            if (currentUserWords.indexOf(word) !== -1) {
+              currentWordInfo = currentUserWords[indexOfUserWord];
+            }
             return (
               <div key={word.id}>
-                <WordCard cardInfo={word} />
+                <WordCard cardInfo={currentWordInfo} />
               </div>
             );
           })}
