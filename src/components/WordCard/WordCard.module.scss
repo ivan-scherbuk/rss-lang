@@ -1,4 +1,4 @@
-.word-card-container {
+.WordCardContainer {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -10,50 +10,50 @@
 
 }
 
-.icon {
+.Icon {
     font-family: Material Icons;
     font-size: 30px;
 }
 
-.icon:hover {
+.Icon:hover {
     cursor: pointer;
     transform: scale(1.2);
 }
 
-.icon-succsess {
+.IconSuccsess {
     color: green
 }
 
-.icon-failture {
+.IconFailture {
     color: red;
 }
 
-.word-text {
+.WordText {
     text-align: center;
     margin: 10px 0 10px 0;
 }
 
-.word-content {
+.WordContent {
     margin: 10px 0 10px 0;
 }
 
-.contetnt-wrapper {
+.ContetntWrapper {
     width: 30%
 }
 
-.word-img {
+.WordImg {
     width: 390px;
     height: 260px;
     border-radius: 20px;
 }
 
-.notification-wrapper {
+.NotificationWrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   height: 30vh;
 }
 
-.result-counter {
+.ResultCounter {
   margin-bottom: 10px;
 }

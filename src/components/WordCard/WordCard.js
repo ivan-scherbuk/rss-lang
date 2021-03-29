@@ -10,6 +10,14 @@ export default function WordCard(props) {
     const { update, updatedWord, onError } = useUserWordUpdate()
     const audioPlayer = new Audio();
     audioPlayer.volume = 0.1;
+    const [isForceOpened, setForceOpened] = useState(false)
+    let notification
+    if (props.cardInfo.optional?.difficulty === "hard") {
+      notification = "notification_important"
+    } else {
+      notification = ""
+    }
+
 
     function playAudio(url, phase) {
         audioPlayer.src = url;
@@ -39,45 +47,52 @@ export default function WordCard(props) {
 
         }
         audioPlayer.addEventListener('ended', playNextAudio);
+    }
 
-
+    if (props.cardInfo.optional?.deleted && !isForceOpened) {
+      return <div className={classesCss['WordCardContainer']}>
+          <div className={classesCss['WordText']} onClick = {() =>
+            setForceOpened(true)
+          }>{word}</div>
+        </div>
 
     }
 
+
     return (
-        <div className={classesCss['word-card-container']}>
+        <div className={classesCss['WordCardContainer']}>
             {/* <img src={image}/> */}
-            <div className={classesCss['word-img']} style={{backgroundImage: `url(${image})`}}></div>
+            <div className={classesCss['WordImg']} style={{backgroundImage: `url(${image})`}}></div>
             <div>
-                <div className={classesCss['icon']} onClick = {() =>
+                <div className={classesCss['Icon']} onClick = {() =>
                     playAudio(audio)
 
                 }>volume_up</div>
-                <div className={classesCss['icon']} onClick = {() =>
+                <div className={classesCss['Icon']} onClick = {() =>
                   update(props.cardInfo, {difficulty: 'hard'}) }>add_alert</div>
-                <div className={classesCss['icon']} onClick ={() =>
+                <div className={classesCss['Icon']} onClick ={() =>
                   update(props.cardInfo, {deleted: true})
 
                 }>delete_forever</div>
             </div>
-            <div className={classesCss['contetnt-wrapper']}>
-                <div className={classesCss['word-text']}>{word}</div>
-                <div className={classesCss['word-text']}>{transcription}</div>
-                <div className={classesCss['word-text']}>{wordTranslate}</div>
-                <div dangerouslySetInnerHTML={{__html: textMeaning}} className={classesCss['word-content']}></div>
-                <div className={classesCss['word-content']}>{textMeaningTranslate}</div>
-                <div  dangerouslySetInnerHTML={{__html: textExample}} className={classesCss['word-content']}></div>
-                <div className={classesCss['word-content']}>{textExampleTranslate}</div>
+            <div className={classesCss['ContetntWrapper']}>
+                <div className={classesCss['WordText']}>{word}</div>
+                <div className={classesCss['WordText']}>{transcription}</div>
+                <div className={classesCss['WordText']}>{wordTranslate}</div>
+                <div dangerouslySetInnerHTML={{__html: textMeaning}} className={classesCss['WordContent']}></div>
+                <div className={classesCss['WordContent']}>{textMeaningTranslate}</div>
+                <div  dangerouslySetInnerHTML={{__html: textExample}} className={classesCss['WordContent']}></div>
+                <div className={classesCss['WordContent']}>{textExampleTranslate}</div>
             </div>
-            <div className={classesCss['notification-wrapper']}>
-                <div className={classesCss['icon']}>notification_important</div>
-                <div className={classesCss['result-container']}>
-                  <div className={classesCss['result-wrapper']}>
-                      {/* <span className={`${classesCss['icon']} ${classesCss['icon-succsess']}`}>thumb_up_off_alt</span><span className={classesCss['result-counter']}>{`:${successCounter}`}</span> */}
+            <div className={classesCss['NotificationWrapper']}>
+                <div className={classesCss['Icon']}>{notification}</div>
+                <div className={classesCss['ResultContainer']}>
+                  <div className={classesCss['ResultWrapper']}>
+                      {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-succsess']}`}>thumb_up_off_alt</span><span className={classesCss['result-counter']}>{`:${successCounter}`}</span> */}
                   </div>
 
-                  <div className={classesCss['result-wrapper']}>
-                      {/* <span className={`${classesCss['icon']} ${classesCss['icon-failture']}`}>thumb_down_off_alt</span><span className={classesCss['result-counter']}>{`:${failedCounter}`}</span> */}
+                  <div className={classesCss['ResultWrapper']}>
+                      {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-failture']}`}>thumb_down_off_alt</span><span className={classesCss['result-counter']}>{`:${failedCounter}`}</span> */}
                   </div>
                 </div>
 
