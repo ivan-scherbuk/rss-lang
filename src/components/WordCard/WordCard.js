@@ -10,6 +10,14 @@ export default function WordCard(props) {
     const { update, updatedWord, onError } = useUserWordUpdate()
     const audioPlayer = new Audio();
     audioPlayer.volume = 0.1;
+    const [isForceOpened, setForceOpened] = useState(false)
+    let notification
+    if (props.cardInfo.optional?.difficulty === "hard") {
+      notification = "notification_important"
+    } else {
+      notification = ""
+    }
+
 
     function playAudio(url, phase) {
         audioPlayer.src = url;
@@ -39,10 +47,17 @@ export default function WordCard(props) {
 
         }
         audioPlayer.addEventListener('ended', playNextAudio);
+    }
 
-
+    if (props.cardInfo.optional?.deleted && !isForceOpened) {
+      return <div className={classesCss['WordCardContainer']}>
+          <div className={classesCss['WordText']} onClick = {() =>
+            setForceOpened(true)
+          }>{word}</div>
+        </div>
 
     }
+
 
     return (
         <div className={classesCss['WordCardContainer']}>
@@ -70,7 +85,7 @@ export default function WordCard(props) {
                 <div className={classesCss['WordContent']}>{textExampleTranslate}</div>
             </div>
             <div className={classesCss['NotificationWrapper']}>
-                <div className={classesCss['Icon']}>notification_important</div>
+                <div className={classesCss['Icon']}>{notification}</div>
                 <div className={classesCss['ResultContainer']}>
                   <div className={classesCss['ResultWrapper']}>
                       {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-succsess']}`}>thumb_up_off_alt</span><span className={classesCss['result-counter']}>{`:${successCounter}`}</span> */}
