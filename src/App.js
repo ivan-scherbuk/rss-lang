@@ -1,8 +1,7 @@
 import React, { useEffect } from "react"
 import { Route, Switch, useLocation } from "react-router-dom"
 import { TransitionGroup, CSSTransition } from "react-transition-group"
-import moment from "moment"
-import NavigationBar from "./components/Navigation/NavigationBar"
+import NavigationBar from "./pages/Navigation/NavigationBar"
 import MainPage from "./pages/MainPage"
 import BookPage from "./pages/BookPage/BookPage"
 import GamesPage from "./pages/GamesPage"
@@ -17,13 +16,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { getUserWords } from "./redux/actions.user"
 import { syncUserWords } from "./redux/actions.words"
 import { checkToken, logOut } from "./redux/actions.auth"
+import UserPage from "./pages/UserPage"
 
 function App(){
 
 	const dispatch = useDispatch()
 	const location = useLocation()
 	const user = useSelector(store => store.user)
-	const words = useSelector(store => store.words)
 
 
 	async function syncUser(){
@@ -42,7 +41,7 @@ function App(){
 		if(user.isLogged){
 			syncUser()
 		}
-	}, [dispatch, user.isLogged])
+	}, [dispatch, user.isLogged, syncUser])
 
 	return (
 		<div>
@@ -61,6 +60,7 @@ function App(){
 						<Route path="/games/sprint"><Sprint/></Route>
 						<Route path="/games/puzzle"><PuzzleGame/></Route>
 						<Route path="/games" exact><GamesPage/></Route>
+            <Route path="/user" exact><UserPage/></Route>
 						<Route path="/" exact><MainPage/></Route>
 					</Switch>
 				</CSSTransition>

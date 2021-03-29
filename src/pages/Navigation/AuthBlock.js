@@ -1,16 +1,15 @@
 import React, { useState } from "react"
-import Button from "../Buttons/Button"
-import AuthModal from "../AuthForm/AuthModal"
+import Button from "../../components/Buttons/Button"
+import AuthModal from "../../components/AuthForm/AuthModal"
 import classesCss from './Navigation.module.scss'
 import Avatar from "@material-ui/core/Avatar"
-import { useDispatch, useSelector } from "react-redux"
-import { logOut } from "../../redux/actions.auth"
+import { useSelector } from "react-redux"
+import { NavLink } from "react-router-dom"
 
 
 export default function AuthBlock({children, classes, className, styles}) {
 
 	const {isLogged, email} = useSelector(state => state.user)
-	const dispatch = useDispatch()
 	const [modalIsOpen, setModalIsOpen] = useState(false)
 
 	const modalClasses = [classes.modal, classesCss.AuthModal]
@@ -30,11 +29,16 @@ export default function AuthBlock({children, classes, className, styles}) {
 					className={buttonClasses.join(" ")}
 					onClick={() => setModalIsOpen(!modalIsOpen)}
 				/>
-				: <Avatar
-						className={classes.avatar}
+				:
+          <NavLink
+            className={classes.avatar}
+            to="/statistic">
+            <Avatar
+
 						alt={email.toUpperCase()}
-						onClick = {() => dispatch(logOut())}
+            src={'url()'}
 					/>
+          </NavLink>
 			}
 			<AuthModal
 				onClose={() => setModalIsOpen(false)}

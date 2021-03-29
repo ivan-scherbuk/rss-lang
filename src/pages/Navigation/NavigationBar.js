@@ -1,8 +1,8 @@
 import React from "react"
 import { NavLink, useLocation } from "react-router-dom"
 import AuthBlock from "./AuthBlock"
-import AuthForm from "../AuthForm/AuthForm"
-import Button from "../Buttons/Button"
+import AuthForm from "../../components/AuthForm/AuthForm"
+import Button from "../../components/Buttons/Button"
 import classesCss from "./Navigation.module.scss"
 
 export default function NavigationBar(){

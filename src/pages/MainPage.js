@@ -1,7 +1,6 @@
 import React from "react"
 import classesCss from "./styles/MainPage.module.scss"
 import "../styles/effect.scss"
-import NavigationBar from "../components/Navigation/NavigationBar";
 
 
 export default function MainPage(){

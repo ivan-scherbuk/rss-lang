@@ -61,6 +61,7 @@
       }
 
       &.Active{
+
         height: 400px;
         width: 400px;
         padding: 100px;
@@ -123,6 +124,15 @@
     .Avatar{
       height: $bubbleButtonDefSize;
       width: $bubbleButtonDefSize;
+      font-size: 60px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      >div{
+        font-size: inherit;
+        height: 100%;
+        width: 100%;
+      }
     }
   }
 
