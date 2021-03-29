@@ -4,8 +4,13 @@ import classesCss from "./../styles/BookPage.module.scss";
 import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import Pagination from "./Pagination";
+import SettingsBook from "./SettingsBook";
 
-export default function BookMainContent({ setIsBook }) {
+export default function BookMainContent({
+  setIsBook,
+  settingsToggle,
+  settingsOff,
+}) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(
     +sessionStorage.getItem("currentPage") || 0
@@ -47,6 +52,7 @@ export default function BookMainContent({ setIsBook }) {
         setCurrentPage={setCurrentPage}
         totalPagesCount={totalPagesCount}
       />
+      {settingsToggle && <SettingsBook settingsOff={settingsOff} />}
     </div>
   );
 }
