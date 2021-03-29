@@ -28,10 +28,23 @@
 }
 
 .pagination {
+  bottom: 0px;
+  position: sticky;
   display: flex;
-  flex-direction: row;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #ffffff;
+  font-size: 17px;
 }
 
 .selectedInput {
   width: 20px;
+}
+
+.doubleArrow {
+  color: red;
+}
+
+.singleArrow {
+  color: yellowgreen;
 }

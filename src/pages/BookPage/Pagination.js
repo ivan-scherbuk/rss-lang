@@ -41,8 +41,12 @@ export default function Pagination({
   };
   return (
     <div className={classesCss.pagination}>
-      <div onClick={turnToStart}>{"<<"}</div>
-      <div onClick={turnPageBack}>{"<"}</div>
+      <div onClick={turnToStart} className={classesCss.doubleArrow}>
+        {"<<"}
+      </div>
+      <div onClick={turnPageBack} className={classesCss.singleArrow}>
+        {"<"}
+      </div>
       Page:
       {!editMode && (
         <span onClick={activateEditMode}>
@@ -59,8 +63,12 @@ export default function Pagination({
         ></input>
       )}
       of {totalPagesCount}
-      <div onClick={turnPageForward}>{">"}</div>
-      <div onClick={turnToEnd}>{">>"}</div>
+      <div onClick={turnPageForward} className={classesCss.singleArrow}>
+        {">"}
+      </div>
+      <div onClick={turnToEnd} className={classesCss.doubleArrow}>
+        {">>"}
+      </div>
     </div>
   );
 }

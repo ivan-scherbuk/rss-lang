@@ -31,14 +31,16 @@ export default function BookMainContent({ setIsBook }) {
 
   return (
     <div>
-      {currentWords &&
-        currentWords.map((word) => {
-          return (
-            <div key={word.id}>
-              <WordCard cardInfo={word} />
-            </div>
-          );
-        })}
+      <div className={classesCss.test}>
+        {currentWords &&
+          currentWords.map((word) => {
+            return (
+              <div key={word.id}>
+                <WordCard cardInfo={word} />
+              </div>
+            );
+          })}
+      </div>
       <Pagination
         onPageChanged={onPageChanged}
         currentPage={currentPage}
