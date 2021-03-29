@@ -48,3 +48,19 @@
 .singleArrow {
   color: yellowgreen;
 }
+
+.settingsBlackout {
+  top: 0px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  z-index: 5;
+  background: rgba(41, 41, 41, 0.6);
+}
+
+.settingsContent {
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+}
