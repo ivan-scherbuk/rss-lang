@@ -51,10 +51,12 @@ export default function BookMainContent({
       <div className={classesCss.test}>
         {currentWords &&
           currentWords.map((word) => {
-            const indexOfUserWord = currentUserWords.indexOf(word);
             let currentWordInfo = word;
-            if (currentUserWords.indexOf(word) !== -1) {
-              currentWordInfo = currentUserWords[indexOfUserWord];
+            if (currentUserWords) {
+              const indexOfUserWord = currentUserWords.indexOf(word);
+              if (indexOfUserWord !== -1) {
+                currentWordInfo = currentUserWords[indexOfUserWord];
+              }
             }
             return (
               <div key={word.id}>
