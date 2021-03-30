@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useWords } from "../../hooks/hooks.words";
-import classesCss from "./BookPage.module.scss";
+import classesCss from "../styles/BookPage.module.scss";
 import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import Pagination from "./Pagination";
+import SettingsBook from "./SettingsBook";
 
-export default function BookMainContent({ setIsBook }) {
+export default function BookMainContent({
+  setIsBook,
+  settingsToggle,
+  settingsOff,
+}) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(
     +sessionStorage.getItem("currentPage") || 0
@@ -32,20 +37,23 @@ export default function BookMainContent({ setIsBook }) {
 
   return (
     <div>
-      {currentWords &&
-        currentWords.map((word) => {
-          return (
-            <div key={word.id}>
-              <WordCard cardInfo={word} />
-            </div>
-          );
-        })}
+      <div className={classesCss.test}>
+        {currentWords &&
+          currentWords.map((word) => {
+            return (
+              <div key={word.id}>
+                <WordCard cardInfo={word} />
+              </div>
+            );
+          })}
+      </div>
       <Pagination
         onPageChanged={onPageChanged}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPagesCount={totalPagesCount}
       />
+      {settingsToggle && <SettingsBook settingsOff={settingsOff} />}
     </div>
   );
 }

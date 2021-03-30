@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getUserWords } from "./redux/actions.user"
 import { syncUserWords } from "./redux/actions.words"
 import { checkToken, logOut } from "./redux/actions.auth"
-import UserPage from "./pages/UserPage"
+import UserPage from "./pages/UserPage/UserPage"
 
 function App(){
 
@@ -24,24 +24,23 @@ function App(){
 	const location = useLocation()
 	const user = useSelector(store => store.user)
 
-
-	async function syncUser(){
-		// if token OK or token pre-expire and can be refreshed - return token
-		// if token is expired - return false
-		const token = await dispatch(checkToken())
-		if(token){
-			await dispatch(getUserWords())
-			await dispatch(syncUserWords())
-		} else{
-			await dispatch(logOut())
-		}
-	}
-
 	useEffect (() => {
+    async function syncUser(){
+      // if token OK or token pre-expire and can be refreshed - return token
+      // if token is expired - return false
+      const token = await dispatch(checkToken())
+      if(token){
+        await dispatch(getUserWords())
+        await dispatch(syncUserWords())
+      } else{
+        await dispatch(logOut())
+      }
+    }
+
 		if(user.isLogged){
 			syncUser()
 		}
-	}, [dispatch, user.isLogged, syncUser])
+	}, [dispatch, user.isLogged])
 
 	return (
 		<div>
