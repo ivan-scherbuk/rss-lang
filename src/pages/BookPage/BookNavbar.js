@@ -15,16 +15,21 @@ export default function BookNavbar({ classes }) {
     <div className={classesCss.BookNavbar}>
       {groups.map((group) => {
         return (
-          <div
-            key={group}
-            onClick={onGroupChanged}
-            className={classes && classes.group}
-          >
+          <div key={group} onClick={onGroupChanged}>
             <NavLink
               to={"/book/group/" + group}
+              className={
+                classes
+                  ? [
+                      classes.group,
+                      classesCss.group,
+                      classesCss["group" + group],
+                    ].join(" ")
+                  : [classesCss.group, classesCss["group" + group]].join(" ")
+              }
               activeClassName={classes && classes.activeGroup}
             >
-              Group {group}
+              {group}
             </NavLink>
           </div>
         );
