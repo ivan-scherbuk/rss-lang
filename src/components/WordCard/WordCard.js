@@ -58,7 +58,6 @@ export default function WordCard(props) {
 
     }
 
-
     return (
         <div className={classesCss['WordCardContainer']}>
             {/* <img src={image}/> */}

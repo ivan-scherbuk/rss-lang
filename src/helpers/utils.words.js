@@ -42,7 +42,7 @@ export function getUserWordsGroup(group, userGroup, {difficulty, deleted, ...opt
 	if (userGroup) {
 		for (let page in userGroup) {
 			if (userGroup.hasOwnProperty(page)) {
-				crossedGroup[page] = getUserWordsChunk(group, page, {difficulty, deleted})
+				crossedGroup[page] = getUserWordsChunk(group[page], userGroup[page], {difficulty, deleted})
 			}
 		}
 	}

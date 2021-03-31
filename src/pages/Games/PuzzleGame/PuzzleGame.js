@@ -1,84 +1,117 @@
-import React, { useEffect, useState } from "react"
-import classesCss from "./PuzzleGame.module.scss"
-import { useTimer, useTimerGenerator } from "../../../hooks/hooks.game"
-import {getUserWordsChunk, createRandomChunkFromGroup, getUserWordsGroup } from "../../../helpers/utils.words"
-import { useSelector } from "react-redux"
+import React, { useEffect, useMemo, useState } from "react"
+import { useWordsGroup } from "../../../hooks/hooks.words"
+import { createRandomChunkFromGroup } from "../../../helpers/utils.words"
 import PuzzleField from "./PuzzleField"
-import {useUserWordUpdate, useUserWords} from "../../../hooks/hooks.user"
-import {useWordsGroup} from "../../../hooks/hooks.words"
+import Timer from "../common/Timer";
+import Lives from "./components/Lives";
+import WordList from "./components/WordsList";
+import classesCss from "./PuzzleGame.module.scss"
+
+const TOTAL_LIVES = 3
+const SECONDS_FOR_COMPLETE = 30
 
 export default function PuzzleGame(){
-	const [currentChunk, setCurrentChunk] = useState(null)
-	const [currentWord, setCurrentWord] = useState(0)
-	const words = useSelector(store => store.words)
-	const user = useSelector(store => store.user)
-	const {update, updatedWord} = useUserWordUpdate()
-	const {currentWordsGroup, getWordsGroup} = useWordsGroup()
-	const {currentUserWords, getUserWordsChunk} = useUserWords()
-	const [countdown, setCountdown] = useState(50)
-	const [currentPage, setCurrentPage] = useState(0)
 
-	const timer = useTimerGenerator(() => {
-		setCurrentWord(currentWord + 1)
-		//setCountdown(50)
-	}, 60 * 1000, currentChunk && currentWord < currentChunk.length, 250)
+  const {currentWordsGroup, getWordsGroup} = useWordsGroup()
 
-	function onSuccessAssembly(){
-		timer.reset()
-	}
+  const [currentWord, setCurrentWord] = useState(0)
+  const [lives, setLives] = useState(TOTAL_LIVES)
+  const [timerState, setTimerState] = useState({
+    shouldReset : false,
+    shouldPause: false,
+  })
+  const [autoComplete, setAutoComplete] = useState(false)
 
-	useEffect(() => {
-		if(currentWordsGroup){
-			setCurrentChunk(createRandomChunkFromGroup(currentWordsGroup))
-		}
-	}, [currentWordsGroup])
+  const currentChunk = useMemo(() => {
+    if (currentWordsGroup) {
+      return createRandomChunkFromGroup(currentWordsGroup)
+    }
+    return null
+  }, [currentWordsGroup])
 
-	useEffect(() => {
-		console.log(updatedWord)
-	}, [updatedWord])
+  function resetTimer(){
+    setTimerState(state => ({...state, shouldReset: false}))
+  }
 
-	useEffect(() => {
-		console.log(currentUserWords)
-	}, [currentUserWords])
+  function completeAssemblyHandler(){
+    setTimerState(state => ({...state, shouldReset: true, shouldPause: false}))
+    if(autoComplete) {
+      setAutoComplete(false)
+      currentChunk[currentWord] = {...currentChunk[currentWord], status:"failed"}
+    } else {
+      currentChunk[currentWord] = {...currentChunk[currentWord], status:"succeed"}
+    }
+    setCurrentWord(current => {
+      return current + 1
+    })
+    if(lives < TOTAL_LIVES) setLives(TOTAL_LIVES)
+  }
 
-	useEffect(() => {
-		getWordsGroup(3)
-		//getUserWordsChunk(4,2)
-	}, [])
+  function wrongSelectHandler(){
+    if(lives > 0)setLives(state => state - 1)
+  }
 
-	useEffect(() => {
-		if(user.words && currentPage <30){
-			getUserWordsChunk(1,currentPage, {deleted:false})
-		}
-	}, [user.words, getUserWordsChunk, currentPage])
+  useEffect(() => {
+    getWordsGroup(3)
+  }, [getWordsGroup])
 
-	useEffect(() => {
-		if(currentWord >= 19){
-			setCurrentPage(currentPage + 1)
-			setCurrentWord(0)
-		}
-	}, [currentPage, currentWord])
+  useEffect(() => {
+    if(lives <= 0) {
+      setAutoComplete(true)
+      setTimerState(state => ({...state, shouldPause: true}))
+    }
+  }, [lives])
 
-	return (
-		<div className={classesCss.PuzzleGame}>
-			{
-				currentChunk && currentWord+1 <= currentChunk.length ?
-					(
-						<>
-							<div className={classesCss.CurrentWord}>
-								<div className={classesCss.Word}><h3>{currentChunk[currentWord].word}</h3></div>
-								<div className={classesCss.Countdown}>{countdown >=0 ? countdown : 0}</div>
-							</div>
-							<div className={classesCss.Translation}>
-								<span>{currentChunk[currentWord].textExampleTranslate}</span>
-							</div>
-							<PuzzleField
-								text={currentChunk[currentWord].textExample}
-								onSuccess={onSuccessAssembly}
-							/>
-						</>
-					) : <div>ЗАГРУЗКА</div>
-			}
-		</div>
-	)
+
+  return (
+    <div className={classesCss.PuzzleGame}>
+      {
+        currentChunk && currentWord + 1 <= currentChunk.length ?
+          (
+            <div
+              className={classesCss.GameLayout}
+              key={currentChunk[currentWord].word}
+            >
+              <div className={classesCss.WordBlock}>
+                <div className={classesCss.CurrentWord}>
+                    {currentChunk[currentWord].word[0].toUpperCase() + currentChunk[currentWord].word.slice(1)}
+                </div>
+                <div className={classesCss.Translation}>
+                  <span>{currentChunk[currentWord].textExampleTranslate}</span>
+                </div>
+                <PuzzleField
+                  text={currentChunk[currentWord].textExample}
+                  onSuccess={completeAssemblyHandler}
+                  onWrongSelect={wrongSelectHandler}
+                  autoComplete={autoComplete}
+                />
+              </div>
+              <div className={classesCss.HelperBlock}>
+                <Timer
+                  className={classesCss.Countdown}
+                  softReset={timerState.shouldReset? resetTimer : null}
+                  pause={timerState.shouldPause}
+                  onWillGenerate={() => {
+                    setAutoComplete(true)
+                    //return false prevent further timer process, and we save 0 on timer, if we will use
+                    //onGenerate instead, timer will reset and show counter of next card
+                    return false
+                  }}
+                  cycle={SECONDS_FOR_COMPLETE * 1000}
+                  tic={1000}
+                />
+                <WordList
+                  words={currentChunk}
+                  currentWordIndex={currentWord}
+                />
+                <Lives
+                  livesCount={lives}
+                  totalLives={TOTAL_LIVES}
+                />
+              </div>
+            </div>
+          ) : <div>ЗАГРУЗКА</div>
+      }
+    </div>
+  )
 }

@@ -1,15 +1,13 @@
 import React from "react"
 import classesCss from "./Button.module.scss"
 
-export default function Button({onClick, label, disabled, className, style}){
+export default function Button(props){
 	return(
 		<button
-			style={style}
-			onClick={onClick}
-			disabled={disabled}
-			className={[classesCss.Button, className].join(" ")}
+      {...props}
+			className={[classesCss.Button, props.className].join(" ")}
 		>
-			{label}
+			{props.label}
 		</button>
 	)
 }
