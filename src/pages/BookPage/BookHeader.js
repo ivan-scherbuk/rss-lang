@@ -5,9 +5,13 @@ import classesCss from "../styles/BookPage.module.scss";
 export default function BookHeader({ settingsOn }) {
   return (
     <div className={classesCss.BookHeader}>
-      <NavLink to={"/"}>Main</NavLink>
+      <NavLink className={classesCss.headerLink} to={"/"}>
+        Main
+      </NavLink>
       <div onClick={settingsOn}>Settings</div>
-      <NavLink to={"/book/vocabulary"}>Vocabulary</NavLink>
+      <NavLink className={classesCss.headerLink} to={"/book/vocabulary"}>
+        Vocabulary
+      </NavLink>
     </div>
   );
 }

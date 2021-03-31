@@ -41,16 +41,22 @@ export default function Pagination({
   };
   return (
     <div className={classesCss.pagination}>
-      <div onClick={turnToStart} className={classesCss.doubleArrow}>
+      <div
+        onClick={turnToStart}
+        className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
+      >
         {"<<"}
       </div>
-      <div onClick={turnPageBack} className={classesCss.singleArrow}>
+      <div
+        onClick={turnPageBack}
+        className={[classesCss.singleArrow, classesCss.arrow].join(" ")}
+      >
         {"<"}
       </div>
-      Page:
       {!editMode && (
         <span onClick={activateEditMode}>
-          {typeof currentPage === "number" ? currentPage + 1 : ""}
+          {typeof currentPage === "number" ? currentPage + 1 : ""} /{" "}
+          {totalPagesCount}
         </span>
       )}
       {editMode && (
@@ -62,11 +68,16 @@ export default function Pagination({
           onBlur={deactivateEditMode}
         ></input>
       )}
-      of {totalPagesCount}
-      <div onClick={turnPageForward} className={classesCss.singleArrow}>
+      <div
+        onClick={turnPageForward}
+        className={[classesCss.singleArrow, classesCss.arrow].join(" ")}
+      >
         {">"}
       </div>
-      <div onClick={turnToEnd} className={classesCss.doubleArrow}>
+      <div
+        onClick={turnToEnd}
+        className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
+      >
         {">>"}
       </div>
     </div>

@@ -17,7 +17,7 @@ const StartPage = () => {
 
     return (
         <>
-            <img src={background} alt="savannah background" className={classes.backgroundImg}/>
+            <img src={background} alt="audiocall background" className={classes.backgroundImg}/>
             <Grid container direction="column" justify="center" alignItems="center" className={classes.container}>
                 <Grid container justify="flex-end" className={classes.exitContainer}>
                     <CloseButton/>

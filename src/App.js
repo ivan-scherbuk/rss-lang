@@ -1,31 +1,29 @@
-import React, { useEffect } from "react"
-import { Route, Switch, useLocation } from "react-router-dom"
-import { TransitionGroup, CSSTransition } from "react-transition-group"
+import React, { useEffect } from "react";
+import { Route, Switch, useLocation } from "react-router-dom";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 import NavigationBar from "./pages/Navigation/NavigationBar"
-import MainPage from "./pages/MainPage"
-import BookPage from "./pages/BookPage/BookPage"
-import GamesPage from "./pages/GamesPage"
-import Sprint from "./pages/Games/Sprint"
-import AudioCall from "./pages/Games/Audiocall"
-import Savannah from "./pages/Games/Savannah/Savannah"
-import StatisticPage from "./pages/StatisticPage"
-import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame"
-import "./styles/effect.scss"
-import "./styles/App.module.scss"
-import { useDispatch, useSelector } from "react-redux"
-import { getUserWords } from "./redux/actions.user"
-import { syncUserWords } from "./redux/actions.words"
-import { checkToken, logOut } from "./redux/actions.auth"
+import MainPage from "./pages/MainPage";
+import BookPage from "./pages/BookPage/BookPage";
+import GamesPage from "./pages/GamesPage";
+import Sprint from "./pages/Games/Sprint";
+import AudioCall from "./pages/Games/AudioCall/AudioCall";
+import Savannah from "./pages/Games/Savannah/Savannah";
+import StatisticPage from "./pages/StatisticPage";
+import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame";
+import "./styles/effect.scss";
+import "./styles/App.module.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserWords } from "./redux/actions.user";
+import { syncUserWords } from "./redux/actions.words";
+import { checkToken, logOut } from "./redux/actions.auth";
 import UserPage from "./pages/UserPage/UserPage"
-import { useUserWordsGroup } from "./hooks/hooks.user";
 
-function App(){
+export default function App() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const user = useSelector((store) => store.user);
 
-	const dispatch = useDispatch()
-	const location = useLocation()
-	const user = useSelector(store => store.user)
-
-	useEffect (() => {
+  useEffect (() => {
     async function syncUser(){
       // if token OK or token pre-expire and can be refreshed - return token
       // if token is expired - return false
@@ -38,10 +36,10 @@ function App(){
       }
     }
 
-		if(user.isLogged){
-			syncUser()
-		}
-	}, [dispatch, user.isLogged])
+    if(user.isLogged){
+      syncUser()
+    }
+  }, [dispatch, user.isLogged])
 
 	return (
 		<div>
@@ -68,5 +66,3 @@ function App(){
 		</div>
 	)
 }
-
-export default App
