@@ -9,7 +9,10 @@ export default function BookHeader({ settingsOn }) {
         Main
       </NavLink>
       <div onClick={settingsOn}>Settings</div>
-      <NavLink className={classesCss.headerLink} to={"/book/vocabulary"}>
+      <NavLink
+        className={classesCss.headerLink}
+        to={"/book/vocabulary/group/1"}
+      >
         Vocabulary
       </NavLink>
     </div>
