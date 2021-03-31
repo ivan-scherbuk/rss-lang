@@ -1,4 +1,4 @@
-import { wordsRequest } from "./requests/server"
+import { wordsRequest } from "../helpers/requsts.server"
 import { ADD_WORDS_CHUNK, ADD_WORDS_GROUP } from "./types"
 
 const addWordsChunk = wordsChunk => ({type: ADD_WORDS_CHUNK, payload: wordsChunk})

@@ -5,11 +5,12 @@ import classesCss from "./Navigation.module.scss"
 import Avatar from "@material-ui/core/Avatar"
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
+import {SETTINGS} from "../../settings";
 
 
 export default function AuthBlock({children, classes, className, styles}){
 
-  const {isLogged, email} = useSelector(state => state.user)
+  const {isLogged, email, settings} = useSelector(state => state.user)
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   const modalClasses = [classes.modal, classesCss.AuthModal]
@@ -19,6 +20,7 @@ export default function AuthBlock({children, classes, className, styles}){
     buttonClasses.push(classes.authButtonActive)
   }
 
+  console.log(settings?.optional?.image ? `url(${SETTINGS.AWS_STORE_URL}/${settings.optional.image})`: null)
   return (
     <div className={className}>
       {
@@ -35,6 +37,7 @@ export default function AuthBlock({children, classes, className, styles}){
             to="/user">
             <Avatar
               alt={email.toUpperCase()}
+              src={settings?.optional?.image ? `${SETTINGS.AWS_STORE_URL}/${settings.optional.image}`: null}
             />
           </NavLink>
       }

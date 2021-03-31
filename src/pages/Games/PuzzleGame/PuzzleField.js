@@ -88,8 +88,8 @@ export default function PuzzleField({text, onSuccess, onWrongSelect, autoComplet
         onSuccess()
       }
 		}
-    //if add onSuccess function it will work incorrect because onSuccess set Autocomplete so
-    //it call change in PuzzleField, but words stack are still 0, so it calls
+    //if add onSuccess function to deps it will work incorrect because onSuccess sets autocomplete flag so
+    //it call changes in props, when words.cards.length is still 0, so it call
     //onSuccess function one more time
 	}, [words.cards.length])
 
@@ -97,7 +97,14 @@ export default function PuzzleField({text, onSuccess, onWrongSelect, autoComplet
 		if (text) {
 			setCurrentWord(0)
 			const textWOTags = text.replace(/<\/?\w+>/g, "")
-			const textParts = [...textWOTags.matchAll(/((?:the |a |in |to |on )*(?:[\w’])+(?: \w\.)?)+([.;,+"\-:]+)*/gi)]
+      //const textWOTags = "Little darling, hello - Hello my boy, i love ’you’ and now we oki-doki friends, go go! your J. Brown S. ok."
+      const regExp = new RegExp([
+        '(',
+        '(?:the |a |in |to |on )*',
+        '(?:\\w-\\w|\\w|’)+(?: \\w\\.)?',')+',
+        '((?:\\.|; |, |\\+ |" | - |: )+',
+        ')*'].join(''),'gi')
+			const textParts = [...textWOTags.matchAll(regExp)]
 			const cells = textParts.reduce((result, elem, index) => {
 				result.push({
 					type: "text",
