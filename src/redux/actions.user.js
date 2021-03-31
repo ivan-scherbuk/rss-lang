@@ -4,7 +4,7 @@ import { ADD_WORD_TO_USER, SET_USER_WORDS, SET_USER_SETTINGS } from "./types"
 
 const addWordToUser = word => ({type: ADD_WORD_TO_USER, payload: word})
 const serUserWords = wordSet => ({type: SET_USER_WORDS, payload: wordSet})
-//if you update settings without server saving
+//if you want to update settings without server saving
 export const setUserSettings = settings => ({type: SET_USER_SETTINGS, payload:settings})
 
 export function getUserWords(){

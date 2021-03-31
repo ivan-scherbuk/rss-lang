@@ -123,7 +123,7 @@ export function useUserWordsGroup(){
 	const {getWordsGroup} = useWordsGroup()
 	const [currentUserWordsGroup, setCurrentUserWordsGroup] = useState(null)
 	const [onLoading, setOnLoading] = useState(false)
-	const [subscribedUserWordsGroup, setSubscribedUserWordsGroup] = useState(null)
+	//const [subscribedUserWordsGroup, setSubscribedUserWordsGroup] = useState(null)
 	const [subscription, setSubscription] = useState(null)
 
 
@@ -142,15 +142,16 @@ export function useUserWordsGroup(){
 				})
 			}
 		} else {
-			setSubscription({group})
+			setSubscription({group, filters})
 			return false
 		}
 	}, [getWordsGroup, user.words, words])
 
 	useEffect(() => {
 		if(subscription && user.words[subscription.group]){
-			setSubscribedUserWordsGroup(user.words[subscription.group])
-			setSubscription(null)
+		  const {group, filters} = subscription
+      setSubscription(null)
+      getUserWordsGroup(group, filters)
 		}
 	}, [user.words, subscription])
 
@@ -160,5 +161,5 @@ export function useUserWordsGroup(){
 		}
 	}, [currentUserWordsGroup, onLoading])
 
-	return {getUserWordsGroup, subscribedUserWordsGroup, onLoading, currentUserWordsGroup}
+	return {getUserWordsGroup, onLoading, currentUserWordsGroup}
 }

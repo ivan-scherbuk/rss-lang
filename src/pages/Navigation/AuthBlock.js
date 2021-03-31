@@ -20,7 +20,6 @@ export default function AuthBlock({children, classes, className, styles}){
     buttonClasses.push(classes.authButtonActive)
   }
 
-  console.log(settings?.optional?.image ? `url(${SETTINGS.AWS_STORE_URL}/${settings.optional.image})`: null)
   return (
     <div className={className}>
       {

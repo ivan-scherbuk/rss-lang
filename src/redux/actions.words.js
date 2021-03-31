@@ -38,12 +38,12 @@ export function getWords(group = 0, page = 0){
 				data[resPage[0].page] = resPage
 			})
 			dispatch(addWordsGroup({data, group}))
+      return data
 		} else {
 			try {
 				const rawRes = await wordsRequest(group, page)
 				const data = await rawRes.json()
 				dispatch(addWordsChunk({data, group, page}))
-				//indexedDBRequest()
 				return data
 			} catch (e) {
 				return (e)

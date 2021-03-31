@@ -17,6 +17,7 @@ import { getUserWords } from "./redux/actions.user"
 import { syncUserWords } from "./redux/actions.words"
 import { checkToken, logOut } from "./redux/actions.auth"
 import UserPage from "./pages/UserPage/UserPage"
+import { useUserWordsGroup } from "./hooks/hooks.user";
 
 function App(){
 
