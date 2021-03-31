@@ -4,6 +4,8 @@ import {setStatusGame} from '../../../redux/games/actions';
 import {Grid} from "@material-ui/core";
 import StartModal from "../common/StartModal";
 import CloseButton from "../common/CloseButton";
+import classesCss from "./AudioCallGame.module.scss";
+import background from "../../../assets/images/audiocall.jpg"
 
 const classes = {}
 
@@ -16,7 +18,7 @@ export default function StartPage () {
 
   return (
       <>
-
+          {/* <img src={background} alt="audiocall background" className={classes.backgroundImg}/> */}
           <Grid container direction="column" justify="center" alignItems="center" className={classes.container}>
               <Grid container justify="flex-end" className={classes.exitContainer}>
                   <CloseButton/>
