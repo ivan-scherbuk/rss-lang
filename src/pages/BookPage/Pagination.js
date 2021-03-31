@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import classesCss from "./../styles/BookPage.module.scss";
+import classesCss from "../styles/BookPage.module.scss";
 
 export default function Pagination({
   onPageChanged,

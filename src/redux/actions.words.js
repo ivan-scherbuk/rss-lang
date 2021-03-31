@@ -1,4 +1,4 @@
-import { wordsRequest } from "./requests/server"
+import { wordsRequest } from "../helpers/requsts.server"
 import { ADD_WORDS_CHUNK, ADD_WORDS_GROUP } from "./types"
 
 const addWordsChunk = wordsChunk => ({type: ADD_WORDS_CHUNK, payload: wordsChunk})
@@ -38,12 +38,12 @@ export function getWords(group = 0, page = 0){
 				data[resPage[0].page] = resPage
 			})
 			dispatch(addWordsGroup({data, group}))
+      return data
 		} else {
 			try {
 				const rawRes = await wordsRequest(group, page)
 				const data = await rawRes.json()
 				dispatch(addWordsChunk({data, group, page}))
-				//indexedDBRequest()
 				return data
 			} catch (e) {
 				return (e)

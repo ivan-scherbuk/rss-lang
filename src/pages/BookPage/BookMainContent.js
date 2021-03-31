@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWords } from "../../hooks/hooks.words";
-import classesCss from "./../styles/BookPage.module.scss";
+import classesCss from "../styles/BookPage.module.scss";
 import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import Pagination from "./Pagination";
@@ -28,6 +28,7 @@ export default function BookMainContent({
     deleted: true | false | undefined,
   };
   const { currentGroup } = useParams();
+
 
   useEffect(() => {
     setIsBook(true);

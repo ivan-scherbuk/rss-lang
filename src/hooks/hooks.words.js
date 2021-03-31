@@ -59,21 +59,18 @@ export function useWordsGroup(){
 	const [currentRequest, setCurrentRequest] = useState(initialGroupRequest)
 	const [currentWordsGroup, setCurrentWordsGroup] = useState(null)
 
-	const getWordsGroup = useCallback((group) => {
+	const getWordsGroup = useCallback(async (group) => {
 		if (!words[group] || Object.keys(words[group]).length < 30) {
 			setGroupLoading(true)
-			const pageQueue = []
+			const requestPages = []
 			for (let i = 0; i < 30; i++) {
-				if (!words[group] || !(i in words[group])) {
-					pageQueue.push(i)
-				}
+				if (!words[group] || !(i in words[group])) requestPages.push(i)
 			}
 			setCurrentRequest({group})
-			return dispatch(getWords(group, pageQueue))
-		} else {
-			setCurrentWordsGroup(words[group])
-			return words[group]
+      return await dispatch(getWords(group, requestPages))
 		}
+    setCurrentWordsGroup(words[group])
+    return words[group]
 	}, [words, dispatch])
 
 	useEffect(() => {

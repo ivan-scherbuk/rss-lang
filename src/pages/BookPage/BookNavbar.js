@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import classesCss from "./../styles/BookPage.module.scss";
+import classesCss from "../styles/BookPage.module.scss";
 
 export default function BookNavbar({ classes }) {
   let groups = [];
