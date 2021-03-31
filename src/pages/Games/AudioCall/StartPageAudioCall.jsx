@@ -18,16 +18,16 @@ export default function StartPage () {
 
   return (
       <>
-          {/* <img src={background} alt="audiocall background" className={classes.backgroundImg}/> */}
-          <Grid container direction="column" justify="center" alignItems="center" className={classes.container}>
-              <Grid container justify="flex-end" className={classes.exitContainer}>
+          <img src={background} alt="audiocall background" className={classesCss.backgroundImg}/>
+          <Grid container direction="column" justify="center" alignItems="center" className={classesCss.container}>
+              <Grid container justify="flex-end" className={classesCss.exitContainer}>
                   <CloseButton/>
               </Grid>
               <StartModal title="Аудиовызов"
                           description="Тренировка Аудиовызов развивает словарный запас. Выбирайте правильный
                       перевод слова из предложенных."
-                          classes={{container: classes.container}}
                           handleStart={handleStart}
+                          classes={{container: classes.container}}
                           label="Начать">
               </StartModal>
           </Grid>

@@ -4,7 +4,7 @@ import { setStatusGame, setLevel } from '../../../redux/games/actions';
 import {Grid, makeStyles} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux"
 import {useWords} from "../../../hooks/hooks.words"
-import classNames from "classnames";
+// import classNames from "classnames";
 import Loader from "../../../components/Loader";
 import {levelSelector} from "../../../redux/games/selectors";
 import Levels from "../common/Levels";
@@ -15,6 +15,7 @@ import SoundButton from "../common/SoundButton";
 import correctSound from "../../../assets/audio/correct.mp3";
 import errorSound from "../../../assets/audio/error.mp3";
 import FullScreenButton from "../common/FullScreenButton";
+import classesCss from "./AudioCallGame.module.scss";
 
 
 
@@ -172,7 +173,7 @@ export default function AudioCall() {
     return (
         <>
         {onLoading ? <Loader/> : (
-            <Grid className={classes.container}>
+            <Grid className={classesCss.containerGame}>
                 {isGameOver && (
                     <Statistics
                         statisticsArr={statisticsArr}
@@ -199,32 +200,24 @@ export default function AudioCall() {
                       direction="column"
                       justify="space-between"
                       alignItems="center"
-                      className={classes.gameContainer}>
+                      className={classesCss.gameContainer}>
 
                     <div
-                        className={classNames({
-                            [classes.wrapperFalling]: true,
-                            [classes.animation]: !btnClicked,
-                            [classes.noAnimation]: isGameOver || btnClicked,
-                        })}
+                        className={classesCss.wordAudio}
                     >
                         <h3 onClick ={()  => {
                           playAudio(wordAudio)
                           // console.log(wordAudio)
                         }
-                        }>WORD</h3>
+                        }>campaign</h3>
                     </div>
-                    <Grid container justify="space-evenly" alignItems="center" className={classes.listWords}>
+                    <Grid container justify="space-evenly" alignItems="center" className={classesCss.listWords}>
                         {
                             arrOfWords.map((itemWord) => (
                                 <button
                                     key={itemWord}
                                     onClick={handleWordClick(itemWord)}
-                                    className={classNames({
-                                        [classes.wordButton]: true,
-                                        [classes.bubble]: true,
-                                        [classes.wordButtonRight]: btnClicked && itemWord === wordTranslation,
-                                    })}
+                                    className={classesCss.wordButton}
                                 >
                                     {itemWord}
                                 </button>

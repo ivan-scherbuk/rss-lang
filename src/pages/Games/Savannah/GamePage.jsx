@@ -18,6 +18,7 @@ import correctSound from "../../../assets/audio/correct.mp3";
 import errorSound from "../../../assets/audio/error.mp3";
 import FullScreenButton from "../common/FullScreenButton";
 
+
 const NUMBER_OF_WORDS = 20;
 
 const Savannah = () => {

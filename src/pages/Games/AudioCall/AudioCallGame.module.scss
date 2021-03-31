@@ -1,16 +1,161 @@
 .container {
-  height: '100vh';
-  position: 'relative';
+  height: 100vh;
+  position: relative;
 }
 .exitContainer {
-  position: 'absolute';
-  padding: '1rem';
-  zIndex: 1;
+  position: absolute;
+  padding: 1rem;
+  z-index: 10;
   top: 0;
 }
 .backgroundImg {
-  position: 'absolute';
-  width: '100vw';
-  height: '100vh';
-  objectFit: 'cover';
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+
+}
+
+.containerGame {
+  height: 100vh;
+  position: relative;
+  background-image: url('./../../../assets/images/audiocall.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100vw;
+}
+
+.gameContainer {
+  height: calc(100vh - 45px);
+}
+
+
+.wrapperFalling {
+  position: absolute,
+}
+
+.animation {
+  animation: falling 7s infinite,
+}
+
+.noAnimation {
+animation: unset;
+}
+
+.wordAudio {
+  font-family: Material Icons;
+  color: white;
+  font-size: 70px;
+}
+
+.listWords {
+  position: absolute;
+  top: 50%,
+}
+
+.wordButton {
+  position: relative;
+  display: inline-block;
+  height: 120px;
+  width: 120px;
+  word-break: break-word;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  border: 0;
+}
+
+.wordButton:before{
+      content: "";
+      position: absolute;
+      top: 1%;
+      left: 5%;
+      width: 90%;
+      height: 90%;
+      border-radius: 100%;
+      filter: blur(5px);
+      z-index: 2;
+      background: radial-gradient(circle at top, white, rgba(255, 255, 255, 0) 58%);
+  }
+
+  .wordButton:after {
+      position: absolute;
+      top: 5%;
+      left: 10%;
+      width: 80%;
+      height: 80%;
+      border-radius: 100%;
+      filter: blur(1px);
+      z-index: 2;
+      transform: rotateZ(-30deg);
+  }
+
+.wordButtonRight {
+  animation: bubble 0.3s linear;
+  background: radial-gradient(circle at bottom, #81e8f6, #76deef 10%, #055194 80%, #062745 100%);
+}
+
+.bubble {
+  background: radial-gradient(circle at 50% 55%, rgba(240, 245, 255, 0.9), rgba(240, 245, 255, 0.9) 40%, rgba(225, 238, 255, 0.8) 60%, rgba(43, 130, 255, 0.4))
+}
+
+.bubble:before {
+      filter: blur(0);
+      height: 80%;
+      width: 40%;
+      background: radial-gradient(circle at 130% 130%, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 46%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0.8) 58%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0) 100%);
+      transform: translateX(131%) translateY(58%) rotateZ(168deg) rotateX(10deg);
+  }
+.bubble:after {
+      display: block;
+      background: radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 74%, white 80%, white 84%, rgba(255, 255, 255, 0) 100%);
+}
+
+.snakeCorrectAnswer {
+  animation: snakeCorrectAnimation 5s infinite, shake 2.5s linear infinite,
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg), }
+  10% { transform: translate(-1px, -2px) rotate(-1deg), }
+  30% { transform: translate(3px, 2px) rotate(0deg), }
+  50% { transform: translate(-1px, 2px) rotate(-1deg), }
+  70% { transform: translate(3px, 1px) rotate(-1deg), }
+  90% { transform: translate(1px, 2px) rotate(0deg), }
+}
+
+// @keyframes falling {
+//   0% {
+//       top: '10%';
+//       opacity: 0.9;
+//   }
+//   100% {
+//       top: '60%';
+//       opacity: 0.1;
+//   }
+// }
+
+@keyframes snakeCorrectAnimation {
+  20% {
+      filter: hue-rotate(70deg),
+  }
+}
+
+@keyframes bubble {
+  0% {
+      transform: scale(1);
+  }
+
+  30% {
+      transform: scale(0.7);
+  }
+  50% {
+      transform: scale(0.6);
+  }
+  70% {
+      transform: scale(0.7);
+  }
+
+  100% {
+      transform: scale(1);
+  }
 }
