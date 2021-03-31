@@ -4,8 +4,25 @@ import { ADD_WORD_TO_USER, SET_USER_WORDS, SET_USER_SETTINGS } from "./types"
 
 const addWordToUser = word => ({type: ADD_WORD_TO_USER, payload: word})
 const serUserWords = wordSet => ({type: SET_USER_WORDS, payload: wordSet})
-//if you want to update settings without server saving
-export const setUserSettings = settings => ({type: SET_USER_SETTINGS, payload:settings})
+
+
+export function setUserSettings(settings){
+  try{
+    const localData = JSON.parse(localStorage.getItem("userData"))
+    localStorage.setItem("userData", JSON.stringify({
+      ...localData,
+      settings:{
+        ...localData.settings,
+        ...settings,
+        optional:{
+          ...localData.settings.optional,
+          ...settings.optional
+        }
+      }
+    }))
+  } catch(e){}
+  return {type: SET_USER_SETTINGS, payload: settings}
+}
 
 export function getUserWords(){
 	return async (dispatch, getState) => {

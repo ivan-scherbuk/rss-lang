@@ -42,7 +42,7 @@ export default function App() {
   }, [dispatch, user.isLogged])
 
 	return (
-		<div>
+		<>
 			<NavigationBar />
 			<TransitionGroup>
 				<CSSTransition
@@ -63,6 +63,6 @@ export default function App() {
 					</Switch>
 				</CSSTransition>
 			</TransitionGroup>
-		</div>
+		</>
 	)
 }
