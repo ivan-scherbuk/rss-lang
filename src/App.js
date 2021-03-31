@@ -7,7 +7,7 @@ import MainPage from "./pages/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
 import Sprint from "./pages/Games/Sprint";
-import AudioCall from "./pages/Games/Audiocall";
+import AudioCall from "./pages/Games/AudioCall/AudioCall";
 import Savannah from "./pages/Games/Savannah/Savannah";
 import StatisticPage from "./pages/StatisticPage";
 import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame";
