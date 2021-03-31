@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useWords } from "../../hooks/hooks.words";
-import classesCss from "../styles/BookPage.module.scss";
 import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import { useUserWords } from "../../hooks/hooks.user";
+import { useSelector } from "react-redux";
 
 export default function BookMainContent({ setGroupPath, currentPage }) {
   const { currentWords, getWordsChunk, onLoading } = useWords();
@@ -14,22 +14,26 @@ export default function BookMainContent({ setGroupPath, currentPage }) {
     onLoading: onUserLoading,
   } = useUserWords();
   const { currentGroup } = useParams();
-
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     setGroupPath("");
   }, []);
 
   useEffect(() => {
+    getWordsChunk(currentGroup - 1, currentPage);
+    sessionStorage.setItem("currentPage", currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
     const filters = {
       difficulty: "hard | normal | weak" | undefined,
       deleted: true | false | undefined,
     };
-    getWordsChunk(currentGroup - 1, currentPage);
-    sessionStorage.setItem("currentPage", currentPage);
-    getUserWordsChunk(currentGroup - 1, currentPage, filters);
-    console.log(currentUserWords);
-  }, [currentPage, getWordsChunk, currentGroup, getUserWordsChunk]);
+    if (user.words) {
+      getUserWordsChunk(currentGroup - 1, currentPage, filters);
+    }
+  }, [user, currentPage]);
 
   return (
     <div>
@@ -37,9 +41,11 @@ export default function BookMainContent({ setGroupPath, currentPage }) {
         currentWords.map((word) => {
           let currentWordInfo = word;
           if (currentUserWords) {
-            const indexOfUserWord = currentUserWords.indexOf(word);
-            if (indexOfUserWord !== -1) {
-              currentWordInfo = currentUserWords[indexOfUserWord];
+            for (let i = 0; i < currentUserWords.length; i++) {
+              if (currentUserWords[i].id === word.id) {
+                currentWordInfo = currentUserWords[i];
+                console.log(currentWordInfo);
+              }
             }
           }
           return (
