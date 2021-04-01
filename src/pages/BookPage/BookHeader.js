@@ -11,13 +11,18 @@ export default function BookHeader({ settingsOn, groupPath }) {
       <div onClick={settingsOn}>Настройки</div>
       {groupPath === "" ? (
         <NavLink
+          onClick={() => sessionStorage.setItem("currentPage", 0)}
           className={classesCss.headerLink}
           to={"/book/vocabulary/learn/group/1"}
         >
           Словарь
         </NavLink>
       ) : (
-        <NavLink className={classesCss.headerLink} to={"/book/group/1"}>
+        <NavLink
+          onClick={() => sessionStorage.setItem("currentPage", 0)}
+          className={classesCss.headerLink}
+          to={"/book/group/1"}
+        >
           Учебник
         </NavLink>
       )}
