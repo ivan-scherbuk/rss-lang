@@ -6,6 +6,8 @@ import {
 	getUserWordsChunk as getUserWordsChunkHelper } from "../helpers/utils.words"
 import {useWords, useWordsGroup} from "./hooks.words"
 
+
+
 //Usage
 // const { update, updatedWord, onError } = useUserWordUpdate()
 // update(word, data)
@@ -23,16 +25,37 @@ export function useUserWordUpdate(){
 	const dispatch = useDispatch()
 	const [updatedWord, setUpdatedWord] = useState(null)
 	const [onError, setOnError] = useState(null)
+  console.log(user)
 
 	const update = useCallback(async (word, data = {}) => {
+
+    const localData = {
+      difficulty: data.difficulty,
+      optional: {...data}
+    }
+    delete localData.optional.difficulty
+    if(localData.optional.succeed === true){
+      localData.optional.successCounter = 1
+      localData.optional.failCounter = 0
+      delete localData.optional.succeed
+    } else if(localData.optional.failed === true){
+      localData.optional.failCounter = 1
+      localData.optional.successCounter = 0
+      delete localData.optional.failed
+    }
+
 		if (user.words[word.group] && user.words[word.group][word.page]) {
 			const wordForUpdate = user.words[word.group][word.page].find(userWord => userWord.wordId === word.id)
 			if (wordForUpdate) {
-				const localData = {...data}
-				delete localData.difficulty
+        if(wordForUpdate.optional?.successCounter){
+          localData.successCounter = wordForUpdate.optional.successCounter + localData.optional.successCounter
+        }
+        if(wordForUpdate.optional?.failCounter){
+          localData.failCounter = wordForUpdate.optional.failCounter + localData.optional.failCounter
+        }
 				const updateWord = {
 					...wordForUpdate,
-					difficulty: data.difficulty || wordForUpdate.difficulty || 'normal',
+					difficulty: data.difficulty || wordForUpdate.difficulty || "normal",
 					optional: {
 						...wordForUpdate.optional,
 						...localData,
@@ -49,10 +72,11 @@ export function useUserWordUpdate(){
 			}
 		}
 
-		return dispatch(addUserWord(word, data)).then((word) => {
+		if(!localData.difficulty) localData.difficulty = "normal"
+    console.log(localData)
+		return dispatch(addUserWord(word, localData)).then((word) => {
 			setUpdatedWord(word)
 		}).catch(e => setOnError({word, e}))
-
 	}, [user, dispatch, updatedWord])
 	return { update, updatedWord, onError }
 }
@@ -80,23 +104,27 @@ export function useUserWords(){
  	const [subscription, setSubscription] = useState(null)
 
 	const getUserWordsChunk = useCallback((group, page, filters = {}) => {
-		if(user.words[group] && user.words[group][page]){
-			if(words && words[group] && words[group][page]){
-				const chunk = getUserWordsChunkHelper(words[group][page], user.words[group][page], filters)
-				setCurrentUserWords(chunk)
-				return chunk
-			} else {
-				setOnLoading(true)
-				return getWordsChunk(group, page).then((resWords) => {
-					setCurrentUserWords(
-						getUserWordsChunkHelper(resWords, user.words[group][page], filters)
-					)
-				})
-			}
-		} else {
-			setSubscription({group, page})
-			return false
-		}
+	  if(user?.isLogged){
+      if(user.words[group] && user.words[group][page]){
+        if(words && words[group] && words[group][page]){
+          const chunk = getUserWordsChunkHelper(words[group][page], user.words[group][page], filters)
+          setCurrentUserWords(chunk)
+          return chunk
+        } else {
+          setOnLoading(true)
+          return getWordsChunk(group, page).then((resWords) => {
+            setCurrentUserWords(
+              getUserWordsChunkHelper(resWords, user.words[group][page], filters)
+            )
+          })
+        }
+      } else {
+        setSubscription({group, page})
+        return false
+      }
+    } else {
+	    console.log("User is not logged in")
+    }
 	}, [user.words, words, getWordsChunk])
 
 	useEffect(() => {

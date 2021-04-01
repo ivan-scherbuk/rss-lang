@@ -1,20 +1,24 @@
-import React, { useState } from "react"
-import { useSelector } from "react-redux";
-import ImageUploading from "react-images-uploading";
+import React from "react"
 import classesCss from "./UserPage.module.scss"
-import { userSettingsRequestWithImage } from "../../helpers/requsts.server";
 import UserSettingsForm from "./components/UserSettingsForm";
+import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {logOut} from "../../redux/actions.auth";
 
 
 export default function UserPage(){
 
-  const {token, id} = useSelector(state => state.user)
-
-
+  const dispatch = useDispatch()
 
   return (
     <div className={classesCss.UserPage}>
       <UserSettingsForm />
+      <NavLink
+        className={classesCss.ExitButton}
+        to={"/"}
+        onClick={() => dispatch(logOut())}
+      >Выйти из аккаунта
+      </NavLink>
     </div>
   )
 }

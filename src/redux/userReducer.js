@@ -71,11 +71,14 @@ export default function userReducer(state = getInitialUser(), action){
     case SET_USER_SETTINGS: {
       return {
         ...state,
-        ...action.payload,
-        optional:{
-          ...state.optional,
-          ...action.payload.optional
-        }
+        settings: {
+          ...state.settings,
+          ...action.payload,
+          optional:{
+            ...state.settings.optional,
+            ...action.payload.optional
+          }
+        },
       }
     }
 		default: return state

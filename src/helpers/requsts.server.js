@@ -51,7 +51,12 @@ export async function userSettingsRequestWithImage({token, id, data}){
 
 export async function userWordsRequest({token, id, method, wordId, word = {}}){
   const request = `${SERVER}/users/${id}/words${wordId? "/" + wordId : ""}`
-  return await fetch(request, getRequestData(token, method, word))
+  const wordToRequest = {...word}
+  if(method === "PUT"){
+    delete wordToRequest.wordId
+    delete wordToRequest.id
+  }
+  return await fetch(request, getRequestData(token, method, wordToRequest))
 }
 
 
