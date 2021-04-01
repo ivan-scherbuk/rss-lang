@@ -1,6 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { useWordsGroup } from "../../../hooks/hooks.words"
-import { createRandomChunkFromGroup } from "../../../helpers/utils.words"
 import PuzzleField from "./PuzzleField"
 import Timer from "../common/Timer";
 import Lives from "./components/Lives";
@@ -10,9 +8,7 @@ import classesCss from "./PuzzleGame.module.scss"
 const TOTAL_LIVES = 3
 const SECONDS_FOR_COMPLETE = 30
 
-export default function PuzzleGame(){
-
-  const {currentWordsGroup, getWordsGroup} = useWordsGroup()
+export default function PuzzleGame({words, onLoading, onWordSelect}){
 
   const [currentWord, setCurrentWord] = useState(0)
   const [lives, setLives] = useState(TOTAL_LIVES)
@@ -23,11 +19,11 @@ export default function PuzzleGame(){
   const [autoComplete, setAutoComplete] = useState(false)
 
   const currentChunk = useMemo(() => {
-    if (currentWordsGroup) {
-      return createRandomChunkFromGroup(currentWordsGroup)
+    if (words?.length > 0) {
+      return [...words]
     }
     return null
-  }, [currentWordsGroup])
+  }, [words])
 
   function resetTimer(){
     setTimerState(state => ({...state, shouldReset: false}))
@@ -38,8 +34,10 @@ export default function PuzzleGame(){
     if(autoComplete) {
       setAutoComplete(false)
       currentChunk[currentWord] = {...currentChunk[currentWord], status:"failed"}
+      onWordSelect(currentChunk[currentWord], {failed: true})
     } else {
       currentChunk[currentWord] = {...currentChunk[currentWord], status:"succeed"}
+      onWordSelect(currentChunk[currentWord], {succeed: true})
     }
     setCurrentWord(current => {
       return current + 1
@@ -50,10 +48,6 @@ export default function PuzzleGame(){
   function wrongSelectHandler(){
     if(lives > 0)setLives(state => state - 1)
   }
-
-  useEffect(() => {
-    getWordsGroup(3)
-  }, [getWordsGroup])
 
   useEffect(() => {
     if(lives <= 0) {

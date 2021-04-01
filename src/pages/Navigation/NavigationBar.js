@@ -96,7 +96,7 @@ export default function NavigationBar(){
 			</NavLink>
 			<NavLink to={{pathname: "/games/puzzle", state: {go: "go"}}}>
 				<Button
-					label={"Игра"}
+					label={"Пазл"}
 					style={{
 						backgroundImage: `url(${process.env.PUBLIC_URL}/static/book.webp)`,
 					}}

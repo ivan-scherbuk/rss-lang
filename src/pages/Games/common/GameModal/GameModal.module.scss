@@ -1,0 +1,30 @@
+.GameModal{
+  background-color: rgba(255,255,255,0.4);
+  padding: 30px;
+  box-sizing: border-box;
+  max-width: 650px;
+  margin: auto;
+  min-width: 300px;
+  min-height: 350px;
+  border-radius: 40px;
+
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+  0 1px 2px 0 rgba(0,0,0,0.25),
+  0 2px 4px 1px rgba(0,0,0,0.2),
+  0 4px 8px 2px rgba(0,0,0,0.15),
+  0 8px 16px 4px rgba(0,0,0,0.1);
+  .ModalText{
+    text-align: center;
+    font-size: 22px;
+    color: white;
+    margin-bottom: auto;
+    padding-bottom: 30px;
+    h3{
+      font-size: 1.3em;
+      margin-bottom: 20px;
+      margin-top: 0;
+    }
+  }
+}

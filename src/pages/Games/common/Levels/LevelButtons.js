@@ -8,7 +8,7 @@ export default function LevelButtons({levelNumbers, levelStyles, onSelect, class
   return (
     <div className={cx(className, classesCss.LevelButtonsWrap)}>
       {
-        new Array(6).fill(null).map((el, index) => {
+        new Array(levelNumbers).fill(null).map((el, index) => {
           return (
             <div
               key = {`lb${index}`}

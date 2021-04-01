@@ -17,7 +17,8 @@ export default function UserPage(){
         className={classesCss.ExitButton}
         to={"/"}
         onClick={() => dispatch(logOut())}
-      >Выйти из аккаунта</NavLink>
+      >Выйти из аккаунта
+      </NavLink>
     </div>
   )
 }
