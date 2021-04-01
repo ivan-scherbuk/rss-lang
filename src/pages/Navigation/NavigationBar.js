@@ -1,15 +1,15 @@
-import React from "react"
-import { NavLink, useLocation } from "react-router-dom"
-import AuthBlock from "./AuthBlock"
-import AuthForm from "../../components/AuthForm/AuthForm"
-import Button from "../../components/Buttons/Button"
-import classesCss from "./Navigation.module.scss"
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import AuthBlock from "./AuthBlock";
+import AuthForm from "../../components/AuthForm/AuthForm";
+import Button from "../../components/Buttons/Button";
+import classesCss from "./Navigation.module.scss";
 
-export default function NavigationBar(){
-
-	const location = useLocation()
-	const navigationClasses = [classesCss.Navigation]
-	if(location.pathname === "/") navigationClasses.push(classesCss.NavigationCloud)
+export default function NavigationBar() {
+  const location = useLocation();
+  const navigationClasses = [classesCss.Navigation];
+  if (location.pathname === "/")
+    navigationClasses.push(classesCss.NavigationCloud);
 
 	return (
 		<div className={navigationClasses.join(' ')}>

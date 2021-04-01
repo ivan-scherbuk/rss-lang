@@ -123,3 +123,14 @@
 .group5 {
   background-color: DarkOrange;
 }
+
+.VocabularyHeader {
+  display: flex;
+  flex-direction: row;
+  column-gap: 20px;
+}
+
+.VocabularySection {
+  color: black;
+  text-decoration: none;
+}

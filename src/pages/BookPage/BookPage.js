@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import BookHeader from "./BookHeader.js";
-import BookMainContent from "./BookMainContent.js";
+import BookMain from "./BookMain.js";
 import classesCss from "./../styles/BookPage.module.scss";
-import { Route } from "react-router";
 import BookNavbar from "./BookNavbar.js";
-import Vocabulary from "./Vocabulary/Vocabulary.js";
 
 export default function BookPage() {
-  const [isBook, setIsBook] = useState(true);
+  const [groupPath, setGroupPath] = useState("");
   const [settingsToggle, setSettingsToggle] = useState(false);
-
   const settingsOff = () => {
     setSettingsToggle(false);
   };
@@ -19,23 +16,14 @@ export default function BookPage() {
   };
   return (
     <div className={classesCss.BookPage}>
-      <BookHeader settingsOn={settingsOn} />
+      <BookHeader settingsOn={settingsOn} groupPath={groupPath} />
       <div className={classesCss.main}>
-        {isBook && <BookNavbar />}
-        <div className={classesCss.BookMainContent}>
-          <Route
-            path={"/book/group/:currentGroup"}
-            render={() => (
-              <BookMainContent
-                setIsBook={setIsBook}
-                settingsToggle={settingsToggle}
-                settingsOff={settingsOff}
-              />
-            )}
-          />
-          <Route
-            path={"/book/vocabulary"}
-            render={() => <Vocabulary setIsBook={setIsBook} />}
+        <BookNavbar groupPath={groupPath} />
+        <div>
+          <BookMain
+            setGroupPath={setGroupPath}
+            settingsToggle={settingsToggle}
+            settingsOff={settingsOff}
           />
         </div>
       </div>
