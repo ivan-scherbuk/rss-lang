@@ -36,7 +36,9 @@ export default function BookMain({
         )}
       />
       <Route
-        path={"/book/vocabulary/group/:currentGroupVocabulary"}
+        path={
+          "/book/vocabulary/:currentSectionVocabulary/group/:currentGroupVocabulary"
+        }
         render={() => (
           <Vocabulary
             setGroupPath={setGroupPath}

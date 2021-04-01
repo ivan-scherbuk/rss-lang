@@ -16,7 +16,7 @@ export default function BookPage() {
   };
   return (
     <div className={classesCss.BookPage}>
-      <BookHeader settingsOn={settingsOn} />
+      <BookHeader settingsOn={settingsOn} groupPath={groupPath} />
       <div className={classesCss.main}>
         <BookNavbar groupPath={groupPath} />
         <div>
