@@ -104,23 +104,27 @@ export function useUserWords(){
  	const [subscription, setSubscription] = useState(null)
 
 	const getUserWordsChunk = useCallback((group, page, filters = {}) => {
-		if(user.words[group] && user.words[group][page]){
-			if(words && words[group] && words[group][page]){
-				const chunk = getUserWordsChunkHelper(words[group][page], user.words[group][page], filters)
-				setCurrentUserWords(chunk)
-				return chunk
-			} else {
-				setOnLoading(true)
-				return getWordsChunk(group, page).then((resWords) => {
-					setCurrentUserWords(
-						getUserWordsChunkHelper(resWords, user.words[group][page], filters)
-					)
-				})
-			}
-		} else {
-			setSubscription({group, page})
-			return false
-		}
+	  if(user?.isLogged){
+      if(user.words[group] && user.words[group][page]){
+        if(words && words[group] && words[group][page]){
+          const chunk = getUserWordsChunkHelper(words[group][page], user.words[group][page], filters)
+          setCurrentUserWords(chunk)
+          return chunk
+        } else {
+          setOnLoading(true)
+          return getWordsChunk(group, page).then((resWords) => {
+            setCurrentUserWords(
+              getUserWordsChunkHelper(resWords, user.words[group][page], filters)
+            )
+          })
+        }
+      } else {
+        setSubscription({group, page})
+        return false
+      }
+    } else {
+	    console.log("User is not logged in")
+    }
 	}, [user.words, words, getWordsChunk])
 
 	useEffect(() => {

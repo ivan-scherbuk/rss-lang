@@ -8,6 +8,7 @@ import {SETTINGS} from "../../settings";
 import GameModal from "./common/GameModal/GameModal";
 import classesCss from "./Games.module.scss"
 import { useUserWordUpdate } from "../../hooks/hooks.user";
+import { useSelector } from "react-redux";
 
 export default function GameShell(props){
   const {
@@ -21,8 +22,10 @@ export default function GameShell(props){
   const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
   const {currentWords, getWordsChunk, onLoading} = useWords()
   const {update: userWordUpdate} = useUserWordUpdate()
-  const [currentChunk, setCurrentChunk] = useState(null)
   const {state:{group: urlGroup, page: urlPage}} = useLocation()
+  const {isLogged} = useSelector(state => state.user)
+  const [currentChunk, setCurrentChunk] = useState(null)
+
 
   function levelSelectHandler(index){
     getWordsGroup(index)
@@ -39,7 +42,9 @@ export default function GameShell(props){
   }
 
   function addWordToUserHandler(word, params){
-    userWordUpdate(word, params)
+    if(isLogged){
+      userWordUpdate(word, params)
+    }
   }
 
   useEffect(() => {

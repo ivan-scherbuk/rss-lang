@@ -25,8 +25,23 @@ export function createUser(user){
   }
 }
 
-//onLoading - when call from another action and don't need to set onLoading one more time
+async function getUserSettings(data, callsCount = 0){
+  try{
+    const userExistingSettings = await userSettingsRequest(data)
+    if(userExistingSettings.ok) {
+      const c = await userExistingSettings.json()
+      console.log(c)
+      return c
+    }
+    const userNewSettings = await userSettingsRequest({...data, method:"PUT", settings:{optional:{}}})
+    if(userNewSettings.ok && callsCount < 3) return await getUserSettings(data, callsCount++)
+    else return {}
+  } catch(e){
+    if(callsCount) console.log(e)
+  }
 
+}
+//onLoading - when call from another action and don't need to set onLoading one more time
 export function signIn(user, onLoading = false){
   return async (dispatch) => {
     if (!onLoading) dispatch(setLoading())
@@ -35,9 +50,8 @@ export function signIn(user, onLoading = false){
       try {
         const userAuthData = await rawRes.json()
         const userRawData = await userDataRequest({token: userAuthData.token, id: userAuthData.userId})
-        const rawRawSettings = await userSettingsRequest({token: userAuthData.token, id: userAuthData.userId})
         const userData = await userRawData.json()
-        const userSettings = await rawRawSettings.json()
+        const userSettings = await getUserSettings({token: userAuthData.token, id: userAuthData.userId})
         userAuthData.tokenExpire = getNextExpireTime()
         const fullUserData = {...userAuthData, ...userData, settings: userSettings, words: {}}
         dispatch(setUser(fullUserData))
