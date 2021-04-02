@@ -10,10 +10,11 @@ export default function BookMain({
   setGroupPath,
   settingsToggle,
   settingsOff,
+  setGameState,
 }) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(
-    +sessionStorage.getItem("currentPage") || 0
+    +sessionStorage.getItem("currentPage")
   );
   const onPageChanged = (e) => {
     if (e.target.value > 0 && e.target.value <= totalPagesCount) {
@@ -32,6 +33,7 @@ export default function BookMain({
             settingsToggle={settingsToggle}
             settingsOff={settingsOff}
             currentPage={currentPage}
+            setGameState={setGameState}
           />
         )}
       />
@@ -42,8 +44,11 @@ export default function BookMain({
         render={() => (
           <Vocabulary
             setGroupPath={setGroupPath}
+            totalPagesCount={totalPagesCount}
             setTotalPagesCount={setTotalPagesCount}
             currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            setGameState={setGameState}
           />
         )}
       />

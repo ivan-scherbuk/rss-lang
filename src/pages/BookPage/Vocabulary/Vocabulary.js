@@ -10,6 +10,9 @@ export default function Vocabulary({
   setGroupPath,
   setTotalPagesCount,
   currentPage,
+  setCurrentPage,
+  totalPagesCount,
+  setGameState,
 }) {
   const {
     getUserWordsGroup,
@@ -20,6 +23,8 @@ export default function Vocabulary({
   const { currentGroupVocabulary } = useParams();
   const { currentSectionVocabulary } = useParams();
   const user = useSelector((state) => state.user);
+  const [currentSectionWords, setCurrentSectionWords] = useState();
+  const pageToStart = () => sessionStorage.setItem("currentPage", 0);
 
   useEffect(() => {
     setGroupPath("vocabulary/" + currentSectionVocabulary + "/");
@@ -36,27 +41,73 @@ export default function Vocabulary({
   }, [user, currentGroupVocabulary]);
 
   useEffect(() => {
+    sessionStorage.setItem("currentPage", currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
     if (currentUserWordsGroup) {
-      console.log(Object.values(currentUserWordsGroup).flat());
+      if (currentSectionWords) {
+        if (!Array.isArray(currentSectionWords[0])) {
+          const maxWordsInPage = 20;
+          let pages = Math.ceil(currentSectionWords.length / maxWordsInPage);
+          setTotalPagesCount(pages);
+          let helpArr = [];
+          for (let i = 0; i < pages; i++) {
+            helpArr.push(
+              currentSectionWords.slice(
+                i * maxWordsInPage,
+                maxWordsInPage * (i + 1)
+              )
+            );
+          }
+          setCurrentSectionWords(helpArr);
+          if (currentSectionVocabulary === "difficult") {
+            setGameState(helpArr[currentPage]);
+            sessionStorage.setItem(
+              "gameState",
+              JSON.stringify(helpArr[currentPage])
+            );
+          }
+        }
+      } else {
+        setCurrentSectionWords(
+          Object.values(currentUserWordsGroup)
+            .flat()
+            .filter((word) => {
+              if (currentSectionVocabulary === "learn") {
+                return word.difficulty === "hard";
+              }
+              if (currentSectionVocabulary === "difficult") {
+                return word.difficulty === "hard";
+              }
+              if (currentSectionVocabulary === "delete") {
+                return word.optional.deleted;
+              }
+            })
+        );
+      }
     }
-  }, [currentUserWordsGroup]);
+  }, [currentUserWordsGroup, currentSectionWords]);
 
   return (
     <div>
       <div className={classesCss.VocabularyHeader}>
         <NavLink
+          onClick={pageToStart}
           className={classesCss.VocabularySection}
           to={"/book/vocabulary/learn/group/" + currentGroupVocabulary}
         >
           Изучаемые
         </NavLink>
         <NavLink
+          onClick={pageToStart}
           className={classesCss.VocabularySection}
           to={"/book/vocabulary/difficult/group/" + currentGroupVocabulary}
         >
           Сложные
         </NavLink>
         <NavLink
+          onClick={pageToStart}
           className={classesCss.VocabularySection}
           to={"/book/vocabulary/delete/group/" + currentGroupVocabulary}
         >
@@ -64,25 +115,15 @@ export default function Vocabulary({
         </NavLink>
       </div>
       <div>
-        <Route
-          path={"/book/vocabulary/delete/group/:currentGroupVocabulary"}
-          render={() => (
-            <div>
-              {currentUserWordsGroup &&
-                Object.values(currentUserWordsGroup)
-                  .flat()
-                  .map((word) => {
-                    if (word.optional.deleted) {
-                      return (
-                        <div key={word.id}>
-                          <WordCard cardInfo={word} />
-                        </div>
-                      );
-                    }
-                  })}
-            </div>
-          )}
-        />
+        {Array.isArray(currentSectionWords) &&
+          Array.isArray(currentSectionWords[0]) &&
+          currentSectionWords[currentPage].map((word) => {
+            return (
+              <div key={word.id}>
+                <WordCard cardInfo={word} />
+              </div>
+            );
+          })}
       </div>
     </div>
   );

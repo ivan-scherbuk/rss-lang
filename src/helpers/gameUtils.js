@@ -43,6 +43,22 @@ export function checkCollision(staticObj, mobileObj){
 
 }
 
+export const populateStatistics = (key, totalStatistics, gameStatistics) => {
+  try {
+    const statistics = JSON.parse(totalStatistics.optional[key]);
+    statistics.push(gameStatistics);
+    totalStatistics.optional[key] = JSON.stringify(statistics);
+    // for null data
+    //totalStatistics.optional[key] = JSON.stringify([]);
+    delete totalStatistics.id;
+  } catch (e) {}
+  return totalStatistics;
+};
+
+export const getUserData = () => {
+  return JSON.parse(localStorage.getItem("userData")) || {};
+};
+
 export function firstLetterToCapital(word){
   return word[0].toUpperCase() + word.slice(1)
 }

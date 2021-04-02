@@ -4,7 +4,7 @@ import LevelButtons from "./common/Levels/LevelButtons";
 import levelClasses from "../styles/Styles.module.scss"
 import { useWords, useWordsGroup } from "../../hooks/hooks.words";
 import { createRandomChunkFromGroup } from "../../helpers/utils.words";
-import { SETTINGS } from "../../settings";
+import {SETTINGS} from "../../settings";
 import GameModal from "./common/GameModal/GameModal";
 import classesCss from "./Games.module.scss"
 import { useUserWordUpdate } from "../../hooks/hooks.user";
