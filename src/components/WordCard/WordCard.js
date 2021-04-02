@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import classesCss from "./WordCard.module.scss";
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import {SETTINGS} from "../../settings";
+import { useParams } from "react-router";
 
-export default function WordCard(props) {
+export default function WordCard({ cardInfo, translate, buttons }) {
   let {
     id,
     group,
@@ -19,18 +20,45 @@ export default function WordCard(props) {
     wordTranslate,
     textMeaningTranslate,
     textExampleTranslate,
-  } = props.cardInfo;
-  // let {failedCounter, successCounter} = props.optional
+  } = cardInfo;
+  const [failedCounter, setFailedCounter] = useState(0);
+  const [successCounter, setSuccessCounter] = useState(0);
+  useEffect(() => {
+    if (cardInfo.optional && cardInfo.optional.optional) {
+      setFailedCounter(cardInfo.optional.optional.failCounter);
+      setSuccessCounter(cardInfo.optional.optional.successCounter);
+    }
+  }, []);
+  const { currentSectionVocabulary } = useParams();
   const { update, updatedWord, onError } = useUserWordUpdate();
   const audioPlayer = new Audio();
   audioPlayer.volume = 0.1;
   const [isForceOpened, setForceOpened] = useState(false);
   let notification;
-  if (props.cardInfo.optional?.difficulty === "hard") {
+  if (cardInfo.optional?.difficulty === "hard") {
     notification = "notification_important";
   } else {
     notification = "";
   }
+
+  const restoreWord = () => {
+    if (currentSectionVocabulary === "difficult") {
+      update(cardInfo, {
+        difficulty: "normal",
+        successCounter: successCounter,
+        failCounter: failedCounter,
+        deleted: cardInfo.optional.deleted,
+      });
+    }
+    if (currentSectionVocabulary === "delete") {
+      update(cardInfo, {
+        difficulty: cardInfo.difficulty,
+        successCounter: successCounter,
+        failCounter: failedCounter,
+        deleted: false,
+      });
+    }
+  };
 
   function playAudio(url, phase) {
     audioPlayer.src = url;
@@ -61,18 +89,18 @@ export default function WordCard(props) {
     audioPlayer.addEventListener("ended", playNextAudio);
   }
 
-  if (props.cardInfo.optional?.deleted && !isForceOpened) {
-    return (
-      <div className={classesCss["WordCardContainer"]}>
-        <div
-          className={classesCss["WordText"]}
-          onClick={() => setForceOpened(true)}
-        >
-          {word}
-        </div>
-      </div>
-    );
-  }
+  // if (cardInfo.optional?.deleted && !isForceOpened) {
+  //   return (
+  //     <div className={classesCss["WordCardContainer"]}>
+  //       <div
+  //         className={classesCss["WordText"]}
+  //         onClick={() => setForceOpened(true)}
+  //       >
+  //         {word}
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className={classesCss["WordCardContainer"]}>
@@ -85,43 +113,77 @@ export default function WordCard(props) {
         <div className={classesCss["Icon"]} onClick={() => playAudio(`${SETTINGS.SERVER}/${audio}`)}>
           volume_up
         </div>
-        <div
-          className={classesCss["Icon"]}
-          onClick={() => update(props.cardInfo, { difficulty: "hard" })}
-        >
-          add_alert
-        </div>
-        <div
-          className={classesCss["Icon"]}
-          onClick={() => update(props.cardInfo, { deleted: true })}
-        >
-          delete_forever
-        </div>
+        {["difficult", "delete"].includes(currentSectionVocabulary) ? (
+          <div onClick={restoreWord}>Восстановить</div>
+        ) : (
+          buttons === "y" && (
+            <div>
+              <div
+                className={classesCss["Icon"]}
+                onClick={() => update(cardInfo, { difficulty: "hard" })}
+              >
+                add_alert
+              </div>
+              <div
+                className={classesCss["Icon"]}
+                onClick={() => update(cardInfo, { deleted: true })}
+              >
+                delete_forever
+              </div>
+            </div>
+          )
+        )}
       </div>
       <div className={classesCss["ContetntWrapper"]}>
         <div className={classesCss["WordText"]}>{word}</div>
         <div className={classesCss["WordText"]}>{transcription}</div>
-        <div className={classesCss["WordText"]}>{wordTranslate}</div>
+        {!(translate === "n" && currentSectionVocabulary === "learn") && (
+          <div className={classesCss["WordText"]}>{wordTranslate}</div>
+        )}
         <div
           dangerouslySetInnerHTML={{ __html: textMeaning }}
           className={classesCss["WordContent"]}
         ></div>
-        <div className={classesCss["WordContent"]}>{textMeaningTranslate}</div>
+        {!(translate === "n" && currentSectionVocabulary === "learn") && (
+          <div className={classesCss["WordContent"]}>
+            {textMeaningTranslate}
+          </div>
+        )}
         <div
           dangerouslySetInnerHTML={{ __html: textExample }}
           className={classesCss["WordContent"]}
         ></div>
-        <div className={classesCss["WordContent"]}>{textExampleTranslate}</div>
+        {!(translate === "n" && currentSectionVocabulary === "learn") && (
+          <div className={classesCss["WordContent"]}>
+            {textExampleTranslate}
+          </div>
+        )}
       </div>
       <div className={classesCss["NotificationWrapper"]}>
         <div className={classesCss["Icon"]}>{notification}</div>
+        {["difficult", "delete"].includes(currentSectionVocabulary) && (
+          <div>Page: {page + 1}</div>
+        )}
         <div className={classesCss["ResultContainer"]}>
           <div className={classesCss["ResultWrapper"]}>
-            {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-succsess']}`}>thumb_up_off_alt</span><span className={classesCss['result-counter']}>{`:${successCounter}`}</span> */}
+            <span
+              className={`${classesCss["Icon"]} ${classesCss["Icon-succsess"]}`}
+            >
+              thumb_up_off_alt
+            </span>
+            <span
+              className={classesCss["result-counter"]}
+            >{`:${successCounter}`}</span>
           </div>
-
           <div className={classesCss["ResultWrapper"]}>
-            {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-failture']}`}>thumb_down_off_alt</span><span className={classesCss['result-counter']}>{`:${failedCounter}`}</span> */}
+            <span
+              className={`${classesCss["Icon"]} ${classesCss["Icon-failture"]}`}
+            >
+              thumb_down_off_alt
+            </span>
+            <span
+              className={classesCss["result-counter"]}
+            >{`:${failedCounter}`}</span>
           </div>
         </div>
       </div>
