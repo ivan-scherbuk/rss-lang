@@ -7,6 +7,9 @@ import BookNavbar from "./BookNavbar.js";
 export default function BookPage() {
   const [groupPath, setGroupPath] = useState("");
   const [settingsToggle, setSettingsToggle] = useState(false);
+  const [gameState, setGameState] = useState(
+    JSON.parse(sessionStorage.getItem("gameState"))
+  );
   const settingsOff = () => {
     setSettingsToggle(false);
   };
@@ -16,7 +19,11 @@ export default function BookPage() {
   };
   return (
     <div className={classesCss.BookPage}>
-      <BookHeader settingsOn={settingsOn} groupPath={groupPath} />
+      <BookHeader
+        settingsOn={settingsOn}
+        groupPath={groupPath}
+        gameState={gameState}
+      />
       <div className={classesCss.main}>
         <BookNavbar groupPath={groupPath} />
         <div>
@@ -24,6 +31,7 @@ export default function BookPage() {
             setGroupPath={setGroupPath}
             settingsToggle={settingsToggle}
             settingsOff={settingsOff}
+            setGameState={setGameState}
           />
         </div>
       </div>
