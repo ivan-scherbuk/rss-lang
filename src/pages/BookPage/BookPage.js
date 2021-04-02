@@ -1,20 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import BookHeader from "./BookHeader.js";
-import BookMainContent from "./BookMainContent.js";
+import BookMain from "./BookMain.js";
 import classesCss from "./../styles/BookPage.module.scss";
-import { Route } from "react-router";
 import BookNavbar from "./BookNavbar.js";
 
 export default function BookPage() {
+  const [groupPath, setGroupPath] = useState("");
+  const [settingsToggle, setSettingsToggle] = useState(false);
+  const [gameState, setGameState] = useState(
+    JSON.parse(sessionStorage.getItem("gameState"))
+  );
+  const settingsOff = () => {
+    setSettingsToggle(false);
+  };
+
+  const settingsOn = () => {
+    setSettingsToggle(true);
+  };
   return (
     <div className={classesCss.BookPage}>
-      <BookHeader />
-      <BookNavbar />
-      <div className={classesCss.BookMainContent}>
-        <Route
-          path={"/book/group/:currentGroup"}
-          render={() => <BookMainContent />}
-        />
+      <BookHeader
+        settingsOn={settingsOn}
+        groupPath={groupPath}
+        gameState={gameState}
+      />
+      <div className={classesCss.main}>
+        <BookNavbar groupPath={groupPath} />
+        <div>
+          <BookMain
+            setGroupPath={setGroupPath}
+            settingsToggle={settingsToggle}
+            settingsOff={settingsOff}
+            setGameState={setGameState}
+          />
+        </div>
       </div>
     </div>
   );

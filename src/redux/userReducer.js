@@ -1,4 +1,4 @@
-import { LOADING, SIGN_IN, LOG_OUT, ADD_WORD_TO_USER, SET_USER_WORDS } from "./types"
+import { LOADING, SIGN_IN, LOG_OUT, ADD_WORD_TO_USER, SET_USER_WORDS, SET_USER_SETTINGS } from "./types"
 
 const initialState = {
 	id: null,
@@ -65,9 +65,22 @@ export default function userReducer(state = getInitialUser(), action){
 					userWords[group][page].push(action.payload)
 				}
 			}
-
 			return {...state, words: userWords}
 		}
+
+    case SET_USER_SETTINGS: {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          ...action.payload,
+          optional:{
+            ...state.settings.optional,
+            ...action.payload.optional
+          }
+        },
+      }
+    }
 		default: return state
 	}
 }

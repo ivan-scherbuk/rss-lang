@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import classesCss from "./../styles/BookPage.module.scss";
+import classesCss from "../styles/BookPage.module.scss";
 
 export default function Pagination({
   onPageChanged,
@@ -41,12 +41,22 @@ export default function Pagination({
   };
   return (
     <div className={classesCss.pagination}>
-      <div onClick={turnToStart}>{"<<"}</div>
-      <div onClick={turnPageBack}>{"<"}</div>
-      Page:
+      <div
+        onClick={turnToStart}
+        className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
+      >
+        {"<<"}
+      </div>
+      <div
+        onClick={turnPageBack}
+        className={[classesCss.singleArrow, classesCss.arrow].join(" ")}
+      >
+        {"<"}
+      </div>
       {!editMode && (
         <span onClick={activateEditMode}>
-          {typeof currentPage === "number" ? currentPage + 1 : ""}
+          {typeof currentPage === "number" ? currentPage + 1 : ""} /{" "}
+          {totalPagesCount}
         </span>
       )}
       {editMode && (
@@ -58,9 +68,18 @@ export default function Pagination({
           onBlur={deactivateEditMode}
         ></input>
       )}
-      of {totalPagesCount}
-      <div onClick={turnPageForward}>{">"}</div>
-      <div onClick={turnToEnd}>{">>"}</div>
+      <div
+        onClick={turnPageForward}
+        className={[classesCss.singleArrow, classesCss.arrow].join(" ")}
+      >
+        {">"}
+      </div>
+      <div
+        onClick={turnToEnd}
+        className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
+      >
+        {">>"}
+      </div>
     </div>
   );
 }

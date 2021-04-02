@@ -116,6 +116,9 @@ const {getUserWordsGroup, subscribedUserWordsGroup, onLoading, currentUserWordsG
 //-------------------------------------------------------------------------
 //Хук для обновления данных о слове юзера
 import {useUserWordUpdate} from './src/hooks/hooks.user'
+import {useEffect, useState} from "react";
+import {addStatisticsThunk, getStatisticsThunk} from "./src/redux/games/thunk.statistics";
+import {populateStatistics} from "./src/helpers/gameUtils";
 const { update, updatedWord, onError } = useUserWordUpdate()
 
 // update get word object from words array (not user array) and additional data
@@ -133,7 +136,50 @@ update(word, data)
 //если произойдет ошибка то в onError запишется объект в который будет записано слово и ошибка
 //Если у пользователя такого слова нет то добавит его ему и произведет такие же действия как при апдейте
 
+//-------------------------------------------------------------------------
+//statusGameSelector //setStatusGame action
+// бывает true/false в зависимости от того, вошли мы в игру или нет
 
+const statusGame = useSelector(statusGameSelector);
 
+return (
+	<div>
+		{statusGame ? (<GamePage />) : (<StartPage />)}
+	</div>
+);
+// при нажатии кнопки начать игру на странице  StartPage
+const handleStart = useCallback(() => {
+	dispatch(setStatusGame(true));
+}, [dispatch]);
 
+// при окончании игры на стр GamePage
+const HandleExit = useCallback(() => {
+	dispatch(setStatusGame(false));
+}, [dispatch]);
 
+//levelSelector //setLevel action
+const activeLevel = useSelector(levelSelector);
+
+dispatch(setLevel(levelProps));
+// изменяем уровень
+//-------------------------------------------------------------------------
+//как исп-ть statistics thunk
+
+const allStatistics = useSelector(statisticsSelector);
+
+const [currentGameStatistics, setCurrentGameStatistics] = useState({
+  rightAnswers: 0, wrongAnswers: 0, bestSeries: 0
+});
+
+const [currentSeries, setCurrentSeries] = useState(0);
+
+useEffect(() => {
+  dispatch(getStatisticsThunk(userId));
+}, [dispatch, userId]);
+
+//в функции окончания игры добавляем
+const updatesStatistics = populateStatistics(
+  "savannah", allStatistics, {...currentGameStatistics, wordCounter, createdOn: Date.now()}
+);
+updatesStatistics.learnedWords = wordCounter;
+dispatch(addStatisticsThunk(userId, updatesStatistics));

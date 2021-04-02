@@ -1,5 +1,5 @@
 import React from "react"
-import classesCss from '../../Games.module.scss'
+import classesCss from '../PuzzleGame.module.scss'
 
 export default function Symbol({symbol}){
 	return(

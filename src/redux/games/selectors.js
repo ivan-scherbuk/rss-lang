@@ -1,19 +1,25 @@
 import { createSelector } from 'reselect';
 
-export const savannahSelector = (state) => {
-    return state.savannahWords;
+export const gameSelector = (state) => {
+    return state.gameWords;
 };
 
 export const statusGameSelector = createSelector(
-  savannahSelector,
+  gameSelector,
   ({ statusGame }) => {
       return statusGame;
   },
 );
 
 export const levelSelector = createSelector(
-  savannahSelector,
+  gameSelector,
   ({ level }) => {
       return level;
+  },
+);
+export const statisticsSelector = createSelector(
+  gameSelector,
+  ({ gameStatistics }) => {
+      return gameStatistics;
   },
 );

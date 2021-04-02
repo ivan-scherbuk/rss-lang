@@ -1,17 +1,16 @@
 import React, {useCallback} from 'react';
 import classNames from 'classnames';
-import Grid from "@material-ui/core/Grid";
-import {makeStyles} from '@material-ui/core/styles';
+import {createStyles, Grid, makeStyles} from "@material-ui/core";
 import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
-import { useHistory} from 'react-router-dom';
-import {setStatusGame} from "../../../redux/savannah/actions";
+import {NavLink, useHistory} from 'react-router-dom';
+import {setStatusGame} from "../../../redux/games/actions";
 import {useDispatch} from "react-redux";
 import Button from "./Button";
 
 const Statistics = (props) => {
-    const {statisticsArr, rightAnswers, wrongAnswers, toNewGame} = props;
+    const {statisticsArr, rightAnswers, wrongAnswers} = props;
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
@@ -75,13 +74,16 @@ const Statistics = (props) => {
 
             <Grid container justify="space-between" alignItems="center" className={classes.buttonsContainer}>
                 <Button onClick={handleGamesPage} label={"К списку игр"} classes={{button: classes.button}}/>
-                <Button onClick={toNewGame} label={"Новая игра"} classes={{button: classes.button}}/>
+                <NavLink to={{ pathname: "/games/savannah", state: { go: "go" } }}>
+                  <Button label={"Новая игра"} classes={{button: classes.button}}/>
+                </NavLink>
             </Grid>
 
         </Grid>
     );
 };
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) =>
+    createStyles({
     container: {
         width: '100%',
         height: '100%',
@@ -122,6 +124,10 @@ tableHeader: {
     "& tr": {
         display: 'flex',
         justifyContent: 'space-around',
+        [theme.breakpoints.down('sm')]: {
+            fontSize: '12px',
+            breakWord: 'word-break',
+        },
     },
 },
 scroll: {
@@ -170,6 +176,9 @@ scroll: {
     },
     buttonsContainer: {
         width: '80%',
+        "& a": {
+          textDecoration: 'none',
+        },
     },
     button: {
         backgroundColor: '#e45731',
@@ -177,7 +186,6 @@ scroll: {
             backgroundColor: '#e67353',
         },
     },
-
-
-});
+    }),
+);
 export default Statistics;

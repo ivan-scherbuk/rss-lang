@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import {setStatusGame} from '../../../redux/savannah/actions';
+import {setStatusGame} from '../../../redux/games/actions';
 import {makeStyles} from "@material-ui/core";
 import {Grid} from "@material-ui/core";
 import background from "../../../assets/images/startSavannah.jpg";
@@ -17,7 +17,7 @@ const StartPage = () => {
 
     return (
         <>
-            <img src={background} alt="savannah background" className={classes.backgroundImg}/>
+            <img src={background} alt="audiocall background" className={classes.backgroundImg}/>
             <Grid container direction="column" justify="center" alignItems="center" className={classes.container}>
                 <Grid container justify="flex-end" className={classes.exitContainer}>
                     <CloseButton/>
