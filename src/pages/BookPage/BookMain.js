@@ -12,6 +12,12 @@ export default function BookMain({
   settingsOff,
   setGameState,
 }) {
+  const [translate, setTranslate] = useState(
+    sessionStorage.getItem("translateSettings") || "y"
+  );
+  const [buttons, setButtons] = useState(
+    sessionStorage.getItem("buttonsChange") || "y"
+  );
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(
     +sessionStorage.getItem("currentPage")
@@ -34,6 +40,9 @@ export default function BookMain({
             settingsOff={settingsOff}
             currentPage={currentPage}
             setGameState={setGameState}
+            setTotalPagesCount={setTotalPagesCount}
+            totalPagesCount={totalPagesCount}
+            buttons={buttons}
           />
         )}
       />
@@ -49,6 +58,7 @@ export default function BookMain({
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             setGameState={setGameState}
+            translate={translate}
           />
         )}
       />
@@ -58,7 +68,15 @@ export default function BookMain({
         setCurrentPage={setCurrentPage}
         totalPagesCount={totalPagesCount}
       />
-      {settingsToggle && <SettingsBook settingsOff={settingsOff} />}
+      {settingsToggle && (
+        <SettingsBook
+          settingsOff={settingsOff}
+          translate={translate}
+          setTranslate={setTranslate}
+          buttons={buttons}
+          setButtons={setButtons}
+        />
+      )}
     </div>
   );
 }

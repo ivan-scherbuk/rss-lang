@@ -4,11 +4,15 @@ import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import { useUserWords } from "../../hooks/hooks.user";
 import { useSelector } from "react-redux";
+import classesCss from "./../styles/BookPage.module.scss";
 
 export default function BookMainContent({
   setGroupPath,
   currentPage,
   setGameState,
+  totalPagesCount,
+  setTotalPagesCount,
+  buttons,
 }) {
   const { currentWords, getWordsChunk, onLoading } = useWords();
   const {
@@ -42,8 +46,22 @@ export default function BookMainContent({
     }
   }, [user, currentPage]);
 
+  // useEffect(() => {
+  //   if (currentUserWords && currentUserWords.length === 20) {
+  //     let deletedWords = currentUserWords.filter(
+  //       (word) => word.optional.optional
+  //     );
+  //     if (deletedWords) {
+  //       totalSuccess =
+  //     }
+  //   }
+  // }, [currentUserWords]);
+
   return (
     <div>
+      <span>Изучаемых слов:</span>
+      <span>Успешно: 0</span>
+      <span>Ошибок: 0</span>
       {currentWords &&
         currentWords.map((word) => {
           let currentWordInfo = word;
@@ -54,11 +72,19 @@ export default function BookMainContent({
               }
             }
           }
-          return (
-            <div key={word.id}>
-              <WordCard cardInfo={currentWordInfo} />
-            </div>
-          );
+          if (!currentWordInfo.optional?.deleted) {
+            return (
+              <div
+                className={
+                  currentWordInfo.difficulty === "hard" &&
+                  classesCss.difficultWord
+                }
+                key={word.id}
+              >
+                <WordCard cardInfo={currentWordInfo} buttons={buttons} />
+              </div>
+            );
+          }
         })}
     </div>
   );
