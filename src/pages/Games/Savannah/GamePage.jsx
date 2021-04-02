@@ -1,15 +1,11 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
-import { getRandomNumber, shuffle } from '../../../helpers/gameUtils';
-import { setStatusGame, setLevel } from '../../../redux/games/actions';
+import {getRandomNumber, getUserData, populateStatistics, shuffle} from '../../../helpers/gameUtils';
 import {Grid, makeStyles} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux"
 import snake from "../../../assets/images/snake.svg"
-import {useWords} from "../../../hooks/hooks.words"
 import classNames from "classnames";
-import Loader from "../../../components/Loader";
 import background from "../../../assets/images/2.jpg";
-import {levelSelector} from "../../../redux/games/selectors";
-import Levels from "../common/Levels";
+import {statisticsSelector} from "../../../redux/games/selectors";
 import Statistics from "../common/Statistics";
 import Lives from "../common/Lives";
 import CloseButton from "../common/CloseButton";
@@ -17,24 +13,25 @@ import SoundButton from "../common/SoundButton";
 import correctSound from "../../../assets/audio/correct.mp3";
 import errorSound from "../../../assets/audio/error.mp3";
 import FullScreenButton from "../common/FullScreenButton";
-
+import {addStatisticsThunk, getStatisticsThunk} from "../../../redux/games/thunk.statistics";
+import Loader from "../../../components/Loader";
 
 const NUMBER_OF_WORDS = 20;
 
-const Savannah = () => {
-
-    const activeLevel = useSelector(levelSelector);
+const Savannah = (props) => {
+    const {words, onLoading, onWordSelect} = props;
+    const allStatistics = useSelector(statisticsSelector);
     const dispatch = useDispatch();
 
     const [answer, setAnswer] = useState('');
     const [statisticsArr, setStatisticsArr] = useState([]);
     const [arrOfWords, setArrOfWords] = useState([]);
     const [btnClicked, setBtnClicked] = useState(false);
-    const [isExit, setIsExit] = useState(false);
     const [isGameOver, setIsGameOver] = useState(false);
     const [livesCount, setLivesCount] = useState(5);
-    const [rightAnswers, setrightAnswers] = useState(0);
-    const [wrongAnswers, setwrongAnswers] = useState(0);
+    const [currentGameStatistics, setCurrentGameStatistics] = useState({
+      rightAnswers: 0, wrongAnswers: 0, bestSeries: 0
+    });
     const [soundOn, setSoundOn] = useState(false);
     const [word, setWord] = useState('');
     const [wordTranslation, setWordTranslation] = useState('');
@@ -43,53 +40,47 @@ const Savannah = () => {
     const [wordTranscription, setWordTranscription] = useState('');
     const [wordCounter, setWordCounter] = useState(0);
     const [snakeSize, setSnakeSize] = useState(0.6);
-
-    const {currentWords, getWordsChunk, onLoading} = useWords();
+    const [currentSeries, setCurrentSeries] = useState(0);
 
     const classes = useStyles({snakeSize});
 
-    const randomPage = useMemo(() => {
-        return getRandomNumber(0, 19);
-    },[]);
+    const userId = useMemo(() => getUserData()?.id,[]);
 
     useEffect(() => {
-        getWordsChunk(activeLevel - 1, randomPage);
-    },[randomPage, getWordsChunk, activeLevel]);
-
-    const shuffledWords = useMemo(() => {
-        return (currentWords) ? shuffle(currentWords) : null;
-    }, [currentWords]);
+      dispatch(getStatisticsThunk(userId));
+    }, [dispatch, userId]);
 
     const handleGameOver = useCallback(() => {
-            setIsGameOver(true);
-            setWord(' ');
-            setArrOfWords([]);
-            setLivesCount(0);
-        },
-        []);
-
+        setIsGameOver(true);
+        setWord(' ');
+        setArrOfWords([]);
+        setLivesCount(0);
+        const updatesStatistics = populateStatistics(
+          "savannah", allStatistics, {...currentGameStatistics, wordCounter, createdOn: Date.now()}
+          );
+        updatesStatistics.learnedWords = wordCounter;
+        dispatch(addStatisticsThunk(userId, updatesStatistics));
+    }, [dispatch, currentGameStatistics, wordCounter, userId, allStatistics]);
 
     useEffect(() => {
-        console.log(shuffledWords);
-
-        if (shuffledWords !== null && shuffledWords.length && livesCount && wordCounter < NUMBER_OF_WORDS) {
+        if (words !== null && words.length && livesCount && wordCounter < NUMBER_OF_WORDS) {
             const f1 = (randomNumber) => {
-                const newWordTranslation = shuffledWords[randomNumber].wordTranslate;
-                setWord(shuffledWords[randomNumber].word);
-                setWordID(shuffledWords[randomNumber].id);
-                setWordAudio(shuffledWords[randomNumber].audio);
-                setWordTranscription(shuffledWords[randomNumber].transcription);
+                const newWordTranslation = words[randomNumber].wordTranslate;
+                setWord(words[randomNumber].word);
+                setWordID(words[randomNumber].id);
+                setWordAudio(words[randomNumber].audio);
+                setWordTranscription(words[randomNumber].transcription);
                 setWordTranslation(newWordTranslation);
-                setArrOfWords(setWordsTranslation(shuffledWords, newWordTranslation));
+                setArrOfWords(setWordsTranslation(words, newWordTranslation));
             };
 
-            f1(wordCounter);
+           f1(wordCounter);
         }
 
         if (wordCounter === NUMBER_OF_WORDS) {
             handleGameOver();
         }
-    }, [livesCount, wordCounter, getWordsChunk, statisticsArr, handleGameOver, activeLevel, shuffledWords]);
+    }, [livesCount, wordCounter, statisticsArr, handleGameOver, words]);
 
     const updateStats = useCallback((isCorrect) => {
         setStatisticsArr([...statisticsArr, {
@@ -104,8 +95,7 @@ const Savannah = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (livesCount && shuffledWords && shuffledWords.length && !btnClicked) {
-                setAnswer(false);
+            if (livesCount && words && words.length && !btnClicked) {
                 setLivesCount(livesCount - 1);
                 updateStats(false);
                 playSound(false, soundOn);
@@ -116,12 +106,7 @@ const Savannah = () => {
         return () => {
             clearTimeout(timer);
         };
-    }, [shuffledWords, updateStats, livesCount, answer, btnClicked, soundOn, wordCounter]);
-
-    const handleExit = useCallback(() => {
-        dispatch(setStatusGame(false));
-        setIsExit(false);
-    }, [dispatch]);
+    }, [words, updateStats, livesCount, currentGameStatistics, btnClicked, soundOn, wordCounter]);
 
     const handleChangeSound = useCallback(() => {
         setSoundOn(!soundOn);
@@ -135,20 +120,24 @@ const Savannah = () => {
 
         if (correct) {
             setSnakeSize(snakeSize + 0.02);
-            setrightAnswers(rightAnswers + 1);
+            setCurrentGameStatistics({...currentGameStatistics, rightAnswers: currentGameStatistics.rightAnswers + 1});
+            setCurrentSeries(currentSeries + 1);
+            onWordSelect(word, {succeed: true});
             playSound(true, soundOn);
         } else {
-            setLivesCount(livesCount - 1);
-            setwrongAnswers(wrongAnswers + 1);
-            playSound(false, soundOn);
-        }
-    }, [livesCount, updateStats, wrongAnswers, wordCounter, rightAnswers, soundOn, snakeSize]);
+          currentGameStatistics.wrongAnswers = currentGameStatistics.wrongAnswers + 1;
+          setLivesCount(livesCount - 1);
+          playSound(false, soundOn);
+          onWordSelect(word, {succeed: false});
 
-    const changeLevel = useCallback((levelProps) => {
-        if (activeLevel !== levelProps) {
-            dispatch(setLevel(levelProps));
+          if (currentSeries >= currentGameStatistics.bestSeries) {
+            currentGameStatistics.bestSeries = currentSeries;
+            setCurrentSeries(0);
+          }
+
+          setCurrentGameStatistics({...currentGameStatistics});
         }
-    }, [dispatch, activeLevel]);
+    }, [onWordSelect, word, livesCount, updateStats, currentGameStatistics, currentSeries, wordCounter, soundOn, snakeSize]);
 
     const handleWordClick = useCallback((itemWord) => () => {
         setBtnClicked(true);
@@ -165,20 +154,16 @@ const Savannah = () => {
 
     return (
         <>
-        {onLoading ? <Loader/> : (
+          {onLoading ? <Grid container justify="center" alignItems="center">ЗАГРУЗКА</Grid> : (
             <Grid className={classes.container}>
                 {isGameOver && (
                     <Statistics
                         statisticsArr={statisticsArr}
-                        rightAnswers={rightAnswers}
-                        wrongAnswers={wrongAnswers}
-                        toNewGame={handleExit}
+                        rightAnswers={currentGameStatistics.rightAnswers}
+                        wrongAnswers={currentGameStatistics.wrongAnswers}
                     />)}
 
                 {!isGameOver && (<Grid container justify="space-between" alignItems="center">
-                    <Grid item xs={4}>
-                        <Levels changeActiveLevel={changeLevel} currentLevel={activeLevel} />
-                    </Grid>
                     <Grid item xs={4} container justify="center">
                         <Lives livesCount={livesCount} gameOver={handleGameOver}/>
                     </Grid>
