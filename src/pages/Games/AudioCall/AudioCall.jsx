@@ -9,7 +9,7 @@ export default function AudioCall() {
 
   return (
       <div>
-          {statusGame ? (<GamePage />) : (<StartPage />)}
+          <GamePage />
       </div>
   );
 }

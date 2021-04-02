@@ -22,9 +22,9 @@ export default function GameShell(props) {
   const { currentWordsGroup, getWordsGroup, onGroupLoading } = useWordsGroup();
   const { currentWords, getWordsChunk, onLoading } = useWords();
   const { update: userWordUpdate } = useUserWordUpdate();
-  const {
-    state: { group: urlGroup, page: urlPage },
-  } = useLocation();
+  const { state: locationState } = useLocation();
+  const urlGroup = locationState?.group;
+  const urlPage = locationState?.page;
   const { isLogged } = useSelector((state) => state.user);
   const [currentChunk, setCurrentChunk] = useState(null);
 

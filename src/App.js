@@ -61,7 +61,9 @@ export default function App(){
             <Route path="/book"><BookPage/></Route>
             <Route path="/statistic"><StatisticPage/></Route>
             <Route path={getGamePath("savannah")} exact component={Savannah}/>
-            <Route path={getGamePath("audiocall")}><AudioCall/></Route>
+            <Route path={getGamePath("audiocall")}>
+              <GameShell gameData={GAMES.audiocall}><AudioCall/></GameShell>
+            </Route>
             <Route path={getGamePath("sprint")}><Sprint/></Route>
             <Route path={getGamePath("puzzle")}>
               <GameShell gameData={GAMES.puzzle}><PuzzleGame/></GameShell>
