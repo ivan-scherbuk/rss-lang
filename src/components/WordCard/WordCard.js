@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classesCss from "./WordCard.module.scss";
 import { useUserWordUpdate } from "../../hooks/hooks.user";
+import {SETTINGS} from "../../settings";
 
 export default function WordCard(props) {
   let {
@@ -78,10 +79,10 @@ export default function WordCard(props) {
       {/* <img src={image}/> */}
       <div
         className={classesCss["WordImg"]}
-        style={{ backgroundImage: `url(${image})` }}
-      ></div>
+        style={{ backgroundImage: `url(${SETTINGS.SERVER}/${image})` }}
+      />
       <div>
-        <div className={classesCss["Icon"]} onClick={() => playAudio(audio)}>
+        <div className={classesCss["Icon"]} onClick={() => playAudio(`${SETTINGS.SERVER}/${audio}`)}>
           volume_up
         </div>
         <div

@@ -42,3 +42,7 @@ export function checkCollision(staticObj, mobileObj){
   && mobileObj.top - mobileObj.height < relStatic.top
 
 }
+
+export function firstLetterToCapital(word){
+  return word[0].toUpperCase() + word.slice(1)
+}

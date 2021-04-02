@@ -25,7 +25,6 @@ export function useUserWordUpdate(){
 	const dispatch = useDispatch()
 	const [updatedWord, setUpdatedWord] = useState(null)
 	const [onError, setOnError] = useState(null)
-  console.log(user)
 
 	const update = useCallback(async (word, data = {}) => {
 
@@ -73,9 +72,9 @@ export function useUserWordUpdate(){
 		}
 
 		if(!localData.difficulty) localData.difficulty = "normal"
-    console.log(localData)
 		return dispatch(addUserWord(word, localData)).then((word) => {
 			setUpdatedWord(word)
+      return word
 		}).catch(e => setOnError({word, e}))
 	}, [user, dispatch, updatedWord])
 	return { update, updatedWord, onError }

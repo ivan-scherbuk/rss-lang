@@ -1,14 +1,15 @@
-import React, { useEffect, useState, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useLocation } from "react-router-dom"
 import LevelButtons from "./common/Levels/LevelButtons";
 import levelClasses from "../styles/Styles.module.scss"
-import { useWordsGroup, useWords } from "../../hooks/hooks.words";
+import { useWords, useWordsGroup } from "../../hooks/hooks.words";
 import { createRandomChunkFromGroup } from "../../helpers/utils.words";
-import {SETTINGS} from "../../settings";
+import { SETTINGS } from "../../settings";
 import GameModal from "./common/GameModal/GameModal";
 import classesCss from "./Games.module.scss"
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useSelector } from "react-redux";
+import StatisticModal from "./common/StatisticModal/StatisticModal";
 
 export default function GameShell(props){
   const {
@@ -16,15 +17,26 @@ export default function GameShell(props){
     gameData,
     className,
     style,
-    randomLengthStack = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH,
+    //randomLengthStack = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH,
+    randomLengthStack = 3,
   } = props
+
+  const [currentChunk, setCurrentChunk] = useState(null)
+  const [isGameEnd, setGameEnd] = useState(false)
 
   const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
   const {currentWords, getWordsChunk, onLoading} = useWords()
   const {update: userWordUpdate} = useUserWordUpdate()
-  const {state:{group: urlGroup, page: urlPage}} = useLocation()
+
   const {isLogged} = useSelector(state => state.user)
-  const [currentChunk, setCurrentChunk] = useState(null)
+  const {state: {group: urlGroup, page: urlPage}} = useLocation()
+
+  const chunkCopyForStatistic = useMemo(() => {
+    if (currentChunk) {
+      return [...currentChunk]
+    }
+    return null
+  }, [currentChunk])
 
 
   function levelSelectHandler(index){
@@ -42,9 +54,22 @@ export default function GameShell(props){
   }
 
   function addWordToUserHandler(word, params){
-    if(isLogged){
-      userWordUpdate(word, params)
+    if (isLogged) {
+      userWordUpdate(word, params).then(res => {
+        const statisticWord = chunkCopyForStatistic.findIndex(statWord => statWord.id === word.id)
+        if (statisticWord + 1) {
+          chunkCopyForStatistic[statisticWord].userNewResults = res
+        }
+      })
     }
+    const statisticWord = chunkCopyForStatistic.findIndex(statWord => statWord.id === word.id)
+    if (statisticWord + 1) {
+      chunkCopyForStatistic[statisticWord].result = params
+    }
+  }
+
+  function gameEndHandler(){
+    setGameEnd(true)
   }
 
   useEffect(() => {
@@ -56,20 +81,19 @@ export default function GameShell(props){
   }, [urlGroup, urlPage, getWordsGroup, getWordsChunk])
 
   useEffect(() => {
-    if(currentWordsGroup){
+    if (currentWordsGroup) {
       setCurrentChunk(createRandomChunkFromGroup(currentWordsGroup, randomLengthStack))
     }
   }, [currentWordsGroup, randomLengthStack])
 
   useEffect(() => {
-    if(currentWords){
+    if (currentWords) {
       setCurrentChunk(currentWords)
     }
   }, [currentWords])
 
 
   const gameContent = useMemo(() => {
-
     function getChild(props){
       return React.Children.map(children,
         child => {
@@ -88,7 +112,8 @@ export default function GameShell(props){
       const wordsProps = {
         words: currentChunk,
         onLoading: onGroupLoading || onLoading,
-        onWordSelect: addWordToUserHandler
+        onWordSelect: addWordToUserHandler,
+        onGameEnd: gameEndHandler,
       }
       return getChild(wordsProps)
     }
@@ -96,20 +121,31 @@ export default function GameShell(props){
   }, [children, onGroupLoading, onLoading, currentChunk])
 
 
+  console.log(chunkCopyForStatistic)
   return (
     <div className={[className, classesCss.GameShell].join(" ")} style={style}>
       {
-        gameContent ? gameContent :
-          <GameModal
-            gameData={gameData}
-          >
-            <LevelButtons
-              levelNumbers={6}
-              levelStyles={levelClasses}
-              onSelect={levelSelectHandler}
+        (() => {
+          if (!isGameEnd) {
+            if (gameContent) return gameContent
+            return (
+              <GameModal
+                gameData={gameData}
+              >
+                <LevelButtons
+                  levelNumbers={6}
+                  levelStyles={levelClasses}
+                  onSelect={levelSelectHandler}
+                />
+              </GameModal>)
+          }
+          return (
+            <StatisticModal
+              className={classesCss.StatisticModal}
+              words={chunkCopyForStatistic}
             />
-          </GameModal>
-
+          )
+        })()
       }
     </div>
   )

@@ -63,7 +63,6 @@ export function addUserWord(word, data = {}){
           ...data.optional,
         },
       }
-      console.log(word, userWord)
       const rawRes = await userWordsRequest({
         token,
         id,

@@ -60,7 +60,7 @@ export default function App(){
           <Switch location={location}>
             <Route path="/book"><BookPage/></Route>
             <Route path="/statistic"><StatisticPage/></Route>
-            <Route path={getGamePath("savannah")} exact component={Savannah}/>
+            <Route path={getGamePath("savannah")} component={Savannah}/>
             <Route path={getGamePath("audiocall")}><AudioCall/></Route>
             <Route path={getGamePath("sprint")}><Sprint/></Route>
             <Route path={getGamePath("puzzle")}>
