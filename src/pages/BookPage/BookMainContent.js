@@ -5,7 +5,11 @@ import { useParams } from "react-router";
 import { useUserWords } from "../../hooks/hooks.user";
 import { useSelector } from "react-redux";
 
-export default function BookMainContent({ setGroupPath, currentPage }) {
+export default function BookMainContent({
+  setGroupPath,
+  currentPage,
+  setGameState,
+}) {
   const { currentWords, getWordsChunk, onLoading } = useWords();
   const {
     currentUserWords,
@@ -32,6 +36,9 @@ export default function BookMainContent({ setGroupPath, currentPage }) {
     };
     if (user.words) {
       getUserWordsChunk(currentGroup - 1, currentPage, filters);
+      let gameStateObj = { group: currentGroup - 1, page: currentPage };
+      sessionStorage.setItem("gameState", JSON.stringify(gameStateObj));
+      setGameState(gameStateObj);
     }
   }, [user, currentPage]);
 
@@ -44,7 +51,6 @@ export default function BookMainContent({ setGroupPath, currentPage }) {
             for (let i = 0; i < currentUserWords.length; i++) {
               if (currentUserWords[i].id === word.id) {
                 currentWordInfo = currentUserWords[i];
-                console.log(currentWordInfo);
               }
             }
           }

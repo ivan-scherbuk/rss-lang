@@ -10,6 +10,7 @@ export default function BookMain({
   setGroupPath,
   settingsToggle,
   settingsOff,
+  setGameState,
 }) {
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(
@@ -32,6 +33,7 @@ export default function BookMain({
             settingsToggle={settingsToggle}
             settingsOff={settingsOff}
             currentPage={currentPage}
+            setGameState={setGameState}
           />
         )}
       />
@@ -46,6 +48,7 @@ export default function BookMain({
             setTotalPagesCount={setTotalPagesCount}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            setGameState={setGameState}
           />
         )}
       />

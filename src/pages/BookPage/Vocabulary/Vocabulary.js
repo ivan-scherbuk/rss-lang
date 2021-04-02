@@ -12,6 +12,7 @@ export default function Vocabulary({
   currentPage,
   setCurrentPage,
   totalPagesCount,
+  setGameState,
 }) {
   const {
     getUserWordsGroup,
@@ -23,6 +24,7 @@ export default function Vocabulary({
   const { currentSectionVocabulary } = useParams();
   const user = useSelector((state) => state.user);
   const [currentSectionWords, setCurrentSectionWords] = useState();
+  const pageToStart = () => sessionStorage.setItem("currentPage", 0);
 
   useEffect(() => {
     setGroupPath("vocabulary/" + currentSectionVocabulary + "/");
@@ -59,6 +61,13 @@ export default function Vocabulary({
             );
           }
           setCurrentSectionWords(helpArr);
+          if (currentSectionVocabulary === "difficult") {
+            setGameState(helpArr[currentPage]);
+            sessionStorage.setItem(
+              "gameState",
+              JSON.stringify(helpArr[currentPage])
+            );
+          }
         }
       } else {
         setCurrentSectionWords(
@@ -84,18 +93,21 @@ export default function Vocabulary({
     <div>
       <div className={classesCss.VocabularyHeader}>
         <NavLink
+          onClick={pageToStart}
           className={classesCss.VocabularySection}
           to={"/book/vocabulary/learn/group/" + currentGroupVocabulary}
         >
           Изучаемые
         </NavLink>
         <NavLink
+          onClick={pageToStart}
           className={classesCss.VocabularySection}
           to={"/book/vocabulary/difficult/group/" + currentGroupVocabulary}
         >
           Сложные
         </NavLink>
         <NavLink
+          onClick={pageToStart}
           className={classesCss.VocabularySection}
           to={"/book/vocabulary/delete/group/" + currentGroupVocabulary}
         >
@@ -106,8 +118,6 @@ export default function Vocabulary({
         {Array.isArray(currentSectionWords) &&
           Array.isArray(currentSectionWords[0]) &&
           currentSectionWords[currentPage].map((word) => {
-            console.log(currentSectionWords);
-            console.log(word);
             return (
               <div key={word.id}>
                 <WordCard cardInfo={word} />
