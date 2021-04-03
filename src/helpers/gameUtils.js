@@ -58,3 +58,7 @@ export const populateStatistics = (key, totalStatistics, gameStatistics) => {
 export const getUserData = () => {
   return JSON.parse(localStorage.getItem("userData")) || {};
 };
+
+export function firstLetterToCapital(word){
+  return word[0].toUpperCase() + word.slice(1)
+}

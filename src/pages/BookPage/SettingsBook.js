@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import classesCss from "./../styles/BookPage.module.scss";
+import React from "react";
+import classesCss from "./BookPage.module.scss";
 
 export default function SettingsBook({
   settingsOff,
@@ -52,7 +52,7 @@ export default function SettingsBook({
           </span>
         </div>
       </div>
-      <div onClick={settingsOff} className={classesCss.settingsBlackout}></div>
+      <div onClick={settingsOff} className={classesCss.settingsBlackout}/>
     </div>
   );
 }

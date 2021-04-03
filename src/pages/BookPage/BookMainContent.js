@@ -4,24 +4,25 @@ import WordCard from "../../components/WordCard/WordCard.js";
 import { useParams } from "react-router";
 import { useUserWords } from "../../hooks/hooks.user";
 import { useSelector } from "react-redux";
-import classesCss from "./../styles/BookPage.module.scss";
+import classesCss from "./BookPage.module.scss";
+import cx from "classnames"
 
-export default function BookMainContent({
-  setGroupPath,
-  currentPage,
-  setGameState,
-  totalPagesCount,
-  setTotalPagesCount,
-  buttons,
-}) {
-  const { currentWords, getWordsChunk, onLoading } = useWords();
+export default function BookMainContent(props){
+  const {
+    setGroupPath,
+      currentPage,
+      setGameState,
+      totalPagesCount,
+      setTotalPagesCount,
+      buttons,
+  } = props
+  const {currentWords, getWordsChunk, onLoading} = useWords();
   const {
     currentUserWords,
     getUserWordsChunk,
-    subscribedUserWords,
     onLoading: onUserLoading,
   } = useUserWords();
-  const { currentGroup } = useParams();
+  const {currentGroup} = useParams();
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -34,13 +35,9 @@ export default function BookMainContent({
   }, [currentPage]);
 
   useEffect(() => {
-    const filters = {
-      difficulty: "hard | normal | weak" | undefined,
-      deleted: true | false | undefined,
-    };
     if (user.words) {
-      getUserWordsChunk(currentGroup - 1, currentPage, filters);
-      let gameStateObj = { group: currentGroup - 1, page: currentPage };
+      getUserWordsChunk(currentGroup - 1, currentPage);
+      let gameStateObj = {group: currentGroup - 1, page: currentPage};
       sessionStorage.setItem("gameState", JSON.stringify(gameStateObj));
       setGameState(gameStateObj);
     }
@@ -57,35 +54,33 @@ export default function BookMainContent({
   //   }
   // }, [currentUserWords]);
 
+  function findUserWord(word){
+    if (currentUserWords?.length) {
+      const userWord = currentUserWords.find(userWord => userWord.id === word.id)
+      if (userWord) return userWord
+    }
+    return word
+  }
+
   return (
-    <div>
-      <span>Изучаемых слов:</span>
-      <span>Успешно: 0</span>
-      <span>Ошибок: 0</span>
+    <div className={classesCss.CardsContainer}>
+      {/*<span>Изучаемых слов:</span>*/}
+      {/*<span>Успешно: 0</span>*/}
+      {/*<span>Ошибок: 0</span>*/}
       {currentWords &&
-        currentWords.map((word) => {
-          let currentWordInfo = word;
-          if (currentUserWords) {
-            for (let i = 0; i < currentUserWords.length; i++) {
-              if (currentUserWords[i].id === word.id) {
-                currentWordInfo = currentUserWords[i];
-              }
-            }
-          }
-          if (!currentWordInfo.optional?.deleted) {
-            return (
-              <div
-                className={
-                  currentWordInfo.difficulty === "hard" &&
-                  classesCss.difficultWord
-                }
-                key={word.id}
-              >
-                <WordCard cardInfo={currentWordInfo} buttons={buttons} />
-              </div>
-            );
-          }
-        })}
+      currentWords.map((word) => {
+        const currentWordInfo = findUserWord(word);
+        return (
+            <WordCard
+              className={cx({
+                [classesCss.DifficultWord]: currentWordInfo.difficulty === "hard",
+                [classesCss.DeletedWord]: currentWordInfo.optional?.deleted,
+              })}
+              key={word.id}
+              cardInfo={currentWordInfo}
+              buttons={buttons}/>
+        );
+      })}
     </div>
   );
 }

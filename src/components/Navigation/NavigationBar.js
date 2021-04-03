@@ -1,10 +1,12 @@
 import React, {useMemo} from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AuthBlock from "./AuthBlock";
-import AuthForm from "../../components/AuthForm/AuthForm";
-import Button from "../../components/Buttons/Button";
+import AuthForm from "../AuthForm/AuthForm";
+import Button from "../Buttons/Button";
 import classesCss from "./Navigation.module.scss";
 import {getUserData} from "../../helpers/gameUtils";
+import cx from "classnames"
+import BookLink from "./BookLink";
 
 export default function NavigationBar() {
   const location = useLocation();
@@ -47,18 +49,7 @@ export default function NavigationBar() {
           />
         </NavLink>
       )}
-      <NavLink
-        onClick={() => sessionStorage.setItem("currentPage", 0)}
-        to="/book/group/1"
-      >
-        <Button
-          label={"Учебник"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/book.webp)`,
-          }}
-          className={[classesCss.BubbleButton, classesCss.BookButton].join(" ")}
-        />
-      </NavLink>
+      <BookLink className={cx(classesCss.BookButton)}/>
       <NavLink to={{ pathname: "/games/savannah", state: { go: "go" } }}>
         <Button
           label={"Саванна"}

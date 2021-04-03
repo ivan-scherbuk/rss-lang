@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Route, useParams } from "react-router";
+import { useParams } from "react-router";
 import { NavLink } from "react-router-dom";
 import WordCard from "../../../components/WordCard/WordCard";
 import { useUserWordsGroup } from "../../../hooks/hooks.user";
-import classesCss from "./../../styles/BookPage.module.scss";
+import classesCss from "../BookPage.module.scss";
 
 export default function Vocabulary({
   setGroupPath,
@@ -17,7 +17,6 @@ export default function Vocabulary({
 }) {
   const {
     getUserWordsGroup,
-    subscribedUserWordsGroup,
     onLoading,
     currentUserWordsGroup,
   } = useUserWordsGroup();
