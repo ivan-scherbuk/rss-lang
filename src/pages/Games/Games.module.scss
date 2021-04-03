@@ -5,6 +5,72 @@
   background: linear-gradient(#ff8351, #f65e23);
 
   .StatisticModal{
+    min-width: 500px;
+  }
 
+  .GameEndHelper{
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    align-items: center;
+
+    .Button{
+      margin-bottom: 30px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .BookLink{
+      font-size: 20px;
+      color: #ff8351;
+      font-weight: bold;
+    }
+
+    .BackLink{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      width: 100px;
+      height: 100px;
+      .Icon{
+        font-size: 85px;
+        margin-bottom: 5px;
+        transition: font-size .2s, margin-bottom .2s;
+        &:active{
+          font-size: 80px;
+          margin-bottom: 10px;
+        }
+      }
+
+    }
+
+    .ResetButton{
+      width: 100px;
+      height: 100px;
+      font-size: 75px;
+      text-align: center;
+      transition: font-size .2s;
+
+      &:active{
+        font-size: 70px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 720px) {
+  .GameShell{
+    flex-direction: column!important;
+    .GameEndHelper{
+      flex-direction: row;
+      .Button{
+        margin-right: 30px;
+        margin-bottom: 0;
+      }
+    }
   }
 }

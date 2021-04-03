@@ -4,7 +4,7 @@ import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
 import {useDispatch, useSelector} from "react-redux";
 import {statisticsSelector} from "../../redux/games/selectors";
 import StatisticsGameCard from "./StatisticsGameCard";
-import CloseButton from "../Games/common/CloseButton";
+import CloseButton from "../../components/Buttons/CloseButton";
 import BarChart from "./BarChart";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import classesCss from "../styles/BookPage.module.scss";
+import classesCss from "./BookPage.module.scss";
 
 export default function BookHeader({ settingsOn, groupPath, gameState }) {
   return (

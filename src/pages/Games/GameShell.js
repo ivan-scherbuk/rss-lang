@@ -1,15 +1,20 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
-import LevelButtons from "./common/Levels/LevelButtons";
-import levelClasses from "../styles/Styles.module.scss"
+import { useSelector } from "react-redux";
+import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useWords, useWordsGroup } from "../../hooks/hooks.words";
 import { createRandomChunkFromGroup } from "../../helpers/utils.words";
-import {SETTINGS} from "../../settings";
+import LevelButtons from "./common/Levels/LevelButtons";
 import GameModal from "./common/GameModal/GameModal";
-import classesCss from "./Games.module.scss"
-import { useUserWordUpdate } from "../../hooks/hooks.user";
-import { useSelector } from "react-redux";
 import StatisticModal from "./common/StatisticModal/StatisticModal";
+import classesCss from "./Games.module.scss"
+import levelClasses from "../styles/Styles.module.scss"
+import { SETTINGS } from "../../settings";
+import BookLink from "../../components/Navigation/BookLink";
+import ResetButton from "../../components/Buttons/ResetButton";
+import cx from "classnames"
+import BackToGameLink from "./common/BackToGameLink";
+import CloseButton from "../../components/Buttons/CloseButton";
 
 export default function GameShell(props){
   const {
@@ -17,13 +22,13 @@ export default function GameShell(props){
     gameData,
     className,
     style,
-    //randomLengthStack = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH,
-    randomLengthStack = 3,
+    randomLengthStack = 3 //SETTINGS.DEFAULT_WORD_CHUNK_LENGTH,
   } = props
 
   const [currentChunk, setCurrentChunk] = useState(null)
   const [statisticChunk, setStatisticChunk] = useState(null)
   const [isGameEnd, setGameEnd] = useState(false)
+  const [gameResetKey, setGameResetKey] = useState(Math.random())
 
   const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
   const {currentWords, getWordsChunk, onLoading} = useWords()
@@ -31,21 +36,6 @@ export default function GameShell(props){
 
   const {isLogged} = useSelector(state => state.user)
   const {state: {group: urlGroup, page: urlPage}} = useLocation()
-
-  function updateStatisticChunk(wordForUpdate, key){
-    const statisticWord = statisticChunk.findIndex(statWord => statWord.id === wordForUpdate.id)
-    if (statisticWord + 1) {
-      const newStatisticChunk = [...statisticChunk]
-      newStatisticChunk[statisticWord][key] = wordForUpdate
-      setStatisticChunk(newStatisticChunk)
-      return true
-    }
-    return false
-  }
-
-  function levelSelectHandler(index){
-    getWordsGroup(index)
-  }
 
   function checkGroup(group){
     if (group < SETTINGS.GROUPS_COUNT) return group
@@ -57,17 +47,40 @@ export default function GameShell(props){
     return 0
   }
 
+  function levelSelectHandler(index){
+    getWordsGroup(index)
+  }
+
   function gameEndHandler(){
     setGameEnd(true)
+  }
+
+  function setGameStartAgain(){
+    setGameResetKey(Math.random())
+    setStatisticChunk([...currentChunk])
+    setGameEnd(false)
+  }
+
+  function updateStatisticChunk(wordForUpdate, dataForUpdate){
+    const statisticWordIndex = statisticChunk.findIndex(statWord => statWord.id === wordForUpdate.id)
+    if (statisticWordIndex + 1) {
+      setStatisticChunk(currentStatistic => {
+        const newStatisticChunk = [...currentStatistic]
+        newStatisticChunk[statisticWordIndex] = {...newStatisticChunk[statisticWordIndex], ...dataForUpdate}
+        return newStatisticChunk
+      })
+      return true
+    }
+    return false
   }
 
   function wordSelectHandler(word, params){
     if (isLogged) {
       userWordUpdate(word, params).then(updatedWord => {
-        updateStatisticChunk(updatedWord, "userNewResults")
+        updateStatisticChunk(word, {userNewResults: updatedWord})
       })
     }
-    updateStatisticChunk(params, "result")
+    updateStatisticChunk(word, {result: params})
   }
 
   useEffect(() => {
@@ -89,21 +102,22 @@ export default function GameShell(props){
   }, [currentWords])
 
   useEffect(() => {
-    if(currentChunk?.length) {
+    if (currentChunk?.length) {
       setStatisticChunk([...currentChunk])
     }
   }, [currentChunk])
 
 
-
   function getGameWithData(){
-    if ((children && (onGroupLoading || onLoading))
-      || (children && !(onGroupLoading || onLoading) && currentChunk?.length)) {
+    const onAnyLoading = onGroupLoading || onLoading
+    if (!isGameEnd && ((children && onAnyLoading)
+      || (children && !onAnyLoading && currentChunk?.length))) {
       const wordsProps = {
         words: currentChunk,
         onLoading: onGroupLoading || onLoading,
         onWordSelect: wordSelectHandler,
         onGameEnd: gameEndHandler,
+        key: gameResetKey,
       }
       return React.Children.map(children,
         child => {
@@ -139,13 +153,29 @@ export default function GameShell(props){
               </GameModal>)
           }
           return (
-            <StatisticModal
-              className={classesCss.StatisticModal}
-              words={statisticChunk}
-            />
+            <>
+              <StatisticModal
+                className={classesCss.StatisticModal}
+                words={statisticChunk}
+              />
+              <div className={classesCss.GameEndHelper}>
+                <ResetButton
+                  className={cx(classesCss.ResetButton, classesCss.Button)}
+                  onClick = {setGameStartAgain}/>
+                <BookLink
+                  className={cx(classesCss.BookLink, classesCss.Button)}
+                />
+                <BackToGameLink
+                  className={cx(classesCss.BackLink, classesCss.Button)}
+                  classes={{icon: classesCss.Icon}}
+                  group={urlGroup}
+                  page={urlPage} />
+              </div>
+            </>
           )
         })()
       }
+      <CloseButton />
     </div>
   )
 };

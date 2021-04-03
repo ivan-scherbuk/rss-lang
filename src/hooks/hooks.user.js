@@ -39,10 +39,10 @@ export function useUserWordUpdate(){
 		if (user.words[word.group] && user.words[word.group][word.page]) {
 			const currentWord = user.words[word.group][word.page].find(userWord => userWord.wordId === word.id)
 			if (currentWord) {
-        if(currentWord.optional?.successCounter && optional.successCounter){
+        if(currentWord.optional?.successCounter && optional.successCounter >= 0){
           optional.successCounter = currentWord.optional.successCounter + optional.successCounter
         }
-        if(currentWord.optional?.failCounter){
+        if(currentWord.optional?.failCounter  && optional.failCounter >= 0){
           optional.failCounter = currentWord.optional.failCounter + optional.failCounter
         }
 
@@ -54,7 +54,6 @@ export function useUserWordUpdate(){
 						...optional,
 					},
 				}
-        console.log(wordForUpdate)
 				return dispatch(updateExistingUserWord(wordForUpdate)).then( updatedWord => {
 
 					setUpdatedWord(updatedWord)

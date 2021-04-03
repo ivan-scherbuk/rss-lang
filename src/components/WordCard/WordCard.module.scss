@@ -1,59 +1,137 @@
-.WordCardContainer {
+$border-radius: 25px;
+
+.Card {
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  margin: 0 0 40px 0;
+  border-radius: $border-radius;
+  background-color: white;
+  box-shadow:
+    0 1px 2px 1px rgba(0,0,0,0.3),
+    0 2px 4px 1px rgba(0,0,0,0.25),
+    0 2px 8px 2px rgba(0,0,0,0.2),
+    0 4px 16px 4px rgba(0,0,0,0.15);
+
+  .HeaderBlock {
+    width: 100%;
+    height: 260px;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    background-size: cover;
+
+    .Overlay {
+      border-top-left-radius: $border-radius;
+      border-top-right-radius: $border-radius;
+      width: 100%;
+      height: 100%;
+      padding: 20px 20px 10px 20px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .WordBlock {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+
+      > div {
+        display: flex;
+      }
+
+      .SecondaryBlock {
+        font-size: 20px;
+        align-items: center;
+        justify-content: center;
+        > div {
+          &:not(:last-child) {
+            margin-right: 15px;
+          }
+        }
+      }
+
+      .PrimaryBlock {
+        h3 {
+          font-size: 40px;
+          margin: 0;
+        }
+      }
+
+      .SoundButton {
+        font-size: 25px;
+      }
+    }
+
+    .ButtonBlock {
+      display: flex;
+      width: 100%;
+      .StatsCounters{
+
+        margin-left: auto;
+        .SuccessCounter{
+          font-size: 1.2em;
+          color: #13ce5c;
+        }
+        .TotalCounter{
+          font-size: 1.6em;
+        }
+
+      }
+      .HardButton{
+        margin-top: 3px;
+        margin-right: 5px;
+
+      }
+    }
+  }
+
+  .CardContent {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 50vw;
-    height: 35vh;
-    margin: 20px 20px 20px 20px;
-    border: 2px solid gray;
-    border-radius: 20px;
+    flex-direction: column;
+    padding: 10px 15px 20px 15px;
+    width: 100%;
+    box-sizing: border-box;
+
+    .WordBlock{
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+
+      &:not(:last-child){
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        box-shadow: 0 20px 0 -19px #333;
+      }
+
+      .Example{
+        font-size: 0.85em;
+        margin-top: 5px;
+        font-style: italic;
+      }
+    }
+
+    .IconBlock {
+
+    }
+  }
+}
+
+.Button {
+  color: inherit;
+  cursor: pointer;
 
 }
 
 .Icon {
-    font-family: Material Icons;
-    font-size: 30px;
-}
-
-.Icon:hover {
-    cursor: pointer;
-    transform: scale(1.2);
-}
-
-.IconSuccsess {
-    color: green
-}
-
-.IconFailture {
-    color: red;
-}
-
-.WordText {
-    text-align: center;
-    margin: 10px 0 10px 0;
-}
-
-.WordContent {
-    margin: 10px 0 10px 0;
-}
-
-.ContetntWrapper {
-    width: 30%
-}
-
-.WordImg {
-    width: 390px;
-    height: 260px;
-    border-radius: 20px;
-}
-
-.NotificationWrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 30vh;
-}
-
-.ResultCounter {
-  margin-bottom: 10px;
+  font-family: Material Icons;
+  font-size: 30px;
+  &:active{
+    font-size: 27px;
+  }
 }

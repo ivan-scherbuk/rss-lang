@@ -5,7 +5,7 @@ import {makeStyles} from "@material-ui/core";
 import {Grid} from "@material-ui/core";
 import background from "../../../assets/images/startSavannah.jpg";
 import StartModal from "../common/StartModal";
-import CloseButton from "../common/CloseButton";
+import CloseButton from "../../../components/Buttons/CloseButton";
 
 const StartPage = () => {
     const classes = useStyles();

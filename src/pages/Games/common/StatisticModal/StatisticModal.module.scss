@@ -1,6 +1,5 @@
 .StatisticModal {
   margin: auto;
-  min-width: 500px;
   background-color: rgba(255, 255, 255, 0.3);
   padding: 30px 20px;
   box-sizing: border-box;
@@ -10,6 +9,38 @@
     width: 100%;
     text-align: center;
     color: #333;
+    font-size: 30px;
+    margin-top: 0;
+  }
+
+  .TableWrap{
+    max-height: 65vh;
+    min-height: 400px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar-track
+    {
+      padding-top: 20px;
+      background-color: transparent;
+      position: absolute;
+      top: 40px;
+    }
+
+    &::-webkit-scrollbar
+    {
+      padding-top: 20px;
+      width: 6px;
+      background-color: transparent;
+      position: absolute;
+      top: 40px;
+    }
+
+    &::-webkit-scrollbar-thumb
+    {
+      border-radius: 3px;
+      background: linear-gradient(transparent 15%, rgba(255, 255, 255, 0.75) 50%, transparent 85%);
+      position: absolute;
+      top: 40px;
+    }
   }
 
   .StatisticTable {
@@ -19,29 +50,38 @@
     border-radius: 20px;
     color: #333;
 
-
     tr {
       &:nth-child(2n) {
         background-color: rgba(255, 255, 255, 0.3);
       }
+      &:last-child{
+        td:first-child{
+          border-bottom-left-radius: 20px;
+        }
+        td:last-child{
+          border-bottom-right-radius: 20px;
+        }
+      }
     }
 
-    td {
+    td, th {
       padding: 5px 8px;
       border-collapse: collapse;
       border: none;
       vertical-align: center;
-
+      text-align: center;
+    }
+    th{
+      padding: 5px 10px;
     }
   }
-
 
   .AudioButton {
     font-size: 20px;
     color: white;
     margin-top: 0;
     margin-bottom: 0;
-    width: 50px;
+    width: 30px;
     height: 33px;
     transition: font-size .3s, margin-bottom .3s, margin-top .3s;
 

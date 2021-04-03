@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import BookMainContent from "./BookMainContent.js";
-import classesCss from "./../styles/BookPage.module.scss";
+import classesCss from "./BookPage.module.scss";
 import { Route } from "react-router";
 import Vocabulary from "./Vocabulary/Vocabulary.js";
 import SettingsBook from "./SettingsBook.js";
 import Pagination from "./Pagination.js";
+import BookNavbar from "./BookNavbar";
 
 export default function BookMain({
   setGroupPath,
   settingsToggle,
   settingsOff,
   setGameState,
+  groupPath
 }) {
   const [translate, setTranslate] = useState(
     sessionStorage.getItem("translateSettings") || "y"
@@ -30,7 +32,9 @@ export default function BookMain({
     }
   };
   return (
+    <>
     <div className={classesCss.BookMainContent}>
+      <BookNavbar groupPath={groupPath}/>
       <Route
         path={"/book/group/:currentGroup"}
         render={() => (
@@ -62,12 +66,7 @@ export default function BookMain({
           />
         )}
       />
-      <Pagination
-        onPageChanged={onPageChanged}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPagesCount={totalPagesCount}
-      />
+
       {settingsToggle && (
         <SettingsBook
           settingsOff={settingsOff}
@@ -78,5 +77,12 @@ export default function BookMain({
         />
       )}
     </div>
+      <Pagination
+        onPageChanged={onPageChanged}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPagesCount={totalPagesCount}
+      />
+    </>
   );
 }

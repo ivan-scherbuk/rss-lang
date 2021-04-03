@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import classesCss from "../styles/BookPage.module.scss";
+import classesCss from "./BookPage.module.scss";
 
 export default function Pagination({
   onPageChanged,
@@ -66,7 +66,7 @@ export default function Pagination({
           onChange={onPageChanged}
           autoFocus={true}
           onBlur={deactivateEditMode}
-        ></input>
+        />
       )}
       <div
         onClick={turnPageForward}

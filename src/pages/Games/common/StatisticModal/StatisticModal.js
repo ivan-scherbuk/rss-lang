@@ -2,23 +2,18 @@ import React from "react"
 import cx from "classnames"
 import { SETTINGS } from "../../../../settings";
 import classesCss from "./StatisticModal.module.scss"
-import SoundButton from "../SoundButton/SoundButton";
+import SoundButton from "../../../../components/Buttons/SoundButton";
 
 
-//Сделать failied/succeed
-//Сделать статистику пользователя за все время по этому слову
-//Сделать повторение игры на этом же наборе слова
-//Повторение игры с новым разделом
-//Возврат ко всем играм
-//Возврат в учебник
-//Выключение звука
-//Раскрытие на всю страницу
-//Сделать прокрутку на всю страницу
+//TODO: Выключение звука
+//TODO: Раскрытие на всю страницу
+//TODO: fix statistic record
 
 export default function StatisticModal({words, className}){
   return (
     <div className={cx(className, classesCss.StatisticModal)}>
       <h3>Результаты</h3>
+      <div className={classesCss.TableWrap}>
       <table className={classesCss.StatisticTable}>
         <thead>
         <tr>
@@ -35,10 +30,10 @@ export default function StatisticModal({words, className}){
           }
         </tr>
         </thead>
+
         <tbody className={classesCss.Body}>
         {
-          words.map((word, index) => {
-            console.log(word)
+          words.map(word => {
             return (
               <tr key={word.id}
                   className={classesCss.Word}>
@@ -64,7 +59,9 @@ export default function StatisticModal({words, className}){
           })
         }
         </tbody>
+
       </table>
+    </div>
     </div>
   )
 }

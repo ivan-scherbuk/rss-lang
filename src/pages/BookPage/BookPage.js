@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import BookHeader from "./BookHeader.js";
 import BookMain from "./BookMain.js";
-import classesCss from "./../styles/BookPage.module.scss";
-import BookNavbar from "./BookNavbar.js";
+import classesCss from "./BookPage.module.scss";
 
-export default function BookPage() {
+export default function BookPage(){
   const [groupPath, setGroupPath] = useState("");
   const [settingsToggle, setSettingsToggle] = useState(false);
   const [gameState, setGameState] = useState(
-    JSON.parse(sessionStorage.getItem("gameState"))
+    JSON.parse(sessionStorage.getItem("gameState")),
   );
   const settingsOff = () => {
     setSettingsToggle(false);
@@ -19,21 +17,19 @@ export default function BookPage() {
   };
   return (
     <div className={classesCss.BookPage}>
-      <BookHeader
-        settingsOn={settingsOn}
-        groupPath={groupPath}
-        gameState={gameState}
-      />
-      <div className={classesCss.main}>
-        <BookNavbar groupPath={groupPath} />
-        <div>
-          <BookMain
-            setGroupPath={setGroupPath}
-            settingsToggle={settingsToggle}
-            settingsOff={settingsOff}
-            setGameState={setGameState}
-          />
-        </div>
+      {/*<BookHeader*/}
+      {/*  settingsOn={settingsOn}*/}
+      {/*  groupPath={groupPath}*/}
+      {/*  gameState={gameState}*/}
+      {/*/>*/}
+      <div className={classesCss.Main}>
+        <BookMain
+          setGroupPath={setGroupPath}
+          settingsToggle={settingsToggle}
+          settingsOff={settingsOff}
+          setGameState={setGameState}
+          groupPath={groupPath}
+        />
       </div>
     </div>
   );

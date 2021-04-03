@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import NavigationBar from "./pages/Navigation/NavigationBar"
+import NavigationBar from "./components/Navigation/NavigationBar"
 import MainPage from "./pages/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
