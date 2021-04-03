@@ -7,8 +7,7 @@
   .BookHeader {
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    width: 300px;
+    flex-direction: row;
     height: 50px;
     align-items: center;
     color: white;
@@ -47,16 +46,15 @@
           color: black;
           font-size: 24px;
           margin: 0 0 20px 0;
-          transition: width .4s, height .4s;
+          transition: width 0.4s, height 0.4s;
 
-          &.Active{
+          &.Active {
             height: 90px;
             width: 90px;
             border: 3px solid white;
             margin-bottom: 8px;
             margin-top: -12px;
           }
-
         }
       }
 
@@ -70,7 +68,6 @@
     }
   }
 }
-
 
 .pagination {
   bottom: 0;
@@ -123,6 +120,7 @@
 .settingsContent {
   position: absolute;
   top: calc(100vh / 2);
+  left: calc(100vw / 2);
   color: white;
   z-index: 10;
 }
@@ -134,8 +132,13 @@
 .headerLink {
   color: white;
   text-decoration: none;
+  margin-left: 10px;
 }
 
+.userHeader {
+  display: flex;
+  margin-left: 10px;
+}
 
 .VocabularyHeader {
   display: flex;
@@ -151,7 +154,6 @@
 .DifficultWord {
   background-color: blueviolet;
 }
-
 
 .DeletedWord {
   display: none;
