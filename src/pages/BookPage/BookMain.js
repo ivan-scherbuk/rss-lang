@@ -12,7 +12,8 @@ export default function BookMain({
   settingsToggle,
   settingsOff,
   setGameState,
-  groupPath
+  groupPath,
+  isLogged,
 }) {
   const [translate, setTranslate] = useState(
     sessionStorage.getItem("translateSettings") || "y"
@@ -33,38 +34,47 @@ export default function BookMain({
   };
   return (
     <>
-    <div className={classesCss.BookMainContent}>
-      <BookNavbar groupPath={groupPath}/>
-      <Route
-        path={"/book/group/:currentGroup"}
-        render={() => (
-          <BookMainContent
-            setGroupPath={setGroupPath}
-            settingsToggle={settingsToggle}
-            settingsOff={settingsOff}
-            currentPage={currentPage}
-            setGameState={setGameState}
-            setTotalPagesCount={setTotalPagesCount}
-            totalPagesCount={totalPagesCount}
-            buttons={buttons}
-          />
-        )}
-      />
-      <Route
-        path={
-          "/book/vocabulary/:currentSectionVocabulary/group/:currentGroupVocabulary"
-        }
-        render={() => (
-          <Vocabulary
-            setGroupPath={setGroupPath}
-            totalPagesCount={totalPagesCount}
-            setTotalPagesCount={setTotalPagesCount}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            setGameState={setGameState}
-            translate={translate}
-          />
-        )}
+      <div className={classesCss.BookMainContent}>
+        <BookNavbar groupPath={groupPath} />
+        <Route
+          path={"/book/group/:currentGroup"}
+          render={() => (
+            <BookMainContent
+              setGroupPath={setGroupPath}
+              settingsToggle={settingsToggle}
+              settingsOff={settingsOff}
+              currentPage={currentPage}
+              setGameState={setGameState}
+              setTotalPagesCount={setTotalPagesCount}
+              totalPagesCount={totalPagesCount}
+              buttons={buttons}
+              isLogged={isLogged}
+            />
+          )}
+        />
+        <Route
+          path={
+            "/book/vocabulary/:currentSectionVocabulary/group/:currentGroupVocabulary"
+          }
+          render={() => (
+            <Vocabulary
+              setGroupPath={setGroupPath}
+              totalPagesCount={totalPagesCount}
+              setTotalPagesCount={setTotalPagesCount}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              setGameState={setGameState}
+              translate={translate}
+              isLogged={isLogged}
+            />
+          )}
+        />
+      </div>
+      <Pagination
+        onPageChanged={onPageChanged}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPagesCount={totalPagesCount}
       />
 
       {settingsToggle && (
@@ -76,13 +86,6 @@ export default function BookMain({
           setButtons={setButtons}
         />
       )}
-    </div>
-      <Pagination
-        onPageChanged={onPageChanged}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPagesCount={totalPagesCount}
-      />
     </>
   );
 }

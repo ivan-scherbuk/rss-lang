@@ -5,11 +5,11 @@ import { useParams } from "react-router";
 import SoundButton from "../Buttons/SoundButton";
 import FastAverageColor from "fast-average-color";
 import ButtonsBlock from "./ButtonsBlock";
-import cx from "classnames"
+import cx from "classnames";
 
 const fac = new FastAverageColor();
 
-export default function WordCard({cardInfo, translate, buttons}){
+export default function WordCard({ cardInfo, translate, buttons, isLogged }) {
   let {
     page,
     word,
@@ -24,10 +24,10 @@ export default function WordCard({cardInfo, translate, buttons}){
     textMeaningTranslate,
     textExampleTranslate,
   } = cardInfo;
-  const [averageColorData, setAverageColorData] = useState(null)
+  const [averageColorData, setAverageColorData] = useState(null);
   const [failedCounter, setFailedCounter] = useState(0);
   const [successCounter, setSuccessCounter] = useState(0);
-  const {currentSectionVocabulary} = useParams();
+  const { currentSectionVocabulary } = useParams();
   const audioPlayer = new Audio();
   audioPlayer.volume = 0.1;
   const [isForceOpened, setForceOpened] = useState(false);
@@ -38,18 +38,7 @@ export default function WordCard({cardInfo, translate, buttons}){
     notification = "";
   }
 
-  // const restoreWord = () => {
-  //   if (currentSectionVocabulary === "difficult") {
-  //     update(cardInfo, {difficulty: "normal"});
-  //   }
-  //   if (currentSectionVocabulary === "delete") {
-  //     update(cardInfo, {
-  //       deleted: false,
-  //     });
-  //   }
-  // };
-
-  function playAudio(url, phase){
+  function playAudio(url, phase) {
     audioPlayer.src = url;
     audioPlayer.load();
     audioPlayer.play();
@@ -71,7 +60,7 @@ export default function WordCard({cardInfo, translate, buttons}){
       return;
     }
 
-    let playNextAudio = function(){
+    let playNextAudio = function () {
       audioPlayer.removeEventListener("ended", playNextAudio);
       playAudio(nextAudio, nextPhase);
     };
@@ -79,9 +68,9 @@ export default function WordCard({cardInfo, translate, buttons}){
   }
 
   useEffect(() => {
-    if (cardInfo.optional && cardInfo.optional.optional) {
-      setFailedCounter(cardInfo.optional.optional.failCounter);
-      setSuccessCounter(cardInfo.optional.optional.successCounter);
+    if (cardInfo.optional) {
+      setFailedCounter(cardInfo.optional.failCounter);
+      setSuccessCounter(cardInfo.optional.successCounter);
     }
   }, []);
 
@@ -99,16 +88,17 @@ export default function WordCard({cardInfo, translate, buttons}){
   // }
 
   if (!averageColorData) {
-    fac.getColorAsync(`${SETTINGS.SERVER}/${image}`)
-    .then(color => {
-      setAverageColorData({
-        color: color.rgb,
-        isLight: color.isLight,
+    fac
+      .getColorAsync(`${SETTINGS.SERVER}/${image}`)
+      .then((color) => {
+        setAverageColorData({
+          color: color.rgb,
+          isLight: color.isLight,
+        });
       })
-    })
-    .catch(e => {
-      console.log(e);
-    });
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   return (
@@ -119,30 +109,31 @@ export default function WordCard({cardInfo, translate, buttons}){
       className={classesCss.Card}
     >
       <div
-        style={{backgroundImage: `url(${SETTINGS.SERVER}/${image})`}}
+        style={{ backgroundImage: `url(${SETTINGS.SERVER}/${image})` }}
         className={classesCss.HeaderBlock}
       >
         <div
           className={classesCss.Overlay}
           style={{
-            background: `linear-gradient(transparent, ${averageColorData?.color})` || "transparent",
-          }}>
-          <ButtonsBlock
-            audio={audio}
-            currentSectionVocabulary={currentSectionVocabulary}
-            cardInfo={cardInfo}
-            buttons={buttons}
-            page={page}
-            successCounter={successCounter}
-            failedCounter={failedCounter}
-            notification={notification}
-          />
-          <div
-            className={cx(
-              classesCss.WordBlock,
-            )}>
+            background:
+              `linear-gradient(transparent, ${averageColorData?.color})` ||
+              "transparent",
+          }}
+        >
+          {isLogged && (
+            <ButtonsBlock
+              audio={audio}
+              currentSectionVocabulary={currentSectionVocabulary}
+              cardInfo={cardInfo}
+              buttons={buttons}
+              page={page}
+              successCounter={successCounter}
+              failedCounter={failedCounter}
+              notification={notification}
+            />
+          )}
+          <div className={cx(classesCss.WordBlock)}>
             <div className={classesCss.PrimaryBlock}>
-
               <h3>{word}</h3>
             </div>
             <div className={classesCss.SecondaryBlock}>
@@ -154,21 +145,25 @@ export default function WordCard({cardInfo, translate, buttons}){
                 file={`${SETTINGS.SERVER}/${audio}`}
                 className={cx(
                   classesCss.SoundButton,
-                  classesCss.Button,
+                  classesCss.Button
                   //{[classesCss.WithShadow]:averageColorData?.isLight}
-                )}/>
+                )}
+              />
             </div>
           </div>
         </div>
       </div>
       <div className={classesCss.CardContent}>
         <div className={classesCss.WordBlock}>
-          <div dangerouslySetInnerHTML={{__html: textMeaning}}/>
-          <div dangerouslySetInnerHTML={{__html: textExample}} className={classesCss.Example}/>
+          <div dangerouslySetInnerHTML={{ __html: textMeaning }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: textExample }}
+            className={classesCss.Example}
+          />
         </div>
         {!(translate === "n" && currentSectionVocabulary === "learn") && (
           <div className={classesCss.WordBlock}>
-            <div >{textMeaningTranslate}</div>
+            <div>{textMeaningTranslate}</div>
             <div className={classesCss.Example}>{textExampleTranslate}</div>
           </div>
         )}
