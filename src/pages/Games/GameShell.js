@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useLocation } from "react-router-dom"
 import LevelButtons from "./common/Levels/LevelButtons";
 import levelClasses from "../styles/Styles.module.scss"
@@ -22,6 +22,7 @@ export default function GameShell(props){
   } = props
 
   const [currentChunk, setCurrentChunk] = useState(null)
+  const [statisticChunk, setStatisticChunk] = useState(null)
   const [isGameEnd, setGameEnd] = useState(false)
 
   const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
@@ -31,13 +32,16 @@ export default function GameShell(props){
   const {isLogged} = useSelector(state => state.user)
   const {state: {group: urlGroup, page: urlPage}} = useLocation()
 
-  const chunkCopyForStatistic = useMemo(() => {
-    if (currentChunk) {
-      return [...currentChunk]
+  function updateStatisticChunk(wordForUpdate, key){
+    const statisticWord = statisticChunk.findIndex(statWord => statWord.id === wordForUpdate.id)
+    if (statisticWord + 1) {
+      const newStatisticChunk = [...statisticChunk]
+      newStatisticChunk[statisticWord][key] = wordForUpdate
+      setStatisticChunk(newStatisticChunk)
+      return true
     }
-    return null
-  }, [currentChunk])
-
+    return false
+  }
 
   function levelSelectHandler(index){
     getWordsGroup(index)
@@ -53,23 +57,17 @@ export default function GameShell(props){
     return 0
   }
 
-  function addWordToUserHandler(word, params){
-    if (isLogged) {
-      userWordUpdate(word, params).then(res => {
-        const statisticWord = chunkCopyForStatistic.findIndex(statWord => statWord.id === word.id)
-        if (statisticWord + 1) {
-          chunkCopyForStatistic[statisticWord].userNewResults = res
-        }
-      })
-    }
-    const statisticWord = chunkCopyForStatistic.findIndex(statWord => statWord.id === word.id)
-    if (statisticWord + 1) {
-      chunkCopyForStatistic[statisticWord].result = params
-    }
-  }
-
   function gameEndHandler(){
     setGameEnd(true)
+  }
+
+  function wordSelectHandler(word, params){
+    if (isLogged) {
+      userWordUpdate(word, params).then(updatedWord => {
+        updateStatisticChunk(updatedWord, "userNewResults")
+      })
+    }
+    updateStatisticChunk(params, "result")
   }
 
   useEffect(() => {
@@ -87,41 +85,42 @@ export default function GameShell(props){
   }, [currentWordsGroup, randomLengthStack])
 
   useEffect(() => {
-    if (currentWords) {
-      setCurrentChunk(currentWords)
-    }
+    if (currentWords?.length) setCurrentChunk(currentWords)
   }, [currentWords])
 
-
-  const gameContent = useMemo(() => {
-    function getChild(props){
-      return React.Children.map(children,
-        child => {
-          return (
-            <child.type
-              {...child.props}
-              {...props}
-            >
-              {children}
-            </child.type>)
-        })
+  useEffect(() => {
+    if(currentChunk?.length) {
+      setStatisticChunk([...currentChunk])
     }
+  }, [currentChunk])
 
+
+
+  function getGameWithData(){
     if ((children && (onGroupLoading || onLoading))
       || (children && !(onGroupLoading || onLoading) && currentChunk?.length)) {
       const wordsProps = {
         words: currentChunk,
         onLoading: onGroupLoading || onLoading,
-        onWordSelect: addWordToUserHandler,
+        onWordSelect: wordSelectHandler,
         onGameEnd: gameEndHandler,
       }
-      return getChild(wordsProps)
+      return React.Children.map(children,
+        child => {
+          return (
+            <child.type
+              {...child.props}
+              {...wordsProps}
+            >
+              {children}
+            </child.type>)
+        })
     }
     return null
-  }, [children, onGroupLoading, onLoading, currentChunk])
+  }
 
+  const gameContent = getGameWithData()
 
-  console.log(chunkCopyForStatistic)
   return (
     <div className={[className, classesCss.GameShell].join(" ")} style={style}>
       {
@@ -142,7 +141,7 @@ export default function GameShell(props){
           return (
             <StatisticModal
               className={classesCss.StatisticModal}
-              words={chunkCopyForStatistic}
+              words={statisticChunk}
             />
           )
         })()

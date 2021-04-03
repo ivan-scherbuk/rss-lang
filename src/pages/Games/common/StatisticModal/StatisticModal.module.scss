@@ -1,35 +1,53 @@
-.StatisticModal{
+.StatisticModal {
   margin: auto;
   min-width: 500px;
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255, 255, 255, 0.3);
   padding: 30px 20px;
   box-sizing: border-box;
   border-radius: 40px;
 
-  h3{
+  h3 {
     width: 100%;
     text-align: center;
     color: #333;
   }
 
-  .StatisticTable{
+  .StatisticTable {
     border-spacing: 0;
-    border: 3px solid rgba(255,255,255,0.7);
+    border: 3px solid rgba(255, 255, 255, 0.7);
     width: 100%;
     border-radius: 20px;
     color: #333;
 
 
-    tr{
-      &:nth-child(2n){
-        background-color: rgba(255,255,255,0.3);
+    tr {
+      &:nth-child(2n) {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
     }
-    }
-    td{
+
+    td {
       padding: 5px 8px;
       border-collapse: collapse;
-      border:none;
+      border: none;
+      vertical-align: center;
 
+    }
+  }
+
+
+  .AudioButton {
+    font-size: 20px;
+    color: white;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 50px;
+    height: 33px;
+    transition: font-size .3s, margin-bottom .3s, margin-top .3s;
+
+    &:hover {
+      background-color: transparent;
+      font-size: 26px;
     }
   }
 }

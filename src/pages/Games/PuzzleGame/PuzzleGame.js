@@ -5,9 +5,9 @@ import Timer from "../common/Timer";
 import Lives from "./components/Lives";
 import WordList from "./components/WordsList";
 import classesCss from "./PuzzleGame.module.scss"
+import {SETTINGS} from "./settings";
 
-const TOTAL_LIVES = 3
-const SECONDS_FOR_COMPLETE = 30
+const {TOTAL_LIVES, SECONDS_FOR_COMPLETE} = SETTINGS
 
 export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
 
@@ -31,7 +31,7 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
   }
 
   function completeAssemblyHandler(){
-    if(currentWord + 1 < currentChunk.length){
+    if(currentWord + 1 <= currentChunk.length){
       setTimerState(state => ({...state, shouldReset: true, shouldPause: false}))
       if(autoComplete) {
         setAutoComplete(false)
@@ -45,7 +45,8 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
         return current + 1
       })
       if(lives < TOTAL_LIVES) setLives(TOTAL_LIVES)
-    } else {
+    }
+    if(currentWord + 1 === currentChunk.length) {
       onGameEnd()
     }
   }

@@ -1,5 +1,8 @@
 import React, { useMemo } from "react"
 import Button from "../../../../components/Buttons/Button";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faVolumeOff } from '@fortawesome/free-solid-svg-icons'
+
 
 
 export default function SoundButton({file, className}){
@@ -12,7 +15,7 @@ export default function SoundButton({file, className}){
     <Button
       onClick={() => pronounce.play()}
       className={className}
-      label={"Звук"}
+      label={<FontAwesomeIcon icon={faVolumeOff} />}
     />
   )
 };

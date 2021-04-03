@@ -140,12 +140,12 @@
         padding-inline-start: 1ch;
         &.Succeed{
           color: #47d47f;
-          list-style-type: "😊";
+          list-style-type: "✔️";
         }
 
         &.Failed{
           color: #ff5733;
-          list-style-type: "😔";
+          list-style-type: "❌";
         }
         &.Current{
           font-weight: bold;

@@ -96,6 +96,7 @@ export function updateExistingUserWord(word){
       if (rawRes.ok) {
         const res = await rawRes.json()
         dispatch(addWordToUser(res))
+        return res
       }
     } else {
       console.log("token expired")
