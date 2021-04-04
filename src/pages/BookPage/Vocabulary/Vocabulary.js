@@ -14,6 +14,7 @@ export default function Vocabulary({
   totalPagesCount,
   setGameState,
   translate,
+  isLogged,
 }) {
   const {
     getUserWordsGroup,
@@ -75,7 +76,11 @@ export default function Vocabulary({
             .flat()
             .filter((word) => {
               if (currentSectionVocabulary === "learn") {
-                return word.difficulty === "hard" || word.optional.optional;
+                return (
+                  word.difficulty === "hard" ||
+                  word.optional.failCounter > 0 ||
+                  word.optional.successCounter > 0
+                );
               }
               if (currentSectionVocabulary === "difficult") {
                 return word.difficulty === "hard";
@@ -123,11 +128,15 @@ export default function Vocabulary({
                 className={
                   currentSectionVocabulary === "learn" &&
                   word.difficulty === "hard" &&
-                  classesCss.difficultWord
+                  classesCss.DifficultWord
                 }
                 key={word.id}
               >
-                <WordCard cardInfo={word} translate={translate} />
+                <WordCard
+                  cardInfo={word}
+                  translate={translate}
+                  isLogged={isLogged}
+                />
               </div>
             );
           })}
