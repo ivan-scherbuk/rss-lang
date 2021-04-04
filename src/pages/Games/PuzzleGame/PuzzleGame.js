@@ -99,7 +99,7 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
                       return false
                     }}
                     cycle={SECONDS_FOR_COMPLETE * 1000}
-                    tic={1000}
+                    tic={10}
                   />
                   <WordList
                     words={currentChunk}

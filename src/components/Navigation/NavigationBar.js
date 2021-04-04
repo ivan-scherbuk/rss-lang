@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 
 
 export default function NavigationBar() {
-  const {isLogged} = useSelector(state => state.user)
+  const {isLogged} = useSelector(store => store.user)
   const location = useLocation();
 
   return (
