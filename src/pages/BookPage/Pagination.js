@@ -48,7 +48,6 @@ export default function Pagination({
     setCurrentPage(totalPagesCount - 1);
   };
   return (
-<<<<<<< HEAD
     <div className={classesCss.pagination}>
       <BookHeader
         settingsOn={settingsOn}
@@ -56,9 +55,6 @@ export default function Pagination({
         gameState={gameState}
         isLogged={isLogged}
       />
-=======
-    <div className={classesCss.Pagination}>
->>>>>>> b4fa4f6bc9914a97a0fa9edbe0c18232c5e1e17b
       <div
         onClick={turnToStart}
         className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
