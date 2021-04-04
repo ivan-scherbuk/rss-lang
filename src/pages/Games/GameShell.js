@@ -35,7 +35,9 @@ export default function GameShell(props){
   const {update: userWordUpdate} = useUserWordUpdate()
 
   const {isLogged} = useSelector(state => state.user)
-  const {state: {group: urlGroup, page: urlPage}} = useLocation()
+  const allStatistics = useSelector(state => state.statisticsSelector);
+  const {state = {}} = useLocation()
+  const {group: urlGroup, page: urlPage} = state? state : {}
 
   function checkGroup(group){
     if (group < SETTINGS.GROUPS_COUNT) return group
@@ -84,10 +86,9 @@ export default function GameShell(props){
   }
 
   useEffect(() => {
-    if (urlGroup >= 0 && urlPage >= 0) {
-      getWordsChunk(checkGroup(urlGroup), checkPage(urlPage))
-    } else if (urlGroup >= 0) {
-      getWordsGroup(checkGroup(urlGroup))
+    if (urlGroup) {
+      if(urlPage) getWordsChunk(checkGroup(urlGroup), checkPage(urlPage))
+      else getWordsGroup(checkGroup(urlGroup))
     }
   }, [urlGroup, urlPage, getWordsGroup, getWordsChunk])
 
