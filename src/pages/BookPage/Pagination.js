@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import BookHeader from "./BookHeader";
 import classesCss from "./BookPage.module.scss";
 
 export default function Pagination({
@@ -6,6 +7,13 @@ export default function Pagination({
   currentPage,
   setCurrentPage,
   totalPagesCount,
+  isLogged,
+  successCounter,
+  failCounter,
+  totalCounter,
+  settingsOn,
+  groupPath,
+  gameState,
 }) {
   let [editMode, setEditMode] = useState(false);
 
@@ -40,7 +48,17 @@ export default function Pagination({
     setCurrentPage(totalPagesCount - 1);
   };
   return (
+<<<<<<< HEAD
+    <div className={classesCss.pagination}>
+      <BookHeader
+        settingsOn={settingsOn}
+        groupPath={groupPath}
+        gameState={gameState}
+        isLogged={isLogged}
+      />
+=======
     <div className={classesCss.Pagination}>
+>>>>>>> b4fa4f6bc9914a97a0fa9edbe0c18232c5e1e17b
       <div
         onClick={turnToStart}
         className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
@@ -80,6 +98,14 @@ export default function Pagination({
       >
         {">>"}
       </div>
+      {isLogged && (
+        <div>
+          <div>Изучаемых слов: {totalCounter}</div>
+          <div>
+            Успешно: {successCounter}/{successCounter + failCounter}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
