@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import HardButton from "../Buttons/HardButton";
 import classesCss from "./WordCard.module.scss";
 import cx from "classnames";
@@ -13,6 +13,9 @@ export default function ButtonsBlock(props) {
     failedCounter,
     page,
     cardInfo,
+    wordsToRender,
+    setDeletedWord,
+    deletedWords,
   } = props;
 
   const { update } = useUserWordUpdate();
@@ -38,13 +41,25 @@ export default function ButtonsBlock(props) {
             <HardButton
               className={cx(classesCss.Button, classesCss.HardButton)}
               onClick={() => {
-                console.log("HARD");
                 update(cardInfo, { difficulty: "hard" });
               }}
             />
             <div
               className={cx(classesCss.Button, classesCss.Icon)}
-              onClick={() => update(cardInfo, { deleted: true })}
+              onClick={() => {
+                update(cardInfo, { deleted: true }).then((data) => {
+                  const index = wordsToRender.findIndex(
+                    (word) => word.id === data.wordId
+                  );
+                  setDeletedWord([
+                    ...deletedWords,
+                    {
+                      ...wordsToRender[index],
+                      optional: data.optional,
+                    },
+                  ]);
+                });
+              }}
             >
               delete_forever
             </div>

@@ -20,12 +20,6 @@ export default function BookPage() {
   const { isLogged } = useSelector((state) => state.user);
   return (
     <div className={classesCss.BookPage}>
-      <BookHeader
-        settingsOn={settingsOn}
-        groupPath={groupPath}
-        gameState={gameState}
-        isLogged={isLogged}
-      />
       <div className={classesCss.Main}>
         <BookMain
           setGroupPath={setGroupPath}
@@ -34,6 +28,8 @@ export default function BookPage() {
           setGameState={setGameState}
           groupPath={groupPath}
           isLogged={isLogged}
+          settingsOn={settingsOn}
+          gameState={gameState}
         />
       </div>
     </div>

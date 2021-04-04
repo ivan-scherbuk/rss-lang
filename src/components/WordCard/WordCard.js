@@ -9,7 +9,15 @@ import cx from "classnames";
 
 const fac = new FastAverageColor();
 
-export default function WordCard({ cardInfo, translate, buttons, isLogged }) {
+export default function WordCard({
+  cardInfo,
+  translate,
+  buttons,
+  isLogged,
+  wordsToRender,
+  setDeletedWord,
+  deletedWords,
+}) {
   let {
     page,
     word,
@@ -130,6 +138,9 @@ export default function WordCard({ cardInfo, translate, buttons, isLogged }) {
               successCounter={successCounter}
               failedCounter={failedCounter}
               notification={notification}
+              wordsToRender={wordsToRender}
+              deletedWords={deletedWords}
+              setDeletedWord={setDeletedWord}
             />
           )}
           <div className={cx(classesCss.WordBlock)}>

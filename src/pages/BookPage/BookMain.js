@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BookMainContent from "./BookMainContent.js";
 import classesCss from "./BookPage.module.scss";
 import { Route } from "react-router";
@@ -14,14 +14,24 @@ export default function BookMain({
   setGameState,
   groupPath,
   isLogged,
+  settingsOn,
+  gameState,
 }) {
+  const [successCounter, setSuccessCounter] = useState(0);
+  const [failCounter, setFailCounter] = useState(0);
+  const [totalCounter, setTotalCounter] = useState(0);
+  const [pages, setPages] = useState(
+    localStorage.getItem("pages") && JSON.parse(localStorage.getItem("pages"))
+  );
   const [translate, setTranslate] = useState(
     sessionStorage.getItem("translateSettings") || "y"
   );
   const [buttons, setButtons] = useState(
     sessionStorage.getItem("buttonsChange") || "y"
   );
-  const [totalPagesCount, setTotalPagesCount] = useState(30);
+  const [totalPagesCount, setTotalPagesCount] = useState(
+    (pages && pages.length) || 30
+  );
   const [currentPage, setCurrentPage] = useState(
     +sessionStorage.getItem("currentPage")
   );
@@ -32,6 +42,17 @@ export default function BookMain({
       setCurrentPage(e.target.value);
     }
   };
+  useEffect(() => {
+    if (!pages) {
+      let helpArr = [];
+      for (let i = 0; i < totalPagesCount; i++) {
+        helpArr.push(i);
+      }
+      setPages(helpArr);
+      localStorage.setItem("pages", JSON.stringify(helpArr));
+      console.log(pages);
+    }
+  }, []);
   return (
     <>
       <div className={classesCss.BookMainContent}>
@@ -49,6 +70,12 @@ export default function BookMain({
               totalPagesCount={totalPagesCount}
               buttons={buttons}
               isLogged={isLogged}
+              pages={pages}
+              setPages={setPages}
+              setCurrentPage={setCurrentPage}
+              setSuccessCounter={setSuccessCounter}
+              setFailCounter={setFailCounter}
+              setTotalCounter={setTotalCounter}
             />
           )}
         />
@@ -75,6 +102,14 @@ export default function BookMain({
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPagesCount={totalPagesCount}
+        pages={pages}
+        isLogged={isLogged}
+        successCounter={successCounter}
+        failCounter={failCounter}
+        totalCounter={totalCounter}
+        settingsOn={settingsOn}
+        groupPath={groupPath}
+        gameState={gameState}
       />
 
       {settingsToggle && (
