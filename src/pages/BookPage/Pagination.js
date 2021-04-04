@@ -40,7 +40,7 @@ export default function Pagination({
     setCurrentPage(totalPagesCount - 1);
   };
   return (
-    <div className={classesCss.pagination}>
+    <div className={classesCss.Pagination}>
       <div
         onClick={turnToStart}
         className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}

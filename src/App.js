@@ -51,20 +51,18 @@ export default function App(){
   return (
     <>
       <NavigationBar/>
-      <TransitionGroup>
-        <CSSTransition
-          timeout={800}
-          classNames="transit"
-          key={location.key || location.pathname}
-        >
+      {/*<TransitionGroup>*/}
+      {/*  <CSSTransition*/}
+      {/*    timeout={800}*/}
+      {/*    classNames="transit"*/}
+      {/*    key={location.key || location.pathname}*/}
+      {/*  >*/}
           <Switch location={location}>
             <Route path="/book"><BookPage/></Route>
             <Route path="/statistic"><StatisticsPage/></Route>
-
             <Route path={getGamePath("savannah")}>
               <GameShell gameData={GAMES.savannah}><Savannah/></GameShell>
             </Route>
-
             <Route path={getGamePath("audiocall")}><AudioCall/></Route>
             <Route path={getGamePath("sprint")}><Sprint/></Route>
             <Route path={getGamePath("puzzle")}>
@@ -74,8 +72,8 @@ export default function App(){
             <Route path="/user" exact><UserPage/></Route>
             <Route path="/" exact><MainPage/></Route>
           </Switch>
-        </CSSTransition>
-      </TransitionGroup>
+      {/*  </CSSTransition>*/}
+      {/*</TransitionGroup>*/}
     </>
   )
 }
