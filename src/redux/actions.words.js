@@ -4,7 +4,6 @@ import { ADD_WORDS_CHUNK, ADD_WORDS_GROUP } from "./types"
 const addWordsChunk = wordsChunk => ({type: ADD_WORDS_CHUNK, payload: wordsChunk})
 const addWordsGroup = wordsGroup => ({type: ADD_WORDS_GROUP, payload: wordsGroup})
 
-
 export function syncUserWords(){
 	return async (dispatch, getState) => {
 		const {user, words} = getState()

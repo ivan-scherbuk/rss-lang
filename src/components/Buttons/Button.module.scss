@@ -8,6 +8,56 @@
   font-family: inherit;
 
   &:hover{
-    background-color: #d3d3d3;
+  }
+}
+
+
+.ResetButton{
+  font-size: 40px;
+  color: white;
+  width: 60px;
+  height: 60px;
+  padding: 0;
+  &:hover{
+    background-color: transparent;
+  }
+  &:active{
+    font-size: 35px;
+  }
+}
+
+.CloseButton{
+  color: white;
+  padding: 0;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: top .3s, right .3s;
+  &:active{
+    font-size: 36px;
+    top:17px;
+    right: 17px;
+  }
+
+  .Icon{
+    font-size: 40px;
+    transition: font-size .3s;
+    &:active{
+      font-size: 36px;
+    }
+  }
+}
+
+.SoundButton{
+  font-family: Material Icons;
+  font-size: 30px;
+}
+
+.HardButton{
+  font-size: 25px;
+  padding: 0;
+  &:active{
+    font-size: 22px;
+    padding-right: 2px;
   }
 }

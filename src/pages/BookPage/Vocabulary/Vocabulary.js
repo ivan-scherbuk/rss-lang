@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Route, useParams } from "react-router";
+import { useParams } from "react-router";
 import { NavLink } from "react-router-dom";
 import WordCard from "../../../components/WordCard/WordCard";
 import { useUserWordsGroup } from "../../../hooks/hooks.user";
-import classesCss from "./../../styles/BookPage.module.scss";
+import classesCss from "../BookPage.module.scss";
 
 export default function Vocabulary({
   setGroupPath,
@@ -13,10 +13,11 @@ export default function Vocabulary({
   setCurrentPage,
   totalPagesCount,
   setGameState,
+  translate,
+  isLogged,
 }) {
   const {
     getUserWordsGroup,
-    subscribedUserWordsGroup,
     onLoading,
     currentUserWordsGroup,
   } = useUserWordsGroup();
@@ -75,7 +76,11 @@ export default function Vocabulary({
             .flat()
             .filter((word) => {
               if (currentSectionVocabulary === "learn") {
-                return word.difficulty === "hard";
+                return (
+                  word.difficulty === "hard" ||
+                  word.optional.failCounter > 0 ||
+                  word.optional.successCounter > 0
+                );
               }
               if (currentSectionVocabulary === "difficult") {
                 return word.difficulty === "hard";
@@ -119,8 +124,19 @@ export default function Vocabulary({
           Array.isArray(currentSectionWords[0]) &&
           currentSectionWords[currentPage].map((word) => {
             return (
-              <div key={word.id}>
-                <WordCard cardInfo={word} />
+              <div
+                className={
+                  currentSectionVocabulary === "learn" &&
+                  word.difficulty === "hard" &&
+                  classesCss.DifficultWord
+                }
+                key={word.id}
+              >
+                <WordCard
+                  cardInfo={word}
+                  translate={translate}
+                  isLogged={isLogged}
+                />
               </div>
             );
           })}

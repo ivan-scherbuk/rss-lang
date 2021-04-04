@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import BookMainContent from "./BookMainContent.js";
-import classesCss from "./../styles/BookPage.module.scss";
+import classesCss from "./BookPage.module.scss";
 import { Route } from "react-router";
 import Vocabulary from "./Vocabulary/Vocabulary.js";
 import SettingsBook from "./SettingsBook.js";
 import Pagination from "./Pagination.js";
+import BookNavbar from "./BookNavbar";
 
 export default function BookMain({
   setGroupPath,
   settingsToggle,
   settingsOff,
   setGameState,
+  groupPath,
+  isLogged,
 }) {
+  const [translate, setTranslate] = useState(
+    sessionStorage.getItem("translateSettings") || "y"
+  );
+  const [buttons, setButtons] = useState(
+    sessionStorage.getItem("buttonsChange") || "y"
+  );
   const [totalPagesCount, setTotalPagesCount] = useState(30);
   const [currentPage, setCurrentPage] = useState(
     +sessionStorage.getItem("currentPage")
@@ -24,41 +33,59 @@ export default function BookMain({
     }
   };
   return (
-    <div className={classesCss.BookMainContent}>
-      <Route
-        path={"/book/group/:currentGroup"}
-        render={() => (
-          <BookMainContent
-            setGroupPath={setGroupPath}
-            settingsToggle={settingsToggle}
-            settingsOff={settingsOff}
-            currentPage={currentPage}
-            setGameState={setGameState}
-          />
-        )}
-      />
-      <Route
-        path={
-          "/book/vocabulary/:currentSectionVocabulary/group/:currentGroupVocabulary"
-        }
-        render={() => (
-          <Vocabulary
-            setGroupPath={setGroupPath}
-            totalPagesCount={totalPagesCount}
-            setTotalPagesCount={setTotalPagesCount}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            setGameState={setGameState}
-          />
-        )}
-      />
+    <>
+      <div className={classesCss.BookMainContent}>
+        <BookNavbar groupPath={groupPath} />
+        <Route
+          path={"/book/group/:currentGroup"}
+          render={() => (
+            <BookMainContent
+              setGroupPath={setGroupPath}
+              settingsToggle={settingsToggle}
+              settingsOff={settingsOff}
+              currentPage={currentPage}
+              setGameState={setGameState}
+              setTotalPagesCount={setTotalPagesCount}
+              totalPagesCount={totalPagesCount}
+              buttons={buttons}
+              isLogged={isLogged}
+            />
+          )}
+        />
+        <Route
+          path={
+            "/book/vocabulary/:currentSectionVocabulary/group/:currentGroupVocabulary"
+          }
+          render={() => (
+            <Vocabulary
+              setGroupPath={setGroupPath}
+              totalPagesCount={totalPagesCount}
+              setTotalPagesCount={setTotalPagesCount}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              setGameState={setGameState}
+              translate={translate}
+              isLogged={isLogged}
+            />
+          )}
+        />
+      </div>
       <Pagination
         onPageChanged={onPageChanged}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalPagesCount={totalPagesCount}
       />
-      {settingsToggle && <SettingsBook settingsOff={settingsOff} />}
-    </div>
+
+      {settingsToggle && (
+        <SettingsBook
+          settingsOff={settingsOff}
+          translate={translate}
+          setTranslate={setTranslate}
+          buttons={buttons}
+          setButtons={setButtons}
+        />
+      )}
+    </>
   );
 }

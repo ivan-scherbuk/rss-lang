@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import NavigationBar from "./pages/Navigation/NavigationBar"
+import NavigationBar from "./components/Navigation/NavigationBar"
 import MainPage from "./pages/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
@@ -60,17 +60,14 @@ export default function App(){
           <Switch location={location}>
             <Route path="/book"><BookPage/></Route>
             <Route path="/statistic"><StatisticsPage/></Route>
-            {/*<Route path={getGamePath("savannah")} exact component={Savannah}/>*/}
 
             <Route path={getGamePath("savannah")}>
               <GameShell gameData={GAMES.savannah}><Savannah/></GameShell>
             </Route>
 
             <Route path={getGamePath("audiocall")}>
-              <GameShell gameData={GAMES.audiocall}><AudioCall/></GameShell>
-            </Route>
+              <GameShell gameData={GAMES.audiocall}><AudioCall/></Route>
             <Route path={getGamePath("sprint")}><Sprint/></Route>
-
             <Route path={getGamePath("puzzle")}>
               <GameShell gameData={GAMES.puzzle}><PuzzleGame/></GameShell>
             </Route>

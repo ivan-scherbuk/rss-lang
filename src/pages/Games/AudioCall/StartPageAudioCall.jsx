@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import {setStatusGame} from '../../../redux/games/actions';
 import {Grid} from "@material-ui/core";
 import StartModal from "../common/StartModal";
-import CloseButton from "../common/CloseButton";
+import CloseButton from "../../../components/Buttons/CloseButton";
 import classesCss from "./AudioCallGame.module.scss";
 import background from "../../../assets/images/audiocall.jpg"
 

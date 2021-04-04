@@ -10,7 +10,7 @@ import {levelSelector} from "../../../redux/games/selectors";
 import Levels from "../common/Levels";
 import Statistics from "../common/Statistics";
 import Lives from "../common/Lives";
-import CloseButton from "../common/CloseButton";
+import CloseButton from "../../../components/Buttons/CloseButton";
 import SoundButton from "../common/SoundButton";
 import correctSound from "../../../assets/audio/correct.mp3";
 import errorSound from "../../../assets/audio/error.mp3";

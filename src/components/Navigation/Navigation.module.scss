@@ -1,7 +1,7 @@
-.Navigation{
+$bubbleButtonDefSize: 100px;
+$duration: .8s;
 
-  $bubbleButtonDefSize: 100px;
-  $duration: .8s;
+.Navigation{
 
   top: 10px;
   left: 0;
@@ -137,16 +137,6 @@
   }
 
 
-
-  .BubbleButton{
-    height: $bubbleButtonDefSize;
-    width: $bubbleButtonDefSize;
-    font-family: Rubik, sans-serif;
-    font-size: 25px;
-    border-radius: 50%;
-    z-index: 4
-  }
-
   .BookButton{
     position: absolute;
     right: 120px;
@@ -208,4 +198,15 @@
       background-size: 80px;
     }
   }
+}
+
+
+.BubbleButton{
+  height: $bubbleButtonDefSize;
+  width: $bubbleButtonDefSize;
+  font-family: Rubik, sans-serif;
+  font-size: 25px;
+  border-radius: 50%;
+  z-index: 4;
+  background-size: cover;
 }

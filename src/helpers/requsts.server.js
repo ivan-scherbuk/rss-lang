@@ -1,4 +1,6 @@
-const SERVER = "https://rss-words-3.herokuapp.com"
+import {SETTINGS} from "../settings";
+
+const SERVER = SETTINGS.SERVER
 
 const getRequestData = (token, method = "GET", body = {}) => {
   const request = {

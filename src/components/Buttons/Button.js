@@ -1,13 +1,14 @@
 import React from "react"
 import classesCss from "./Button.module.scss"
+import cx from "classnames"
 
-export default function Button(props){
+export default function Button({label, className, ...props}){
 	return(
 		<button
       {...props}
-			className={[classesCss.Button, props.className].join(" ")}
+			className={cx(classesCss.Button, className)}
 		>
-			{props.label}
+			{label}
 		</button>
 	)
 }

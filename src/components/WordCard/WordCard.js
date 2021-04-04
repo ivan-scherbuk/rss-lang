@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import classesCss from "./WordCard.module.scss";
-import { useUserWordUpdate } from "../../hooks/hooks.user";
+import { SETTINGS } from "../../settings";
+import { useParams } from "react-router";
+import SoundButton from "../Buttons/SoundButton";
+import FastAverageColor from "fast-average-color";
+import ButtonsBlock from "./ButtonsBlock";
+import cx from "classnames";
 
-export default function WordCard(props) {
+const fac = new FastAverageColor();
+
+export default function WordCard({ cardInfo, translate, buttons, isLogged }) {
   let {
-    id,
-    group,
     page,
     word,
     image,
@@ -18,14 +23,16 @@ export default function WordCard(props) {
     wordTranslate,
     textMeaningTranslate,
     textExampleTranslate,
-  } = props.cardInfo;
-  // let {failedCounter, successCounter} = props.optional
-  const { update, updatedWord, onError } = useUserWordUpdate();
+  } = cardInfo;
+  const [averageColorData, setAverageColorData] = useState(null);
+  const [failedCounter, setFailedCounter] = useState(0);
+  const [successCounter, setSuccessCounter] = useState(0);
+  const { currentSectionVocabulary } = useParams();
   const audioPlayer = new Audio();
   audioPlayer.volume = 0.1;
   const [isForceOpened, setForceOpened] = useState(false);
   let notification;
-  if (props.cardInfo.optional?.difficulty === "hard") {
+  if (cardInfo.optional?.difficulty === "hard") {
     notification = "notification_important";
   } else {
     notification = "";
@@ -60,69 +67,106 @@ export default function WordCard(props) {
     audioPlayer.addEventListener("ended", playNextAudio);
   }
 
-  if (props.cardInfo.optional?.deleted && !isForceOpened) {
-    return (
-      <div className={classesCss["WordCardContainer"]}>
-        <div
-          className={classesCss["WordText"]}
-          onClick={() => setForceOpened(true)}
-        >
-          {word}
-        </div>
-      </div>
-    );
+  useEffect(() => {
+    if (cardInfo.optional) {
+      setFailedCounter(cardInfo.optional.failCounter);
+      setSuccessCounter(cardInfo.optional.successCounter);
+    }
+  }, []);
+
+  // if (cardInfo.optional?.deleted && !isForceOpened) {
+  //   return (
+  //     <div className={classesCss["WordCardContainer"]}>
+  //       <div
+  //         className={classesCss["WordText"]}
+  //         onClick={() => setForceOpened(true)}
+  //       >
+  //         {word}
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  if (!averageColorData) {
+    fac
+      .getColorAsync(`${SETTINGS.SERVER}/${image}`)
+      .then((color) => {
+        setAverageColorData({
+          color: color.rgb,
+          isLight: color.isLight,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   return (
-    <div className={classesCss["WordCardContainer"]}>
-      {/* <img src={image}/> */}
+    <div
+      style={{
+        background: averageColorData?.color || "white",
+      }}
+      className={classesCss.Card}
+    >
       <div
-        className={classesCss["WordImg"]}
-        style={{ backgroundImage: `url(${image})` }}
-      ></div>
-      <div>
-        <div className={classesCss["Icon"]} onClick={() => playAudio(audio)}>
-          volume_up
-        </div>
+        style={{ backgroundImage: `url(${SETTINGS.SERVER}/${image})` }}
+        className={classesCss.HeaderBlock}
+      >
         <div
-          className={classesCss["Icon"]}
-          onClick={() => update(props.cardInfo, { difficulty: "hard" })}
+          className={classesCss.Overlay}
+          style={{
+            background:
+              `linear-gradient(transparent, ${averageColorData?.color})` ||
+              "transparent",
+          }}
         >
-          add_alert
-        </div>
-        <div
-          className={classesCss["Icon"]}
-          onClick={() => update(props.cardInfo, { deleted: true })}
-        >
-          delete_forever
-        </div>
-      </div>
-      <div className={classesCss["ContetntWrapper"]}>
-        <div className={classesCss["WordText"]}>{word}</div>
-        <div className={classesCss["WordText"]}>{transcription}</div>
-        <div className={classesCss["WordText"]}>{wordTranslate}</div>
-        <div
-          dangerouslySetInnerHTML={{ __html: textMeaning }}
-          className={classesCss["WordContent"]}
-        ></div>
-        <div className={classesCss["WordContent"]}>{textMeaningTranslate}</div>
-        <div
-          dangerouslySetInnerHTML={{ __html: textExample }}
-          className={classesCss["WordContent"]}
-        ></div>
-        <div className={classesCss["WordContent"]}>{textExampleTranslate}</div>
-      </div>
-      <div className={classesCss["NotificationWrapper"]}>
-        <div className={classesCss["Icon"]}>{notification}</div>
-        <div className={classesCss["ResultContainer"]}>
-          <div className={classesCss["ResultWrapper"]}>
-            {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-succsess']}`}>thumb_up_off_alt</span><span className={classesCss['result-counter']}>{`:${successCounter}`}</span> */}
-          </div>
-
-          <div className={classesCss["ResultWrapper"]}>
-            {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-failture']}`}>thumb_down_off_alt</span><span className={classesCss['result-counter']}>{`:${failedCounter}`}</span> */}
+          {isLogged && (
+            <ButtonsBlock
+              audio={audio}
+              currentSectionVocabulary={currentSectionVocabulary}
+              cardInfo={cardInfo}
+              buttons={buttons}
+              page={page}
+              successCounter={successCounter}
+              failedCounter={failedCounter}
+              notification={notification}
+            />
+          )}
+          <div className={cx(classesCss.WordBlock)}>
+            <div className={classesCss.PrimaryBlock}>
+              <h3>{word}</h3>
+            </div>
+            <div className={classesCss.SecondaryBlock}>
+              {!(translate === "n" && currentSectionVocabulary === "learn") && (
+                <div>{wordTranslate}</div>
+              )}
+              <div>{transcription}</div>
+              <SoundButton
+                file={`${SETTINGS.SERVER}/${audio}`}
+                className={cx(
+                  classesCss.SoundButton,
+                  classesCss.Button
+                  //{[classesCss.WithShadow]:averageColorData?.isLight}
+                )}
+              />
+            </div>
           </div>
         </div>
+      </div>
+      <div className={classesCss.CardContent}>
+        <div className={classesCss.WordBlock}>
+          <div dangerouslySetInnerHTML={{ __html: textMeaning }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: textExample }}
+            className={classesCss.Example}
+          />
+        </div>
+        {!(translate === "n" && currentSectionVocabulary === "learn") && (
+          <div className={classesCss.WordBlock}>
+            <div>{textMeaningTranslate}</div>
+            <div className={classesCss.Example}>{textExampleTranslate}</div>
+          </div>
+        )}
       </div>
     </div>
   );

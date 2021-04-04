@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import Button from "../../components/Buttons/Button"
-import AuthModal from "../../components/AuthForm/AuthModal"
+import Button from "../Buttons/Button"
+import AuthModal from "../AuthForm/AuthModal"
 import classesCss from "./Navigation.module.scss"
 import Avatar from "@material-ui/core/Avatar"
 import { useSelector } from "react-redux"

@@ -5,7 +5,10 @@ import Symbol from "./components/Symbol"
 import PuzzleCard from "./components/PuzzleCard"
 import { checkCollision, shuffle } from "../../../helpers/gameUtils"
 import { useTimer } from "../../../hooks/hooks.game";
+import {SETTINGS} from "./settings";
 
+
+const {AUTOCOMPLETE_WORD_SELECT_DURATION, AUTOCOMPLETE_SUCCESS_DURATION} = SETTINGS
 
 export default function PuzzleField({text, onSuccess, onWrongSelect, autoComplete}){
   const [currentIntersectWord, setCurrentIntersectWord] = useState(null)
@@ -75,14 +78,14 @@ export default function PuzzleField({text, onSuccess, onWrongSelect, autoComplet
       return el.text === words.cells[currentWord].text
     })
     onSuccessSelect(correctWordInCards)
-  }, 400, autoComplete)
+  }, AUTOCOMPLETE_WORD_SELECT_DURATION, autoComplete)
 
 	useEffect(() => {
 		if (words.cards.length <= 0 && currentWord > 0) {
 		  if(autoComplete){
 		    const timeout = setTimeout(() => {
           onSuccess()
-        }, 2000)
+        }, AUTOCOMPLETE_SUCCESS_DURATION)
         return(() => clearTimeout(timeout))
       } else {
         onSuccess()
@@ -97,7 +100,6 @@ export default function PuzzleField({text, onSuccess, onWrongSelect, autoComplet
 		if (text) {
 			setCurrentWord(0)
 			const textWOTags = text.replace(/<\/?\w+>/g, "")
-      //const textWOTags = "Little darling, hello - Hello my boy, i love ’you’ and now we oki-doki friends, go go! your J. Brown S. ok."
       const regExp = new RegExp([
         '(',
         '(?:the |a |in |to |on )*',
@@ -128,35 +130,35 @@ export default function PuzzleField({text, onSuccess, onWrongSelect, autoComplet
 	return (
 		<div className={classesCss.PuzzleField}>
 			<div className={classesCss.PuzzlePieceWrap} ref={cellsRef}>
-				{words.cells.map((el, index) => {
-					if (el.type === "text") {
+				{words.cells.map((word, index) => {
+					if (word.type === "text") {
 						return (
 							<PuzzleCell
-								word={el}
+								word={word}
 								hovered={index === currentIntersectWord}
-								key={"cell" + index + el.index}
+								key={"cell" + index + word.index}
 							/>
 						)
 					} else {
 						return (
 							<Symbol
-								symbol={el.text}
-								key={"symbol" + el.text + index}
+								symbol={word.text}
+								key={"symbol" + word.text + index}
 							/>
 						)
 					}
 				})}
 			</div>
 			<div className={classesCss.PuzzlePieceWrap}>
-				{words.cards.map((el, index) => {
+				{words.cards.map((word, index) => {
 					return (
 						<PuzzleCard
-							word={el}
+							word={word}
 							index={index}
 							onClickWordSelect={onClickWordSelect}
 							onDragWordSelect={onDragWordSelect}
 							onDrag={onDragCheckIntersection}
-							key={"card" + el.index + index}
+							key={"card" + word.text + index}
 						/>
 					)
 				})
