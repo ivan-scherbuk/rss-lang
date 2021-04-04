@@ -7,7 +7,7 @@ import WordList from "./components/WordsList";
 import classesCss from "./PuzzleGame.module.scss"
 import {SETTINGS} from "./settings";
 
-const {TOTAL_LIVES, SECONDS_FOR_COMPLETE} = SETTINGS
+const {TOTAL_LIVES, SECONDS_FOR_COMPLETE, TIC} = SETTINGS
 
 export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
 
@@ -99,7 +99,7 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
                       return false
                     }}
                     cycle={SECONDS_FOR_COMPLETE * 1000}
-                    tic={1000}
+                    tic={TIC}
                   />
                   <WordList
                     words={currentChunk}
