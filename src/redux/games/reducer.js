@@ -9,9 +9,7 @@ const initialState = {
   level: 1,
   gameStatistics: {
     learnedWords: 0,
-    optional: {
-      savannah: null,
-    },
+    optional: {},
   },
   isUpdating: false,
   isFetching: false,

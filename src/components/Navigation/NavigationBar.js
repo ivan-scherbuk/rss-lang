@@ -1,23 +1,23 @@
-import React, {useMemo} from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AuthBlock from "./AuthBlock";
 import AuthForm from "../AuthForm/AuthForm";
 import Button from "../Buttons/Button";
 import classesCss from "./Navigation.module.scss";
-import {getUserData} from "../../helpers/gameUtils";
 import cx from "classnames"
 import BookLink from "./BookLink";
+import { useSelector } from "react-redux";
+
 
 export default function NavigationBar() {
+  const {isLogged} = useSelector(store => store.user)
   const location = useLocation();
-  const navigationClasses = [classesCss.Navigation];
-  if (location.pathname === "/")
-    navigationClasses.push(classesCss.NavigationCloud);
-
-  const userId = useMemo(() => getUserData()?.id,[]);
 
   return (
-    <div className={navigationClasses.join(" ")}>
+    <div className={cx(
+      classesCss.Navigation,
+      {[classesCss.NavigationCloud] : location.pathname === "/"}
+      )}>
       <AuthBlock
         className={classesCss.AuthBlock}
         classes={{
@@ -36,7 +36,7 @@ export default function NavigationBar() {
       >
         <AuthForm />
       </AuthBlock>
-      {userId && (
+      {isLogged && (
         <NavLink to="/statistic">
           <Button
             label={"Статистика"}
@@ -50,7 +50,7 @@ export default function NavigationBar() {
         </NavLink>
       )}
       <BookLink className={cx(classesCss.BookButton)}/>
-      <NavLink to={{ pathname: "/games/savannah", state: { go: "go" } }}>
+      <NavLink to={{ pathname: "/games/savannah"}}>
         <Button
           label={"Саванна"}
           style={{
@@ -89,7 +89,7 @@ export default function NavigationBar() {
           ].join(" ")}
         />
       </NavLink>
-      <NavLink to={{ pathname: "/games/puzzle", state: { go: "go" } }}>
+      <NavLink to={{ pathname: "/games/puzzle" }}>
         <Button
           label={"Пазл"}
           style={{
