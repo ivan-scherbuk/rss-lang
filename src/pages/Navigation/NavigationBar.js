@@ -5,6 +5,7 @@ import AuthForm from "../../components/AuthForm/AuthForm";
 import Button from "../../components/Buttons/Button";
 import classesCss from "./Navigation.module.scss";
 import {getUserData} from "../../helpers/gameUtils";
+// NOT WORKING
 
 export default function NavigationBar() {
   const location = useLocation();

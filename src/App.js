@@ -66,7 +66,8 @@ export default function App(){
             </Route>
 
             <Route path={getGamePath("audiocall")}>
-              <GameShell gameData={GAMES.audiocall}><AudioCall/></Route>
+              <GameShell gameData={GAMES.audiocall}><AudioCall/></GameShell>
+              </Route>
             <Route path={getGamePath("sprint")}><Sprint/></Route>
             <Route path={getGamePath("puzzle")}>
               <GameShell gameData={GAMES.puzzle}><PuzzleGame/></GameShell>

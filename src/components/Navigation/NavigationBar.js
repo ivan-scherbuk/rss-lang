@@ -63,7 +63,7 @@ export default function NavigationBar() {
           ].join(" ")}
         />
       </NavLink>
-      <NavLink to="/games/audiocall">
+      <NavLink to={{ pathname: "/games/audiocall", state: { go: "go" } }}>
         <Button
           label={"Аудио-вызов"}
           style={{
