@@ -46,8 +46,8 @@ export default function WordCard({
     notification = "";
   }
 
-  function playAudio(url, phase) {
-    audioPlayer.src = url;
+   function playAudio(url, phase) {
+    audioPlayer.src = `${SETTINGS.SERVER}/${url}`;
     audioPlayer.load();
     audioPlayer.play();
 
@@ -153,7 +153,8 @@ export default function WordCard({
               )}
               <div>{transcription}</div>
               <SoundButton
-                file={`${SETTINGS.SERVER}/${audio}`}
+              // file={`${SETTINGS.SERVER}/${audio}`}
+              onClick={() => playAudio(audio)}
                 className={cx(
                   classesCss.SoundButton,
                   classesCss.Button

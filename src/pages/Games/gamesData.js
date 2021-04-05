@@ -19,6 +19,11 @@ export const GAMES = {
     key: "savannah",
     name: "Саванна",
     greetText: "Тренировка Саванна развивает словарный запас. Выбирайте правильный перевод слова из предложенных."
+  },
+  sprint:{
+    navigationImage: "sprint.jpg",
+    key: "sprint",
+    name: "Спринт",
   }
 
 }
