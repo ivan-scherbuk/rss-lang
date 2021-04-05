@@ -1,96 +1,100 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
-import { getRandomNumber, shuffle } from '../../../helpers/gameUtils';
-import { setStatusGame, setLevel } from '../../../redux/games/actions';
+import {getRandomNumber, getUserData, populateStatistics, shuffle} from '../../../helpers/gameUtils';
 import {Grid, makeStyles} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux"
-import {useWords} from "../../../hooks/hooks.words"
-// import classNames from "classnames";
-import Loader from "../../../components/Loader";
-import {levelSelector} from "../../../redux/games/selectors";
-import Levels from "../common/Levels";
+import classesCss from "./AudioCallGame.module.scss";
+import classNames from "classnames";
+import { SETTINGS } from "../../../settings";
+import {statisticsSelector} from "../../../redux/games/selectors";
 import Statistics from "../common/Statistics";
 import Lives from "../common/Lives";
-import CloseButton from "../../../components/Buttons/CloseButton";
 import SoundButton from "../common/SoundButton";
 import correctSound from "../../../assets/audio/correct.mp3";
 import errorSound from "../../../assets/audio/error.mp3";
 import FullScreenButton from "../common/FullScreenButton";
-import classesCss from "./AudioCallGame.module.scss";
-
+import {addStatisticsThunk, getStatisticsThunk} from "../../../redux/games/thunk.statistics";
 
 
 const NUMBER_OF_WORDS = 20;
 
-export default function AudioCall() {
+export default function AudioCall(props) {
 
-    const activeLevel = useSelector(levelSelector);
-    const dispatch = useDispatch();
+  const {words, onLoading, onWordSelect} = props;
+  const allStatistics = useSelector(statisticsSelector);
+  const dispatch = useDispatch();
 
-    const [answer, setAnswer] = useState('');
-    const [statisticsArr, setStatisticsArr] = useState([]);
-    const [arrOfWords, setArrOfWords] = useState([]);
-    const [btnClicked, setBtnClicked] = useState(false);
-    const [isExit, setIsExit] = useState(false);
-    const [isGameOver, setIsGameOver] = useState(false);
-    const [livesCount, setLivesCount] = useState(5);
-    const [rightAnswers, setrightAnswers] = useState(0);
-    const [wrongAnswers, setwrongAnswers] = useState(0);
-    const [soundOn, setSoundOn] = useState(false);
-    const [word, setWord] = useState('');
-    const [wordTranslation, setWordTranslation] = useState('');
-    const [wordID, setWordID] = useState('');
-    const [wordAudio, setWordAudio] = useState('');
-    const [wordTranscription, setWordTranscription] = useState('');
-    const [wordCounter, setWordCounter] = useState(0);
-
-    const {currentWords, getWordsChunk, onLoading} = useWords();
+  const [answer, setAnswer] = useState('');
+  const [statisticsArr, setStatisticsArr] = useState([]);
+  const [arrOfWords, setArrOfWords] = useState([]);
+  const [btnClicked, setBtnClicked] = useState(false);
+  const [isGameOver, setIsGameOver] = useState(false);
+  const [livesCount, setLivesCount] = useState(5);
+  const [currentGameStatistics, setCurrentGameStatistics] = useState({
+    rightAnswers: 0, wrongAnswers: 0, bestSeries: 0
+  });
+  const [soundOn, setSoundOn] = useState(false);
+  const [word, setWord] = useState('');
+  const [wordTranslation, setWordTranslation] = useState('');
+  const [wordID, setWordID] = useState('');
+  const [wordAudio, setWordAudio] = useState('');
+  const [wordTranscription, setWordTranscription] = useState('');
+  const [wordCounter, setWordCounter] = useState(0);
+  // const [snakeSize, setSnakeSize] = useState(0.6);
+  const [currentSeries, setCurrentSeries] = useState(0);
     const audioPlayer = new Audio();
     audioPlayer.volume = 0.1;
 
     const classes = {};
 
-    const randomPage = useMemo(() => {
-        return getRandomNumber(0, 19);
-    },[]);
+    const userId = useMemo(() => getUserData()?.id,[]);
 
     useEffect(() => {
-        getWordsChunk(activeLevel - 1, randomPage);
-    },[randomPage, getWordsChunk, activeLevel]);
-
-    const shuffledWords = useMemo(() => {
-        return (currentWords) ? shuffle(currentWords) : null;
-    }, [currentWords]);
+      dispatch(getStatisticsThunk(userId));
+    }, [dispatch, userId]);
 
     const handleGameOver = useCallback(() => {
-            setIsGameOver(true);
-            setWord(' ');
-            setArrOfWords([]);
-            setLivesCount(0);
-        },
-        []);
-
+        setIsGameOver(true);
+        setWord(' ');
+        setArrOfWords([]);
+        setLivesCount(0);
+        const updatesStatistics = populateStatistics(
+          "savannah", allStatistics, {...currentGameStatistics, wordCounter, createdOn: Date.now()}
+          );
+        updatesStatistics.learnedWords = wordCounter;
+        dispatch(addStatisticsThunk(userId, updatesStatistics));
+    }, [dispatch, currentGameStatistics, wordCounter, userId, allStatistics]);
 
     useEffect(() => {
-        // console.log(shuffledWords);
-
-        if (shuffledWords !== null && shuffledWords.length && livesCount && wordCounter < NUMBER_OF_WORDS) {
+        if (words !== null && words.length && livesCount && wordCounter < NUMBER_OF_WORDS) {
             const f1 = (randomNumber) => {
-                const newWordTranslation = shuffledWords[randomNumber].wordTranslate;
-                setWord(shuffledWords[randomNumber].word);
-                setWordID(shuffledWords[randomNumber].id);
-                setWordAudio(shuffledWords[randomNumber].audio);
-                setWordTranscription(shuffledWords[randomNumber].transcription);
+                const newWordTranslation = words[randomNumber].wordTranslate;
+                setWord(words[randomNumber].word);
+                setWordID(words[randomNumber].id);
+                const previousWordAudioURL = wordAudio;
+                setWordAudio(words[randomNumber].audio);
+                setWordTranscription(words[randomNumber].transcription);
                 setWordTranslation(newWordTranslation);
-                setArrOfWords(setWordsTranslation(shuffledWords, newWordTranslation));
+                setArrOfWords(setWordsTranslation(words, newWordTranslation));
+
+                if (previousWordAudioURL !== words[randomNumber].audio && words[randomNumber].audio) {
+                  playAudio(`${SETTINGS.SERVER}/${words[randomNumber].audio}`);
+                }
             };
 
-            f1(wordCounter);
+           f1(wordCounter);
         }
 
         if (wordCounter === NUMBER_OF_WORDS) {
             handleGameOver();
         }
-    }, [livesCount, wordCounter, getWordsChunk, statisticsArr, handleGameOver, activeLevel, shuffledWords]);
+    }, [livesCount, wordCounter, statisticsArr, handleGameOver, words]);
+
+  function playAudio(url) {
+      audioPlayer.src = url;
+      audioPlayer.load();
+      audioPlayer.play();
+
+  }
 
     const updateStats = useCallback((isCorrect) => {
         setStatisticsArr([...statisticsArr, {
@@ -102,11 +106,10 @@ export default function AudioCall() {
             'isCorrect': isCorrect,
         }]);
     }, [word, wordID, wordAudio, wordTranscription, wordTranslation, statisticsArr]);
-    // console.log({wordAudio})
+
     useEffect(() => {
         const timer = setTimeout(() => {
-            if (livesCount && shuffledWords && shuffledWords.length && !btnClicked) {
-                setAnswer(false);
+            if (livesCount && words && words.length && !btnClicked) {
                 setLivesCount(livesCount - 1);
                 updateStats(false);
                 playSound(false, soundOn);
@@ -117,12 +120,7 @@ export default function AudioCall() {
         return () => {
             clearTimeout(timer);
         };
-    }, [shuffledWords, updateStats, livesCount, answer, btnClicked, soundOn, wordCounter]);
-
-    const handleExit = useCallback(() => {
-        dispatch(setStatusGame(false));
-        setIsExit(false);
-    }, [dispatch]);
+    }, [words, updateStats, livesCount, currentGameStatistics, btnClicked, soundOn, wordCounter]);
 
     const handleChangeSound = useCallback(() => {
         setSoundOn(!soundOn);
@@ -135,20 +133,25 @@ export default function AudioCall() {
         setWordCounter(wordCounter + 1);
 
         if (correct) {
-            setrightAnswers(rightAnswers + 1);
+            // setSnakeSize(snakeSize + 0.02);
+            setCurrentGameStatistics({...currentGameStatistics, rightAnswers: currentGameStatistics.rightAnswers + 1});
+            setCurrentSeries(currentSeries + 1);
+            onWordSelect(word, {succeed: true});
             playSound(true, soundOn);
         } else {
-            setLivesCount(livesCount - 1);
-            setwrongAnswers(wrongAnswers + 1);
-            playSound(false, soundOn);
-        }
-    }, [livesCount, updateStats, wrongAnswers, wordCounter, rightAnswers, soundOn]);
+          currentGameStatistics.wrongAnswers = currentGameStatistics.wrongAnswers + 1;
+          setLivesCount(livesCount - 1);
+          playSound(false, soundOn);
+          onWordSelect(word, {succeed: false});
 
-    const changeLevel = useCallback((levelProps) => {
-        if (activeLevel !== levelProps) {
-            dispatch(setLevel(levelProps));
+          if (currentSeries >= currentGameStatistics.bestSeries) {
+            currentGameStatistics.bestSeries = currentSeries;
+            setCurrentSeries(0);
+          }
+
+          setCurrentGameStatistics({...currentGameStatistics});
         }
-    }, [dispatch, activeLevel]);
+    }, [onWordSelect, word, livesCount, updateStats, currentGameStatistics, currentSeries, wordCounter, soundOn]);
 
     const handleWordClick = useCallback((itemWord) => () => {
         setBtnClicked(true);
@@ -163,36 +166,22 @@ export default function AudioCall() {
         }, 350);
     },[checkAnswer, wordTranslation]);
 
-    function playAudio(url) {
-      audioPlayer.src = url;
-      audioPlayer.load();
-      audioPlayer.play();
-
-  }
-
     return (
         <>
-        {onLoading ? <Loader/> : (
-            <Grid className={classesCss.containerGame}>
+          {onLoading ? <Grid container justify="center" alignItems="center">ЗАГРУЗКА</Grid> : (
+            <Grid className={classesCss.containerGames}>
                 {isGameOver && (
                     <Statistics
                         statisticsArr={statisticsArr}
-                        rightAnswers={rightAnswers}
-                        wrongAnswers={wrongAnswers}
-                        toNewGame={handleExit}
+                        rightAnswers={currentGameStatistics.rightAnswers}
+                        wrongAnswers={currentGameStatistics.wrongAnswers}
                     />)}
 
                 {!isGameOver && (<Grid container justify="space-between" alignItems="center">
-                    <Grid item xs={4}>
-                        <Levels changeActiveLevel={changeLevel} currentLevel={activeLevel} />
-                    </Grid>
-                    <Grid item xs={4} container justify="center">
-                        <Lives livesCount={livesCount} gameOver={handleGameOver}/>
-                    </Grid>
-                    <Grid item xs={4} container justify="flex-end">
-                        <SoundButton onClick={handleChangeSound} isEnabled={soundOn}/>
-                        <FullScreenButton/>
-                        <CloseButton/>
+                    <Grid item container justify="center" className={classesCss.gameIcons}>
+                      <Lives livesCount={livesCount} gameOver={handleGameOver}/>
+                      <SoundButton onClick={handleChangeSound} isEnabled={soundOn}/>
+                      <FullScreenButton/>
                     </Grid>
                 </Grid>)}
 
@@ -202,29 +191,30 @@ export default function AudioCall() {
                       alignItems="center"
                       className={classesCss.gameContainer}>
 
-                    <div
-                        className={classesCss.wordAudio}
-                    >
+
                         <h3 onClick ={()  => {
-                          playAudio(wordAudio)
+                          playAudio(`${SETTINGS.SERVER}/${wordAudio}`)
                           // console.log(wordAudio)
                         }
-                        }>campaign</h3>
-                    </div>
+                        } className={classesCss.wordAudio}>campaign</h3>
+
                     <Grid container justify="space-evenly" alignItems="center" className={classesCss.listWords}>
                         {
                             arrOfWords.map((itemWord) => (
                                 <button
                                     key={itemWord}
                                     onClick={handleWordClick(itemWord)}
-                                    className={classesCss.wordButton}
+                                    className={classNames({
+                                        [classesCss.wordButton]: true,
+                                        [classesCss.bubble]: true,
+                                        [classesCss.wordButtonRight]: btnClicked && itemWord === wordTranslation,
+                                    })}
                                 >
                                     {itemWord}
                                 </button>
                             ))
                         }
                     </Grid>
-
 
                 </Grid>)}
         </Grid>)}

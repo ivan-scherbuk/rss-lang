@@ -110,9 +110,7 @@ animation: unset;
       background: radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 74%, white 80%, white 84%, rgba(255, 255, 255, 0) 100%);
 }
 
-.snakeCorrectAnswer {
-  animation: snakeCorrectAnimation 5s infinite, shake 2.5s linear infinite,
-}
+
 
 @keyframes shake {
   0% { transform: translate(1px, 1px) rotate(0deg), }

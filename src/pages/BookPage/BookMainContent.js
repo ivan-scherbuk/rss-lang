@@ -26,7 +26,6 @@ export default function BookMainContent(){
       if (userWord) return userWord;
       return word;
     }
-
     if (currentWords?.length) {
       if (isLogged) {
         if (currentUserWords?.length) {
