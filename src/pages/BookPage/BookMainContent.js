@@ -105,7 +105,6 @@ export default function BookMainContent(props) {
       (deletedWord) => deletedWord.id === word.id
     );
     if (index !== -1) {
-      console.log(index);
       return deletedWords[index];
     }
     if (currentUserWords?.length) {

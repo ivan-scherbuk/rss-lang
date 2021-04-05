@@ -4,8 +4,8 @@ import classesCss from "./BookPage.module.scss";
 import { Route } from "react-router";
 import Vocabulary from "./Vocabulary/Vocabulary.js";
 import SettingsBook from "./SettingsBook.js";
-import Pagination from "./Pagination.js";
-import BookNavbar from "./BookNavbar";
+import BookMenu from "./Menu/BookMenu.js";
+import GroupMenu from "./Menu/GroupMenu";
 
 export default function BookMain({
   setGroupPath,
@@ -56,7 +56,6 @@ export default function BookMain({
   return (
     <>
       <div className={classesCss.BookMainContent}>
-        <BookNavbar groupPath={groupPath} />
         <Route
           path={"/book/group/:currentGroup"}
           render={() => (
@@ -97,7 +96,7 @@ export default function BookMain({
           )}
         />
       </div>
-      <Pagination
+      <BookMenu
         onPageChanged={onPageChanged}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

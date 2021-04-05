@@ -5,8 +5,11 @@ import AuthForm from "../AuthForm/AuthForm";
 import Button from "../Buttons/Button";
 import classesCss from "./Navigation.module.scss";
 import cx from "classnames"
-import BookLink from "./BookLink";
+import BookButton from "../Buttons/BookButton";
 import { useSelector } from "react-redux";
+import { GAMES_ARRAY } from "../../pages/Games/gamesData";
+import { setFirstLetterToCapital } from "../../helpers/gameUtils";
+import GameButton from "../Buttons/GameButton";
 
 
 export default function NavigationBar() {
@@ -49,59 +52,20 @@ export default function NavigationBar() {
           />
         </NavLink>
       )}
-      <BookLink className={cx(classesCss.BookButton)}/>
-      <NavLink to={{ pathname: "/games/savannah"}}>
-        <Button
-          label={"Саванна"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/savannah.jpg)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Savannah,
-          ].join(" ")}
-        />
-      </NavLink>
-      <NavLink to="/games/audiocall">
-        <Button
-          label={"Аудио-вызов"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/audio.jpg)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Audio,
-          ].join(" ")}
-        />
-      </NavLink>
-      <NavLink to="/games/sprint">
-        <Button
-          label={"Спринт"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/sprint.jpg)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Sprint,
-          ].join(" ")}
-        />
-      </NavLink>
-      <NavLink to={{ pathname: "/games/puzzle" }}>
-        <Button
-          label={"Пазл"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/book.webp)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Game,
-          ].join(" ")}
-        />
-      </NavLink>
+      <BookButton className={cx(classesCss.BookButton)}/>
+      {
+        GAMES_ARRAY.map(game => {
+          return(
+            <GameButton
+              key={game.name}
+              game={game}
+              className={cx(
+                classesCss.BubbleButton,
+                classesCss.GameButton,
+                classesCss[setFirstLetterToCapital(game.key)])}
+            />)
+        })
+      }
     </div>
   );
 }

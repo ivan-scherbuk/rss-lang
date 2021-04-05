@@ -1,10 +1,10 @@
 import React from "react"
-import Button from "../Buttons/Button";
+import Button from "./Button";
 import { NavLink } from "react-router-dom";
-import classesCss from "./Navigation.module.scss";
+import classesCss from "../Navigation/Navigation.module.scss";
 import cx from "classnames"
 
-export default function BookLink({className, label}){
+export default function BookButton({className, label}){
   return (
     <NavLink
       onClick={() => sessionStorage.setItem("currentPage", 0)}

@@ -33,7 +33,7 @@ export default function WordCard({
     textExampleTranslate,
   } = cardInfo;
   const [averageColorData, setAverageColorData] = useState(null);
-  const [failedCounter, setFailedCounter] = useState(0);
+  const [failCounter, setFailedCounter] = useState(0);
   const [successCounter, setSuccessCounter] = useState(0);
   const { currentSectionVocabulary } = useParams();
   const audioPlayer = new Audio();
@@ -136,7 +136,7 @@ export default function WordCard({
               buttons={buttons}
               page={page}
               successCounter={successCounter}
-              failedCounter={failedCounter}
+              failCounter={failCounter}
               notification={notification}
               wordsToRender={wordsToRender}
               deletedWords={deletedWords}

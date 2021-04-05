@@ -16,7 +16,6 @@ import {useWords, useWordsGroup} from "./hooks.words"
 //  difficulty: weak | normal | hard,
 //	successCounter: Number,
 //	failCounter: Number,
-//  deleted: boolean,
 //  succeed: boolean
 // }
 //

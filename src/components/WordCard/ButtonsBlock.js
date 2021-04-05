@@ -9,8 +9,6 @@ export default function ButtonsBlock(props) {
     currentSectionVocabulary,
     buttons,
     notification,
-    successCounter,
-    failedCounter,
     page,
     cardInfo,
     wordsToRender,
@@ -30,6 +28,8 @@ export default function ButtonsBlock(props) {
       });
     }
   };
+
+  const {successCounter, failCounter} = cardInfo?.optional? cardInfo.optional : {}
 
   return (
     <div className={classesCss.ButtonBlock}>
@@ -71,11 +71,11 @@ export default function ButtonsBlock(props) {
       {["difficult", "delete"].includes(currentSectionVocabulary) && (
         <div>Page: {page + 1}</div>
       )}
-      {successCounter + failedCounter ? (
+      {successCounter + failCounter ? (
         <div className={classesCss.StatsCounters}>
           <span className={classesCss.SuccessCounter}>{successCounter}</span>/
           <span className={classesCss.TotalCounter}>
-            {successCounter + failedCounter}
+            {successCounter + failCounter}
           </span>
         </div>
       ) : null}
