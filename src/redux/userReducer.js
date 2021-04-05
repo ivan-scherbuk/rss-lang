@@ -52,7 +52,9 @@ export default function userReducer(state = getInitialUser(), action){
 				userWords[group][page] = []
 				userWords[group][page].push(action.payload)
 			} else {
-				const wordIndex = userWords[group][page].findIndex((word) => word.id === action.payload)
+
+				const wordIndex = userWords[group][page].findIndex(word => word.id === action.payload.id)
+        console.log(action.payload,userWords[group][page])
 				if(wordIndex >= 0){
 					userWords[group][page][wordIndex] = {
 						...userWords[group][page][wordIndex],
@@ -61,6 +63,7 @@ export default function userReducer(state = getInitialUser(), action){
 							...userWords[group][page][wordIndex].optional,
 							...action.payload.optional
 						}}
+          console.log(userWords[group][page][wordIndex])
 				} else {
 					userWords[group][page].push(action.payload)
 				}

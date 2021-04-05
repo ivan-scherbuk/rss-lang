@@ -1,41 +1,63 @@
 import React, { useState } from "react";
-import BookHeader from "./BookHeader";
 import classesCss from "../BookPage.module.scss";
 import Pagination from "./Pagination";
 import GroupMenu from "./GroupMenu";
+import { useSelector } from "react-redux";
+import Button from "../../../components/Buttons/Button";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCog, faHome } from "@fortawesome/free-solid-svg-icons";
+import cx from "classnames";
+import { NavLink } from "react-router-dom";
+import GameMenu from "./GameMenu";
 
 export default function BookMenu({
-  onPageChanged,
-  currentPage,
-  setCurrentPage,
-  totalPagesCount,
-  isLogged,
   successCounter,
   failCounter,
   totalCounter,
   settingsOn,
-  groupPath,
-  gameState,
+  gameState
 }) {
+
+  const {isLogged} = useSelector(store => store.user)
+  const {currentPageIndex, pagesList, currentGroup, mode} = useSelector(store => store.book)
+  const currentPageList = pagesList[currentGroup]
 
   return (
     <div className={classesCss.BookMenu}>
+      <NavLink className={cx(classesCss.Home, classesCss.NavigationButton)} to={"/"}>
+        <FontAwesomeIcon icon={faHome} />
+      </NavLink>
+      {isLogged && (
+        <>
+          <Button
+            label={<FontAwesomeIcon icon={faCog}/>}
+            onClick={settingsOn}
+            className={cx(classesCss.Settings, classesCss.NavigationButton)}
+          />
+          {
+            mode === "vocabulary"?
+              <NavLink
+                onClick={() => sessionStorage.setItem("currentPage", 0)}
+                className={classesCss.NavigationLink}
+                to={`/book/${currentGroup + 1}/${currentPageList[currentPageIndex] + 1}`}
+              >
+                Учебник
+              </NavLink> :
+              <NavLink
+                onClick={() => sessionStorage.setItem("currentPage", 0)}
+                className={classesCss.NavigationLink}
+                to={`/vocabulary/${currentGroup + 1}/${currentPageList[currentPageIndex] + 1}`}
+              >
+                Словарь
+              </NavLink>
+          }
+          <GameMenu
+            gameCallValues = {gameState}
+          />
+        </>
+      )}
 
-      <BookHeader
-        settingsOn={settingsOn}
-        groupPath={groupPath}
-        gameState={gameState}
-        isLogged={isLogged}
-      />
-
-
-      <Pagination
-        onPageChanged={onPageChanged}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        totalPagesCount={totalPagesCount}
-      />
-
+      <Pagination />
 
       {isLogged && (
         <div>
@@ -46,7 +68,7 @@ export default function BookMenu({
         </div>
       )}
 
-      <GroupMenu groupPath={groupPath} />
+      <GroupMenu />
     </div>
   );
 }

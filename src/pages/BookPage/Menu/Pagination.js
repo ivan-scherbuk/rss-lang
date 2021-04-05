@@ -1,84 +1,58 @@
-import React, { useState } from "react"
+import React from "react"
 import classesCss from "../BookPage.module.scss";
 import Button from "../../../components/Buttons/Button";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons"
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import PaginationInput from "./PagintaionInput";
 
 
-export default function Pagination({onPageChanged, currentPage, setCurrentPage, totalPagesCount,}){
+export default function Pagination(){
 
-  let [editMode, setEditMode] = useState(false);
+  const {currentPageIndex, pagesList, currentGroup} = useSelector(store => store.book)
+  const currentPageList = pagesList[currentGroup]
+  const totalPagesCount = currentPageList.length
 
-  const activateEditMode = () => {
-    setEditMode(true);
-  };
-
-  const deactivateEditMode = () => {
-    if (currentPage === "") {
-      setCurrentPage(0);
+  function getNextPage(direction){
+    if (currentPageIndex + direction >= 0 && currentPageIndex + direction < totalPagesCount) {
+      return currentPageList[currentPageIndex + direction] + 1
     }
-    setEditMode(false);
-  };
+    return currentPageList[currentPageIndex] + 1
+  }
 
-  const turnPageBack = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const turnPageForward = () => {
-    if (currentPage < totalPagesCount - 1) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const turnToStart = () => {
-    setCurrentPage(0);
-  };
-
-  const turnToEnd = () => {
-    setCurrentPage(totalPagesCount - 1);
-  };
-
-  return(
+  return (
     <div className={classesCss.Pagination}>
-      <Button
-        onClick={turnToStart}
-        className={classesCss.PaginationButton}
-        label={<FontAwesomeIcon icon={faAngleDoubleLeft}/>}
-      />
-      <Button
-        onClick={turnPageBack}
-        className={classesCss.PaginationButton}
-        label={<FontAwesomeIcon icon={faAngleLeft}/>}
-      />
-      <div className={classesCss.PageCounter}>
-      {!editMode && (
-        <span onClick={activateEditMode}>
-          {typeof currentPage === "number" ? currentPage + 1 : ""} /{" "}
-          {totalPagesCount}
-        </span>
-      )}
-      {editMode && (
-        <input
-          className={classesCss.SelectedInput}
-          value={typeof currentPage === "number" ? currentPage + 1 : ""}
-          onChange={onPageChanged}
-          autoFocus={true}
-          onBlur={deactivateEditMode}
+
+      <Link to={`/book/${currentGroup + 1}/${currentPageList[0] + 1}`}>
+        <Button
+          className={classesCss.PaginationButton}
+          label={<FontAwesomeIcon icon={faAngleDoubleLeft}/>}
         />
-      )}
-      </div>
-      <Button
-        onClick={turnPageForward}
-        className={classesCss.PaginationButton}
-        label={<FontAwesomeIcon icon={faAngleRight}/>}
-      />
-      <Button
-        onClick={turnToEnd}
-        className={classesCss.PaginationButton}
-        label={<FontAwesomeIcon icon={faAngleDoubleRight}/>}
-      />
+      </Link>
+
+      <Link to={`/book/${currentGroup + 1}/${getNextPage(-1)}`}>
+        <Button
+          className={classesCss.PaginationButton}
+          label={<FontAwesomeIcon icon={faAngleLeft}/>}
+        />
+      </Link>
+
+      <PaginationInput totalPagesCount = {totalPagesCount} currentPageIndex={currentPageIndex}/>
+
+      <Link to={`/book/${currentGroup + 1}/${getNextPage(1)}`}>
+        <Button
+          className={classesCss.PaginationButton}
+          label={<FontAwesomeIcon icon={faAngleRight}/>}
+        />
+      </Link>
+
+      <Link to={`/book/${currentGroup + 1}/${currentPageList[currentPageList.length - 1] + 1}`}>
+        <Button
+          className={classesCss.PaginationButton}
+          label={<FontAwesomeIcon icon={faAngleDoubleRight}/>}
+        />
+      </Link>
     </div>
   )
 }

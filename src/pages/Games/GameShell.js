@@ -16,6 +16,7 @@ import cx from "classnames"
 import BackToGameLink from "./common/BackToGameLink";
 import CloseButton from "../../components/Buttons/CloseButton";
 import { useStatistic } from "../../hooks/hooks.statistic";
+import {checkGroup, checkPage} from "../../helpers/utils.checkers";
 
 
 const initialStatistic = {
@@ -51,16 +52,6 @@ export default function GameShell(props){
 
   const {state} = useLocation()
   const {group: urlGroup, page: urlPage} = state ? state : {}
-
-  function checkGroup(group){
-    if (group < SETTINGS.GROUPS_COUNT) return group
-    return 0
-  }
-
-  function checkPage(page){
-    if (page < SETTINGS.PAGES_COUNT) return page
-    return 0
-  }
 
   function levelSelectHandler(index){
     getWordsGroup(index)
@@ -164,7 +155,7 @@ export default function GameShell(props){
       const gameProps = {
         key: gameResetKey,
         words: currentChunk,
-        onLoading: onGroupLoading || onLoading,
+        onLoading: onAnyLoading,
         onWordSelect: wordSelectHandler,
         onGameEnd: gameEndHandler,
       }

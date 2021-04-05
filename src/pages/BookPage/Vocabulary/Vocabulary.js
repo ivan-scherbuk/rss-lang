@@ -10,8 +10,6 @@ export default function Vocabulary({
   setGroupPath,
   setTotalPagesCount,
   currentPage,
-  setCurrentPage,
-  totalPagesCount,
   setGameState,
   translate,
   isLogged,

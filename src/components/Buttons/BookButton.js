@@ -8,7 +8,7 @@ export default function BookButton({className, label}){
   return (
     <NavLink
       onClick={() => sessionStorage.setItem("currentPage", 0)}
-      to="/book/group/1"
+      to="/book/1/1"
     >
       <Button
         label={label || "Учебник"}
