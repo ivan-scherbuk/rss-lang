@@ -91,6 +91,7 @@ export default function PuzzleField({text, onSuccess, onWrongSelect, autoComplet
         onSuccess()
       }
 		}
+		//TODO: fix this
     //if add onSuccess function to deps it will work incorrect because onSuccess sets autocomplete flag so
     //it call changes in props, when words.cards.length is still 0, so it call
     //onSuccess function one more time

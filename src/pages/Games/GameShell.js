@@ -10,7 +10,7 @@ import StatisticModal from "./common/StatisticModal/StatisticModal";
 import classesCss from "./Games.module.scss"
 import levelClasses from "../styles/Styles.module.scss"
 import { SETTINGS } from "../../settings";
-import BookLink from "../../components/Navigation/BookLink";
+import BookButton from "../../components/Buttons/BookButton";
 import ResetButton from "../../components/Buttons/ResetButton";
 import cx from "classnames"
 import BackToGameLink from "./common/BackToGameLink";
@@ -161,19 +161,19 @@ export default function GameShell(props){
     const onAnyLoading = onGroupLoading || onLoading
     if (!isGameEnd && ((children && onAnyLoading)
       || (children && !onAnyLoading && currentChunk?.length))) {
-      const wordsProps = {
+      const gameProps = {
+        key: gameResetKey,
         words: currentChunk,
         onLoading: onGroupLoading || onLoading,
         onWordSelect: wordSelectHandler,
         onGameEnd: gameEndHandler,
-        key: gameResetKey,
       }
       return React.Children.map(children,
         child => {
           return (
             <child.type
               {...child.props}
-              {...wordsProps}
+              {...gameProps}
             >
               {children}
             </child.type>)
@@ -211,7 +211,7 @@ export default function GameShell(props){
                 <ResetButton
                   className={cx(classesCss.ResetButton, classesCss.Button)}
                   onClick={setGameStartAgain}/>
-                <BookLink
+                <BookButton
                   className={cx(classesCss.BookLink, classesCss.Button)}
                 />
                 <BackToGameLink

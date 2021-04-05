@@ -55,6 +55,12 @@ export const getUserData = () => {
   return JSON.parse(localStorage.getItem("userData")) || {};
 };
 
-export function firstLetterToCapital(word){
+export function setFirstLetterToCapital(word){
   return word[0].toUpperCase() + word.slice(1)
+}
+
+export function getArrayFromObject(games){
+  const gamesArr = []
+  for(let game in games) if(games.hasOwnProperty(game)) gamesArr.push(games[game])
+  return gamesArr
 }
