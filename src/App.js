@@ -5,7 +5,7 @@ import MainPage from "./pages/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
 import Sprint from "./pages/Games/Sprint";
-import AudioCall from "./pages/Games/AudioCall/AudioCall";
+import AudioCall from "./pages/Games/AudioCall/GamePageAudioCall";
 import Savannah from "./pages/Games/Savannah/GamePage";
 import StatisticsPage from "./pages/StatisticsPage/StatisticsPage";
 import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame";
@@ -54,7 +54,9 @@ export default function App(){
         <Route path={getGamePath("savannah")}>
           <GameShell gameData={GAMES.savannah}><Savannah/></GameShell>
         </Route>
-        <Route path={getGamePath("audiocall")}><AudioCall/></Route>
+        <Route path={getGamePath("audiocall")}>
+          <GameShell gameData={GAMES.audiocall}><AudioCall/></GameShell>
+        </Route>
         <Route path={getGamePath("sprint")}><Sprint/></Route>
         <Route path={getGamePath("puzzle")}>
           <GameShell gameData={GAMES.puzzle}><PuzzleGame/></GameShell>
