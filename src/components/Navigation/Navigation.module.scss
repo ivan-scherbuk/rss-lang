@@ -169,33 +169,26 @@ $duration: .8s;
     font-size: 16px;
     font-weight: bold;
     padding: 0;
+    background-size: cover;
 
     &.Savannah{
       top: 0;
       right: 165px;
-      background-position: -45px -20px;
-      background-size: 120px;
     }
 
-    &.Audio{
+    &.Audiocall{
       top: 30px;
       right: 60px;
-      background-position: -22px -17px;
-      background-size: 120px;
     }
 
     &.Sprint{
       top: 115px;
       right: 10px;
-      background-position: center;
-      background-size: 80px;
     }
 
-    &.Game{
+    &.Puzzle{
       top: 215px;
       right: 25px;
-      background-position: -14px -5px;
-      background-size: 80px;
     }
   }
 }
