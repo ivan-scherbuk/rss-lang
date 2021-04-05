@@ -46,7 +46,7 @@ export default function BookMainContent(props) {
       getWordsChunk(currentGroup - 1, pages[currentPage]);
       sessionStorage.setItem("currentPage", currentPage);
     }
-  }, [currentPage, pages]);
+  }, [currentPage, pages, currentGroup]);
 
   useEffect(() => {
     if (pages && user.words) {

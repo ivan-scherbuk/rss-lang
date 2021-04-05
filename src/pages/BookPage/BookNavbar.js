@@ -1,10 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import cx from "classnames"
+import cx from "classnames";
 import classesCss from "./BookPage.module.scss";
-import levelStyles from "../styles/Styles.module.scss"
+import levelStyles from "../styles/Styles.module.scss";
 
-export default function BookNavbar({groupPath}){
+export default function BookNavbar({ groupPath }) {
   let groups = [];
   const totalGroupsCount = 6;
   for (let i = 1; i <= totalGroupsCount; i++) {
@@ -24,7 +24,7 @@ export default function BookNavbar({groupPath}){
             onClick={onGroupChanged}
             className={cx(
               classesCss.BookLink,
-              levelStyles[`Level${index + 1}`],
+              levelStyles[`Level${index + 1}`]
             )}
             activeClassName={classesCss.Active}
           >

@@ -29,6 +29,7 @@ export default function Vocabulary({
 
   useEffect(() => {
     setGroupPath("vocabulary/" + currentSectionVocabulary + "/");
+    console.log(currentSectionVocabulary);
   }, []);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function Vocabulary({
     if (user.words) {
       getUserWordsGroup(currentGroupVocabulary - 1, filters);
     }
-  }, [user, currentGroupVocabulary]);
+  }, [user]);
 
   useEffect(() => {
     sessionStorage.setItem("currentPage", currentPage);
@@ -92,7 +93,7 @@ export default function Vocabulary({
         );
       }
     }
-  }, [currentUserWordsGroup, currentSectionWords]);
+  }, [currentUserWordsGroup, currentSectionWords, currentGroupVocabulary]);
 
   return (
     <div>
