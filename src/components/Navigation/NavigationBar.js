@@ -1,23 +1,26 @@
-import React, {useMemo} from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AuthBlock from "./AuthBlock";
 import AuthForm from "../AuthForm/AuthForm";
 import Button from "../Buttons/Button";
 import classesCss from "./Navigation.module.scss";
-import {getUserData} from "../../helpers/gameUtils";
 import cx from "classnames"
-import BookLink from "./BookLink";
+import BookButton from "../Buttons/BookButton";
+import { useSelector } from "react-redux";
+import { GAMES_ARRAY } from "../../pages/Games/gamesData";
+import { setFirstLetterToCapital } from "../../helpers/gameUtils";
+import GameButton from "../Buttons/GameButton";
+
 
 export default function NavigationBar() {
+  const {isLogged} = useSelector(store => store.user)
   const location = useLocation();
-  const navigationClasses = [classesCss.Navigation];
-  if (location.pathname === "/")
-    navigationClasses.push(classesCss.NavigationCloud);
-
-  const userId = useMemo(() => getUserData()?.id,[]);
 
   return (
-    <div className={navigationClasses.join(" ")}>
+    <div className={cx(
+      classesCss.Navigation,
+      {[classesCss.NavigationCloud] : location.pathname === "/"}
+      )}>
       <AuthBlock
         className={classesCss.AuthBlock}
         classes={{
@@ -36,7 +39,7 @@ export default function NavigationBar() {
       >
         <AuthForm />
       </AuthBlock>
-      {userId && (
+      {isLogged && (
         <NavLink to="/statistic">
           <Button
             label={"Статистика"}
@@ -49,59 +52,20 @@ export default function NavigationBar() {
           />
         </NavLink>
       )}
-      <BookLink className={cx(classesCss.BookButton)}/>
-      <NavLink to={{ pathname: "/games/savannah", state: { go: "go" } }}>
-        <Button
-          label={"Саванна"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/savannah.jpg)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Savannah,
-          ].join(" ")}
-        />
-      </NavLink>
-      <NavLink to="/games/audiocall">
-        <Button
-          label={"Аудио-вызов"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/audio.jpg)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Audio,
-          ].join(" ")}
-        />
-      </NavLink>
-      <NavLink to="/games/sprint">
-        <Button
-          label={"Спринт"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/sprint.jpg)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Sprint,
-          ].join(" ")}
-        />
-      </NavLink>
-      <NavLink to={{ pathname: "/games/puzzle", state: { go: "go" } }}>
-        <Button
-          label={"Пазл"}
-          style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL}/static/book.webp)`,
-          }}
-          className={[
-            classesCss.BubbleButton,
-            classesCss.GameButton,
-            classesCss.Game,
-          ].join(" ")}
-        />
-      </NavLink>
+      <BookButton className={cx(classesCss.BookButton)}/>
+      {
+        GAMES_ARRAY.map(game => {
+          return(
+            <GameButton
+              key={game.name}
+              game={game}
+              className={cx(
+                classesCss.BubbleButton,
+                classesCss.GameButton,
+                classesCss[setFirstLetterToCapital(game.key)])}
+            />)
+        })
+      }
     </div>
   );
 }

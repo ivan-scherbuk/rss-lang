@@ -16,7 +16,6 @@ import {useWords, useWordsGroup} from "./hooks.words"
 //  difficulty: weak | normal | hard,
 //	successCounter: Number,
 //	failCounter: Number,
-//  deleted: boolean,
 //  succeed: boolean
 // }
 //
@@ -31,9 +30,9 @@ export function useUserWordUpdate(){
 
     const {difficulty, succeed, failed, ...optional} = data
 
-    if(succeed || failed){
-      optional.successCounter = succeed ? 1 : 0
-      optional.failCounter = failed ? 1 : 0
+    if(typeof succeed === "boolean"){
+      optional.successCounter = Number(succeed)
+      optional.failCounter = Number(!succeed)
     }
 
 		if (user.words[word.group] && user.words[word.group][word.page]) {
@@ -55,14 +54,11 @@ export function useUserWordUpdate(){
 					},
 				}
 				return dispatch(updateExistingUserWord(wordForUpdate)).then( updatedWord => {
-
 					setUpdatedWord(updatedWord)
           return updatedWord
 				}).catch(e => {
-					setOnError({
-						word: wordForUpdate,
-						e
-					})
+					setOnError({word: wordForUpdate, e})
+					return wordForUpdate
 				})
 			}
 		}

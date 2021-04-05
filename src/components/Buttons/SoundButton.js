@@ -1,7 +1,5 @@
 import React, { useMemo } from "react"
 import Button from "./Button";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faVolumeOff } from '@fortawesome/free-solid-svg-icons'
 import classesCss from "./Button.module.scss"
 import cx from "classnames"
 

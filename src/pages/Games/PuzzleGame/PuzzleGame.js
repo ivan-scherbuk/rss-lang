@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import {firstLetterToCapital} from "../../../helpers/gameUtils";
+import {setFirstLetterToCapital} from "../../../helpers/gameUtils";
 import PuzzleField from "./PuzzleField"
 import Timer from "../common/Timer";
 import Lives from "./components/Lives";
@@ -7,7 +7,7 @@ import WordList from "./components/WordsList";
 import classesCss from "./PuzzleGame.module.scss"
 import {SETTINGS} from "./settings";
 
-const {TOTAL_LIVES, SECONDS_FOR_COMPLETE} = SETTINGS
+const {TOTAL_LIVES, SECONDS_FOR_COMPLETE, TIC} = SETTINGS
 
 export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
 
@@ -76,7 +76,7 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
                 key={currentChunk[currentWord].word}
               >
                 <div className={classesCss.WordBlock}>
-                  <div className={classesCss.CurrentWord}>{firstLetterToCapital(currentChunk[currentWord].word)}</div>
+                  <div className={classesCss.CurrentWord}>{setFirstLetterToCapital(currentChunk[currentWord].word)}</div>
                   <div className={classesCss.Translation}>
                     <span>{currentChunk[currentWord].textExampleTranslate}</span>
                   </div>
@@ -94,12 +94,10 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
                     pause={timerState.shouldPause}
                     onWillGenerate={() => {
                       setAutoComplete(true)
-                      //return false prevent further timer process, and we save 0 on timer, if we will use
-                      //onGenerate instead, timer will reset and show counter of next card
                       return false
                     }}
                     cycle={SECONDS_FOR_COMPLETE * 1000}
-                    tic={1000}
+                    tic={TIC}
                   />
                   <WordList
                     words={currentChunk}

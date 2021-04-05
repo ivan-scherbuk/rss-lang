@@ -46,7 +46,7 @@ export default function StatisticModal({words, className}){
                 <td>{word.word}</td>
                 <td>{word.transcription}</td>
                 <td>{word.wordTranslate}</td>
-                <td>{word?.result?.failed ? "❌" : "✔️"}</td>
+                <td>{word?.result?.succeed ? "✔️" : "❌"}</td>
                 {word.userNewResults ?
                   <>
                     <td>{word.userNewResults.optional?.successCounter}</td>

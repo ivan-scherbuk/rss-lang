@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import classesCss from "./BookPage.module.scss";
+import React, { useState } from "react"
+import classesCss from "../BookPage.module.scss";
+import Button from "../../../components/Buttons/Button";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
-export default function Pagination({
-  onPageChanged,
-  currentPage,
-  setCurrentPage,
-  totalPagesCount,
-}) {
+
+export default function Pagination({onPageChanged, currentPage, setCurrentPage, totalPagesCount,}){
+
   let [editMode, setEditMode] = useState(false);
 
   const activateEditMode = () => {
@@ -39,20 +39,20 @@ export default function Pagination({
   const turnToEnd = () => {
     setCurrentPage(totalPagesCount - 1);
   };
-  return (
-    <div className={classesCss.pagination}>
-      <div
+
+  return(
+    <div className={classesCss.Pagination}>
+      <Button
         onClick={turnToStart}
-        className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
-      >
-        {"<<"}
-      </div>
-      <div
+        className={classesCss.PaginationButton}
+        label={<FontAwesomeIcon icon={faAngleDoubleLeft}/>}
+      />
+      <Button
         onClick={turnPageBack}
-        className={[classesCss.singleArrow, classesCss.arrow].join(" ")}
-      >
-        {"<"}
-      </div>
+        className={classesCss.PaginationButton}
+        label={<FontAwesomeIcon icon={faAngleLeft}/>}
+      />
+      <div className={classesCss.PageCounter}>
       {!editMode && (
         <span onClick={activateEditMode}>
           {typeof currentPage === "number" ? currentPage + 1 : ""} /{" "}
@@ -61,25 +61,24 @@ export default function Pagination({
       )}
       {editMode && (
         <input
-          className={classesCss.selectedInput}
+          className={classesCss.SelectedInput}
           value={typeof currentPage === "number" ? currentPage + 1 : ""}
           onChange={onPageChanged}
           autoFocus={true}
           onBlur={deactivateEditMode}
         />
       )}
-      <div
+      </div>
+      <Button
         onClick={turnPageForward}
-        className={[classesCss.singleArrow, classesCss.arrow].join(" ")}
-      >
-        {">"}
-      </div>
-      <div
+        className={classesCss.PaginationButton}
+        label={<FontAwesomeIcon icon={faAngleRight}/>}
+      />
+      <Button
         onClick={turnToEnd}
-        className={[classesCss.doubleArrow, classesCss.arrow].join(" ")}
-      >
-        {">>"}
-      </div>
+        className={classesCss.PaginationButton}
+        label={<FontAwesomeIcon icon={faAngleDoubleRight}/>}
+      />
     </div>
-  );
+  )
 }

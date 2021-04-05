@@ -6,8 +6,8 @@ const server = "https://rss-words-3.herokuapp.com";
 const token =  getUserData()?.token;
 
 export const addStatisticsThunk = (id, gameStatistics) => (dispatch) => {
+  console.log(gameStatistics)
   dispatch(setGameStatistics(SET_GAME_STATISTICS.START));
-  //dispatch(setGameStatistics(SET_GAME_STATISTICS.FINISHED, res));
   fetch(`${server}/users/${id}/statistics`, {
     method: "PUT",
     withCredentials: true,

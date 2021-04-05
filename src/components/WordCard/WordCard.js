@@ -9,7 +9,15 @@ import cx from "classnames";
 
 const fac = new FastAverageColor();
 
-export default function WordCard({ cardInfo, translate, buttons, isLogged }) {
+export default function WordCard({
+  cardInfo,
+  translate,
+  buttons,
+  isLogged,
+  wordsToRender,
+  setDeletedWord,
+  deletedWords,
+}) {
   let {
     page,
     word,
@@ -25,7 +33,7 @@ export default function WordCard({ cardInfo, translate, buttons, isLogged }) {
     textExampleTranslate,
   } = cardInfo;
   const [averageColorData, setAverageColorData] = useState(null);
-  const [failedCounter, setFailedCounter] = useState(0);
+  const [failCounter, setFailedCounter] = useState(0);
   const [successCounter, setSuccessCounter] = useState(0);
   const { currentSectionVocabulary } = useParams();
   const audioPlayer = new Audio();
@@ -128,8 +136,11 @@ export default function WordCard({ cardInfo, translate, buttons, isLogged }) {
               buttons={buttons}
               page={page}
               successCounter={successCounter}
-              failedCounter={failedCounter}
+              failCounter={failCounter}
               notification={notification}
+              wordsToRender={wordsToRender}
+              deletedWords={deletedWords}
+              setDeletedWord={setDeletedWord}
             />
           )}
           <div className={cx(classesCss.WordBlock)}>
