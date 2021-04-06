@@ -39,7 +39,6 @@ export default function GroupMenu(){
             isActive={(match, location) => {
               const [, urlGroup] = location.pathname.match(/\/([0-9])\/[0-9]*/)
               return Number(urlGroup) === index + 1;
-
             }}
           >
             {index + 1}

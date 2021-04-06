@@ -12,7 +12,7 @@ import { removePagesFromPageList, setCurrentGroup, setCurrentPage } from "../../
 export default function BookMainContent(){
   const {currentWords, getWordsChunk} = useWords();
   const {currentUserWords, getUserWordsChunk} = useUserWords();
-  const {isLogged, words : userWords} = useSelector((state) => state.user);
+  const {isLogged, words: userWords} = useSelector((state) => state.user);
   const [wordsToRender, setWordsToRender] = useState(null);
   const dispatch = useDispatch()
 
@@ -26,11 +26,10 @@ export default function BookMainContent(){
       if (userWord) return userWord;
       return word;
     }
+
     if (currentWords?.length) {
-      if (isLogged) {
-        if (currentUserWords?.length) {
-          setWordsToRender(currentWords.map(word => findUserWord(word)));
-        }
+      if (isLogged && currentUserWords?.length) {
+        setWordsToRender(currentWords.map(word => findUserWord(word)));
       } else {
         setWordsToRender([...currentWords])
       }
@@ -44,15 +43,6 @@ export default function BookMainContent(){
     }
   }, [group, page, getWordsChunk, getUserWordsChunk, isLogged])
 
-  useEffect(() => {
-    if(group !== undefined && userWords && userWords[group]){
-      const pagesToRemove = []
-      for(let i in userWords[group]){
-        if(userWords[group].hasOwnProperty(i) && userWords[group][i].length === 20) pagesToRemove.push(i)
-      }
-      if(pagesToRemove.length) dispatch(removePagesFromPageList(group, pagesToRemove))
-    }
-  }, [group, userWords, dispatch])
 
   useEffect(() => {
     dispatch(setCurrentGroup(group))
@@ -83,15 +73,6 @@ export default function BookMainContent(){
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
 
 
 // useEffect(() => {
