@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useWords, useWordsGroup } from "../../hooks/hooks.words";
 import { createRandomChunkFromGroup } from "../../helpers/utils.words";
@@ -16,6 +16,8 @@ import cx from "classnames"
 import BackToGameLink from "./common/BackToGameLink";
 import CloseButton from "../../components/Buttons/CloseButton";
 import { useStatistic } from "../../hooks/hooks.statistic";
+import {resetGameStatistics} from "../../redux/games/actions";
+import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
 import {checkGroup, checkPage} from "../../helpers/utils.checkers";
 
 
@@ -35,12 +37,13 @@ export default function GameShell(props){
     randomLengthStack = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH,
   } = props
 
+  const dispatch = useDispatch();
   const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
   const {currentWords, getWordsChunk, onLoading} = useWords()
   const {update: updateUserWord} = useUserWordUpdate()
   const {update: updateStatistic} = useStatistic()
 
-  const {isLogged} = useSelector(state => state.user)
+  const {isLogged, id: userId} = useSelector(state => state.user)
 
   const [currentChunk, setCurrentChunk] = useState(null)
   const [isGameEnd, setGameEnd] = useState(false)
@@ -147,6 +150,14 @@ export default function GameShell(props){
     }
   }, [isGameEnd, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
 
+  useEffect(() => {
+    if(userId){
+      dispatch(getStatisticsThunk(userId));
+      return () => {
+        dispatch(resetGameStatistics());
+      }
+    }
+  }, [dispatch, userId]);
 
   function getGameWithData(){
     const onAnyLoading = onGroupLoading || onLoading
@@ -218,5 +229,4 @@ export default function GameShell(props){
       <CloseButton/>
     </div>
   )
-}
-;
+};
