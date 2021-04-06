@@ -6,10 +6,11 @@ import FastAverageColor from "fast-average-color";
 import ButtonsBlock from "./ButtonsBlock";
 import cx from "classnames";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
 const fac = new FastAverageColor();
 
-export default function WordCard({cardInfo}){
+export default function WordCard({ cardInfo }) {
   const {
     optional,
     word,
@@ -28,8 +29,11 @@ export default function WordCard({cardInfo}){
   const [averageColorData, setAverageColorData] = useState(null);
   const [failCounter, setFailedCounter] = useState(0);
   const [successCounter, setSuccessCounter] = useState(0);
-  const {isLogged} = useSelector(store => store.user)
+  const { isLogged } = useSelector((store) => store.user);
 
+  const { sectionVocabulary } = useParams();
+
+  const { isTranslateVisible } = useSelector((store) => store.book);
 
   let notification;
   if (optional?.difficulty === "hard") {
@@ -41,7 +45,7 @@ export default function WordCard({cardInfo}){
   const audioPlayer = new Audio();
   audioPlayer.volume = 0.1;
 
-   function playAudio(url, phase) {
+  function playAudio(url, phase) {
     audioPlayer.src = `${SETTINGS.SERVER}/${url}`;
     audioPlayer.load();
     audioPlayer.play();
@@ -63,7 +67,7 @@ export default function WordCard({cardInfo}){
       return;
     }
 
-    let playNextAudio = function(){
+    let playNextAudio = function () {
       audioPlayer.removeEventListener("ended", playNextAudio);
       playAudio(nextAudio, nextPhase);
     };
@@ -79,30 +83,34 @@ export default function WordCard({cardInfo}){
 
   if (!averageColorData) {
     fac
-    .getColorAsync(`${SETTINGS.SERVER}/${image}`)
-    .then((color) => {
-      setAverageColorData({
-        color: color.rgb,
-        isLight: color.isLight,
+      .getColorAsync(`${SETTINGS.SERVER}/${image}`)
+      .then((color) => {
+        setAverageColorData({
+          color: color.rgb,
+          isLight: color.isLight,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
       });
-    })
-    .catch((e) => {
-      console.log(e);
-    });
   }
 
   return (
     <div
-      style={{background: averageColorData?.color || "white"}}
+      style={{ background: averageColorData?.color || "white" }}
       className={classesCss.Card}
     >
       <div
-        style={{backgroundImage: `url(${SETTINGS.SERVER}/${image})`}}
+        style={{ backgroundImage: `url(${SETTINGS.SERVER}/${image})` }}
         className={classesCss.HeaderBlock}
       >
         <div
           className={classesCss.Overlay}
-          style={{background: `linear-gradient(transparent, ${averageColorData?.color})` || "transparent"}}
+          style={{
+            background:
+              `linear-gradient(transparent, ${averageColorData?.color})` ||
+              "transparent",
+          }}
         >
           {isLogged && (
             <ButtonsBlock
@@ -111,6 +119,7 @@ export default function WordCard({cardInfo}){
               successCounter={successCounter}
               failCounter={failCounter}
               notification={notification}
+              sectionVocabulary={sectionVocabulary}
             />
           )}
           <div className={cx(classesCss.WordBlock)}>
@@ -118,7 +127,9 @@ export default function WordCard({cardInfo}){
               <h3>{word}</h3>
             </div>
             <div className={classesCss.SecondaryBlock}>
-              <div>{wordTranslate}</div>
+              {!(sectionVocabulary === "learn" && !isTranslateVisible) && (
+                <div>{wordTranslate}</div>
+              )}
               <div>{transcription}</div>
               <SoundButton
                 onClick={() => playAudio(audio)}
@@ -131,13 +142,18 @@ export default function WordCard({cardInfo}){
       </div>
       <div className={classesCss.CardContent}>
         <div className={classesCss.WordBlock}>
-          <div dangerouslySetInnerHTML={{__html: textMeaning}}/>
-          <div dangerouslySetInnerHTML={{__html: textExample}} className={classesCss.Example}/>
+          <div dangerouslySetInnerHTML={{ __html: textMeaning }} />
+          <div
+            dangerouslySetInnerHTML={{ __html: textExample }}
+            className={classesCss.Example}
+          />
         </div>
-        <div className={classesCss.WordBlock}>
-          <div>{textMeaningTranslate}</div>
-          <div className={classesCss.Example}>{textExampleTranslate}</div>
-        </div>
+        {!(sectionVocabulary === "learn" && !isTranslateVisible) && (
+          <div className={classesCss.WordBlock}>
+            <div>{textMeaningTranslate}</div>
+            <div className={classesCss.Example}>{textExampleTranslate}</div>
+          </div>
+        )}
       </div>
     </div>
   );
