@@ -1,15 +1,13 @@
-import React from "react"
+import React from "react";
 import Button from "./Button";
 import { NavLink } from "react-router-dom";
 import classesCss from "../Navigation/Navigation.module.scss";
-import cx from "classnames"
+import cx from "classnames";
+import { MODE_BOOK } from "../../settings";
 
-export default function BookButton({className, label}){
+export default function BookButton({ className, label }) {
   return (
-    <NavLink
-      onClick={() => sessionStorage.setItem("currentPage", 0)}
-      to="/book/1/1"
-    >
+    <NavLink to={`/${MODE_BOOK}/1/1`}>
       <Button
         label={label || "Учебник"}
         style={{
@@ -18,6 +16,5 @@ export default function BookButton({className, label}){
         className={cx(classesCss.BubbleButton, className)}
       />
     </NavLink>
-  )
-
+  );
 }

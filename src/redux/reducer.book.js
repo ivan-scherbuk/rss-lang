@@ -3,7 +3,7 @@ import {
   SET_BOOK_AVAILABLE_PAGES, SET_BOOK_BUTTONS_VISIBLE,
   SET_BOOK_MODE, SET_BOOK_TRANSLATE_VISIBLE,
   SET_CURRENT_GROUP,
-  SET_CURRENT_PAGE,
+  SET_CURRENT_PAGE, SET_CURRENT_WORDS, SET_VOCABULARY_MODE,
 } from "./types";
 import {SETTINGS} from "../settings";
 
@@ -20,9 +20,10 @@ const initialBookState = {
   currentPageIndex: 0,
   pagesList: getInitPagesList(),
   mode: "book",
+  vocabularyMode: "difficult",
   isButtonsVisible: true,
   isTranslateVisible: true,
-  wordsForRender: []
+  currentWords: []
 }
 
 export default function bookReducer(state = initialBookState, {type, payload}){
@@ -41,12 +42,11 @@ export default function bookReducer(state = initialBookState, {type, payload}){
       const {group, page} = payload
       const newPagesList = [...state.pagesList[group]]
       function removePage(pageIndex){
-        const pageToRemoveIndex = newPagesList.findIndex(pageNumber => pageNumber === pageIndex)
+        const pageToRemoveIndex = newPagesList.findIndex(pageNumber => pageNumber === Number(pageIndex))
         if(pageToRemoveIndex + 1){
           newPagesList.splice(pageToRemoveIndex, 1)
         }
       }
-
       if(Number.isInteger(page)) {
         removePage(page)
       }
@@ -55,17 +55,18 @@ export default function bookReducer(state = initialBookState, {type, payload}){
           removePage(singlePage)
         })
       }
-
       return {
         ...state,
-        pages:{
+        pagesList: {
           ...state.pagesList,
           [group]: newPagesList
         }
       }
     }
+
     case SET_CURRENT_PAGE:{
       const {page} = payload
+      if(page === state.currentPageIndex) return state
       return {
         ...state,
         currentPageIndex: page
@@ -74,6 +75,7 @@ export default function bookReducer(state = initialBookState, {type, payload}){
 
     case SET_CURRENT_GROUP:{
       const {group} = payload
+      if(group === state.currentGroup) return state
       return {
         ...state,
         currentGroup: group
@@ -82,6 +84,7 @@ export default function bookReducer(state = initialBookState, {type, payload}){
 
     case SET_BOOK_MODE:{
       const {mode} = payload
+      if(mode === state.mode) return state
       return {...state, mode}
     }
 
@@ -94,6 +97,18 @@ export default function bookReducer(state = initialBookState, {type, payload}){
       const {visibility} = payload
       return {...state, isButtonsVisible: visibility}
     }
+
+    case SET_VOCABULARY_MODE:{
+      const {mode} = payload
+      if(mode === state.vocabularyMode) return state
+      return {...state, vocabularyMode: mode}
+    }
+
+    case SET_CURRENT_WORDS:{
+      const {words} = payload
+      return {...state, currentWords: words}
+    }
+
 
     default: {
       return state

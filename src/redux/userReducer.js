@@ -54,7 +54,6 @@ export default function userReducer(state = getInitialUser(), action){
 			} else {
 
 				const wordIndex = userWords[group][page].findIndex(word => word.id === action.payload.id)
-        console.log(action.payload,userWords[group][page])
 				if(wordIndex >= 0){
 					userWords[group][page][wordIndex] = {
 						...userWords[group][page][wordIndex],

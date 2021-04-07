@@ -6,45 +6,54 @@ import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useSelector } from "react-redux";
 import Button from "../Buttons/Button";
 
-export default function ButtonsBlock(props){
-  const {
-    currentSectionVocabulary,
-    notification,
-    page,
-    cardInfo,
-  } = props;
+export default function ButtonsBlock(props) {
+  const { notification, cardInfo, sectionVocabulary } = props;
 
-  const {update} = useUserWordUpdate();
-  const {isButtonsVisible} = useSelector(store => store.book)
+  const { update } = useUserWordUpdate();
+  const { isButtonsVisible } = useSelector((store) => store.book);
 
-  const {successCounter, failCounter} = cardInfo?.optional ? cardInfo.optional : {}
+  const { successCounter, failCounter } = cardInfo?.optional
+    ? cardInfo.optional
+    : {};
+
+  const restoreWord = () => {
+    if (sectionVocabulary === "difficult") {
+      update(cardInfo, { difficulty: "normal" });
+    }
+    if (sectionVocabulary === "delete") {
+      update(cardInfo, { deleted: false });
+    }
+  };
 
   //TODO: toggle if already hard or deleted
   return (
     <div className={classesCss.ButtonBlock}>
-      {
-        isButtonsVisible ?
-          <>
-            <HardButton
-              className={cx(classesCss.Button, classesCss.HardButton)}
-              onClick={() => {
-                update(cardInfo, {difficulty: "hard"})
-              }}
-            />
-            <Button
-              className={cx(classesCss.Button, classesCss.Icon)}
-              onClick={() => {
-                update(cardInfo, {deleted: true})
-              }}
-              label={"delete_forever"}
-            />
-          </>
-          : null
-      }
-
-      <div className={classesCss["Icon"]}>{notification}</div>
-      {["difficult", "delete"].includes(currentSectionVocabulary) && (
-        <div>Page: {page + 1}</div>
+      {!["difficult", "delete"].includes(sectionVocabulary) &&
+      isButtonsVisible ? (
+        <>
+          <HardButton
+            className={cx(classesCss.Button, classesCss.HardButton)}
+            onClick={() => {
+              update(cardInfo, { difficulty: "hard" });
+            }}
+          />
+          <Button
+            className={cx(classesCss.Button, classesCss.Icon)}
+            onClick={() => {
+              update(cardInfo, { deleted: true });
+            }}
+            label={"delete_forever"}
+          />
+        </>
+      ) : (
+        <div>
+          <Button
+            className={cx(classesCss.Button, classesCss.Icon)}
+            onClick={restoreWord}
+            label={"восстановить"}
+          />
+          <div>Page: {cardInfo.page + 1}</div>
+        </div>
       )}
 
       {successCounter + failCounter ? (
@@ -55,7 +64,6 @@ export default function ButtonsBlock(props){
           </span>
         </div>
       ) : null}
-
     </div>
   );
 }

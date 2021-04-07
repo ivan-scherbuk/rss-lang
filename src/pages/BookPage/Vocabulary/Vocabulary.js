@@ -1,141 +1,121 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { NavLink } from "react-router-dom";
 import WordCard from "../../../components/WordCard/WordCard";
+import { checkGroup, checkPage } from "../../../helpers/utils.checkers";
 import { useUserWordsGroup } from "../../../hooks/hooks.user";
+import { setCurrentGroup, setCurrentPage, setVocabularyMode } from "../../../redux/actions.book";
 import classesCss from "../BookPage.module.scss";
+import cx from "classnames"
+import {
+  MODE_VOCABULARY,
+  VOCABULARY_MODE_DELETED,
+  VOCABULARY_MODE_DIFFICULT,
+  VOCABULARY_MODE_NORMAL,
+  WORD_HARD,
+} from "../../../settings";
 
-export default function Vocabulary({
-  setGroupPath,
-  setTotalPagesCount,
-  currentPage,
-  setGameState,
-  translate,
-  isLogged,
-}) {
-  const {
-    getUserWordsGroup,
-    onLoading,
-    currentUserWordsGroup,
-  } = useUserWordsGroup();
-  const { currentGroupVocabulary } = useParams();
-  const { currentSectionVocabulary } = useParams();
+export default function Vocabulary({ setTotalPagesCount }) {
+  const {getUserWordsGroup, onLoading, currentUserWordsGroup,} = useUserWordsGroup();
+  const [wordsToRender, setWordsToRender] = useState(null);
   const user = useSelector((state) => state.user);
-  const [currentSectionWords, setCurrentSectionWords] = useState();
-  const pageToStart = () => sessionStorage.setItem("currentPage", 0);
+  const dispatch = useDispatch();
+
+  const {
+    sectionVocabulary: urlSection,
+    group: urlGroup,
+    page: urlPage = 1,
+  } = useParams();
+  const group = checkGroup(urlGroup - 1);
+  const page = checkPage(urlPage - 1);
 
   useEffect(() => {
-    setGroupPath("vocabulary/" + currentSectionVocabulary + "/");
-  }, []);
-
-  useEffect(() => {
-    const filters = {
-      difficulty: "hard | normal | weak" | undefined,
-      deleted: true | false | undefined,
-    };
-    if (user.words) {
-      getUserWordsGroup(currentGroupVocabulary - 1, filters);
-    }
-  }, [user, currentGroupVocabulary]);
-
-  useEffect(() => {
-    sessionStorage.setItem("currentPage", currentPage);
-  }, [currentPage]);
+    if (user.words) getUserWordsGroup(group);
+  }, [user, group, urlSection]);
 
   useEffect(() => {
     if (currentUserWordsGroup) {
-      if (currentSectionWords) {
-        if (!Array.isArray(currentSectionWords[0])) {
-          const maxWordsInPage = 20;
-          let pages = Math.ceil(currentSectionWords.length / maxWordsInPage);
-          setTotalPagesCount(pages);
-          let helpArr = [];
-          for (let i = 0; i < pages; i++) {
-            helpArr.push(
-              currentSectionWords.slice(
-                i * maxWordsInPage,
-                maxWordsInPage * (i + 1)
-              )
-            );
-          }
-          setCurrentSectionWords(helpArr);
-          if (currentSectionVocabulary === "difficult") {
-            setGameState(helpArr[currentPage]);
-            sessionStorage.setItem(
-              "gameState",
-              JSON.stringify(helpArr[currentPage])
-            );
-          }
-        }
-      } else {
-        setCurrentSectionWords(
-          Object.values(currentUserWordsGroup)
-            .flat()
-            .filter((word) => {
-              if (currentSectionVocabulary === "learn") {
-                return (
-                  word.difficulty === "hard" ||
-                  word.optional.failCounter > 0 ||
-                  word.optional.successCounter > 0
-                );
-              }
-              if (currentSectionVocabulary === "difficult") {
-                return word.difficulty === "hard";
-              }
-              if (currentSectionVocabulary === "delete") {
-                return word.optional.deleted;
-              }
-            })
+      setWordsToRender(
+        Object.values(currentUserWordsGroup)
+          .flat()
+          .filter(({optional, difficulty}) => {
+            const isDifficultyHard = difficulty === WORD_HARD
+            if (urlSection === VOCABULARY_MODE_DIFFICULT) return isDifficultyHard;
+            if (urlSection === VOCABULARY_MODE_DELETED) return optional.deleted;
+            return (isDifficultyHard || (optional.failCounter + optional.successCounter)) && !optional.deleted;
+          })
+      );
+    }
+  }, [currentUserWordsGroup, urlSection]);
+
+  useEffect(() => {
+    if (wordsToRender && !Array.isArray(wordsToRender[0])) {
+      const maxWordsInPage = 20;
+      let pagesNumber = Math.ceil(wordsToRender.length / maxWordsInPage);
+      setTotalPagesCount(pagesNumber);
+      let helpArr = [];
+      for (let i = 0; i < pagesNumber; i++) {
+        helpArr.push(
+          wordsToRender.slice(i * maxWordsInPage, maxWordsInPage * (i + 1))
         );
       }
+      setWordsToRender(helpArr);
     }
-  }, [currentUserWordsGroup, currentSectionWords]);
+  }, [wordsToRender]);
+
+  useEffect(() => {
+    dispatch(setCurrentGroup(group));
+  }, [group, dispatch]);
+
+  useEffect(() => {
+    dispatch(setCurrentPage(page));
+  }, [page, dispatch]);
+
+  useEffect(() => {
+    dispatch(setVocabularyMode(urlSection))
+  }, [urlSection, dispatch])
+
+  function getVocabularyUrl(mode){
+    return `/${MODE_VOCABULARY}/${mode}/${group + 1}/1`
+  }
 
   return (
     <div>
-      <div className={classesCss.VocabularyHeader}>
+      <div className={classesCss.BookContent}>
         <NavLink
-          onClick={pageToStart}
           className={classesCss.VocabularySection}
-          to={"/book/vocabulary/learn/group/" + currentGroupVocabulary}
+          to={getVocabularyUrl(VOCABULARY_MODE_NORMAL)}
         >
           Изучаемые
         </NavLink>
         <NavLink
-          onClick={pageToStart}
           className={classesCss.VocabularySection}
-          to={"/book/vocabulary/difficult/group/" + currentGroupVocabulary}
+          to={getVocabularyUrl(VOCABULARY_MODE_DIFFICULT)}
         >
           Сложные
         </NavLink>
         <NavLink
-          onClick={pageToStart}
           className={classesCss.VocabularySection}
-          to={"/book/vocabulary/delete/group/" + currentGroupVocabulary}
+          to={getVocabularyUrl(VOCABULARY_MODE_DELETED)}
         >
           Удаленные
         </NavLink>
       </div>
-      <div>
-        {Array.isArray(currentSectionWords) &&
-          Array.isArray(currentSectionWords[0]) &&
-          currentSectionWords[currentPage].map((word) => {
+      <div className={classesCss.BookContent}>
+        {Array.isArray(wordsToRender) &&
+          Array.isArray(wordsToRender[0]) &&
+          wordsToRender[page].map((word) => {
             return (
-              <div
-                className={
-                  currentSectionVocabulary === "learn" &&
-                  word.difficulty === "hard" &&
-                  classesCss.DifficultWord
+              <WordCard
+                className={cx({
+                  [classesCss.test] :
+                  urlSection === VOCABULARY_MODE_NORMAL
+                  && word.difficulty === WORD_HARD})
                 }
                 key={word.id}
-              >
-                <WordCard
-                  cardInfo={word}
-                  translate={translate}
-                  isLogged={isLogged}
-                />
-              </div>
+                cardInfo={word}
+              />
             );
           })}
       </div>

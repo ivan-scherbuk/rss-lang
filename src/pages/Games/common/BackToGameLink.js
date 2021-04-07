@@ -3,11 +3,11 @@ import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowAltCircleLeft } from '@fortawesome/free-solid-svg-icons'
 
-export default function BackToGameLink({group, page, classes, ...props}){
+export default function BackToGameLink({words, classes, ...props}){
   return(
     <NavLink
 
-      to={{pathname:"/games", state:{group, page}}}
+      to={{pathname:"/games", state:{words}}}
       {...props}
     >
       <FontAwesomeIcon

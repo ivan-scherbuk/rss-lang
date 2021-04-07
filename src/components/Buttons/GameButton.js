@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 export default function GameButton({gameCallValues, game, className, classes = {}}){
 
-
   return(
     <Link
       className={classes?.link}

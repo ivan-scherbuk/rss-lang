@@ -9,64 +9,66 @@ import { faCog, faHome } from "@fortawesome/free-solid-svg-icons";
 import cx from "classnames";
 import { NavLink } from "react-router-dom";
 import GameMenu from "./GameMenu";
+import { MODE_BOOK, MODE_VOCABULARY, VOCABULARY_MODE_DIFFICULT, VOCABULARY_MODE_NORMAL } from "../../../settings";
 
-export default function BookMenu({
-  successCounter,
-  failCounter,
-  totalCounter,
-  settingsOn,
-  gameState
-}) {
-
-  const {isLogged} = useSelector(store => store.user)
-  const {currentPageIndex, pagesList, currentGroup, mode} = useSelector(store => store.book)
-  const currentPageList = pagesList[currentGroup]
+export default function BookMenu({settingsOn, totalPagesCount, setTotalPagesCount, totalValues}) {
+  const { isLogged } = useSelector((store) => store.user);
+  const { currentGroup, mode, vocabularyMode } = useSelector(
+    (store) => store.book
+  );
 
   return (
     <div className={classesCss.BookMenu}>
-      <NavLink className={cx(classesCss.Home, classesCss.NavigationButton)} to={"/"}>
+
+      <NavLink
+        className={cx(classesCss.Home, classesCss.NavigationButton)}
+        to={"/"}
+      >
         <FontAwesomeIcon icon={faHome} />
       </NavLink>
+
       {isLogged && (
         <>
           <Button
-            label={<FontAwesomeIcon icon={faCog}/>}
+            label={<FontAwesomeIcon icon={faCog} />}
             onClick={settingsOn}
             className={cx(classesCss.Settings, classesCss.NavigationButton)}
           />
-          {
-            mode === "vocabulary"?
-              <NavLink
-                onClick={() => sessionStorage.setItem("currentPage", 0)}
-                className={classesCss.NavigationLink}
-                to={`/book/${currentGroup + 1}/${currentPageList[currentPageIndex] + 1}`}
-              >
-                Учебник
-              </NavLink> :
-              <NavLink
-                onClick={() => sessionStorage.setItem("currentPage", 0)}
-                className={classesCss.NavigationLink}
-                to={`/vocabulary/${currentGroup + 1}/${currentPageList[currentPageIndex] + 1}`}
-              >
-                Словарь
-              </NavLink>
-          }
-          <GameMenu
-            gameCallValues = {gameState}
-          />
+          {mode === MODE_VOCABULARY ? (
+            <NavLink
+              className={classesCss.NavigationLink}
+              to={`/${MODE_BOOK}/${currentGroup + 1}/1`}
+            >
+              Учебник
+            </NavLink>
+          ) : (
+            <NavLink
+              className={classesCss.NavigationLink}
+              to={`/${MODE_VOCABULARY}/${VOCABULARY_MODE_NORMAL}/${currentGroup + 1}/1`}
+            >
+              Словарь
+            </NavLink>
+          )}
         </>
       )}
+      {mode === MODE_BOOK
+      || (mode === MODE_VOCABULARY && vocabularyMode === VOCABULARY_MODE_DIFFICULT)?
+        <GameMenu /> : null
+      }
+      <Pagination
+        totalPagesCount={totalPagesCount}
+        setTotalPagesCount={setTotalPagesCount}
+      />
 
-      <Pagination />
-
-      {isLogged && (
-        <div>
-          <div>Изучаемых слов: {totalCounter}</div>
+      {isLogged &&
+        !(mode === MODE_VOCABULARY && vocabularyMode !== VOCABULARY_MODE_NORMAL) && (
           <div>
-            Успешно: {successCounter}/{successCounter + failCounter}
+            <div>Изучаемых слов: {totalValues.learned}</div>
+            <div>
+              Успешно: {totalValues.success}/{totalValues.success + totalValues.fail}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       <GroupMenu />
     </div>

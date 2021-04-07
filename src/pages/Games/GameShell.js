@@ -54,7 +54,8 @@ export default function GameShell(props){
   const [currentSeries, setCurrentSeries] = useState(0)
 
   const {state} = useLocation()
-  const {group: urlGroup, page: urlPage} = state ? state : {}
+  //const {group: urlGroup, page: urlPage, words: urlWords} = state ? state : {}
+  const {words: urlWords} = state ? state : {}
 
   function levelSelectHandler(index){
     getWordsGroup(index)
@@ -118,11 +119,8 @@ export default function GameShell(props){
   }
 
   useEffect(() => {
-    if (urlGroup) {
-      if (urlPage) getWordsChunk(checkGroup(urlGroup), checkPage(urlPage))
-      else getWordsGroup(checkGroup(urlGroup))
-    }
-  }, [urlGroup, urlPage, getWordsGroup, getWordsChunk])
+    if(urlWords?.length) setCurrentChunk([...urlWords])
+  }, [urlWords])
 
   useEffect(() => {
     if (currentWordsGroup) {
@@ -219,8 +217,7 @@ export default function GameShell(props){
                 <BackToGameLink
                   className={cx(classesCss.BackLink, classesCss.Button)}
                   classes={{icon: classesCss.Icon}}
-                  group={urlGroup}
-                  page={urlPage}/>
+                  words={urlWords}/>
               </div>
             </>
           )
