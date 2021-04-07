@@ -39,7 +39,7 @@ export default function GameShell(props){
 
   const dispatch = useDispatch();
   const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
-  const {currentWords, getWordsChunk, onLoading} = useWords()
+  const {onLoading} = useWords()
   const {update: updateUserWord} = useUserWordUpdate()
   const {update: updateStatistic} = useStatistic()
 
@@ -54,7 +54,6 @@ export default function GameShell(props){
   const [currentSeries, setCurrentSeries] = useState(0)
 
   const {state} = useLocation()
-  //const {group: urlGroup, page: urlPage, words: urlWords} = state ? state : {}
   const {words: urlWords} = state ? state : {}
 
   function levelSelectHandler(index){
@@ -127,10 +126,6 @@ export default function GameShell(props){
       setCurrentChunk(createRandomChunkFromGroup(currentWordsGroup, randomLengthStack))
     }
   }, [currentWordsGroup, randomLengthStack])
-
-  useEffect(() => {
-    if (currentWords?.length) setCurrentChunk(currentWords)
-  }, [currentWords])
 
   useEffect(() => {
     if (currentChunk?.length) {

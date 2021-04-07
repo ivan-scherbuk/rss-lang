@@ -11,67 +11,90 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import PaginationInput from "./PagintaionInput";
-import { MODE_BOOK, MODE_VOCABULARY } from "../../../settings";
+import { MODE_VOCABULARY } from "../../../settings";
 
-export default function Pagination({totalPagesCount, setTotalPagesCount}) {
 
-  const { currentPageIndex, pagesList, currentGroup, mode } = useSelector(
+const paginationButtons = {
+  leftEnd: faAngleDoubleLeft,
+  left: faAngleLeft,
+  right: faAngleRight,
+  rightEnd: faAngleDoubleRight
+}
+
+export default function Pagination({totalPagesCount}) {
+
+  const { currentVocabularyPage, currentPageIndex, pagesList, currentGroup, mode } = useSelector(
     (store) => store.book
   );
   const currentPageList = pagesList[currentGroup];
 
   function getNextPage(direction) {
-    if (
-      currentPageIndex + direction >= 0 &&
-      currentPageIndex + direction < totalPagesCount
-    ) {
+    if (currentPageIndex + direction >= 0 && currentPageIndex + direction < totalPagesCount) {
       return currentPageList[currentPageIndex + direction] + 1;
     }
     return currentPageList[currentPageIndex] + 1;
   }
 
-  useEffect(() => {
-    if (mode === MODE_BOOK) {
-      setTotalPagesCount(currentPageList.length);
+  function getNextVocabularyPage(direction){
+    if (currentVocabularyPage + direction >= 0 && currentVocabularyPage + direction < totalPagesCount) {
+      return currentVocabularyPage + direction + 1;
     }
-  }, [mode, setTotalPagesCount, currentPageList.length]);
+    return currentVocabularyPage + 1;
+  }
 
-  const pathBase = `/${mode}/${currentGroup + 1}/`
+  function getPaginationButtonsValues(){
+    const pathBase = `/${mode}/${currentGroup + 1}/`
+    if(mode === MODE_VOCABULARY){
+      return {
+        leftEnd: pathBase + 1,
+        left: pathBase + getNextVocabularyPage(-1),
+        right: pathBase + getNextVocabularyPage(1),
+        rightEnd: pathBase + totalPagesCount
+      }
+    }
+    return {
+      leftEnd: pathBase + (currentPageList[0] + 1),
+      left: pathBase + getNextPage(-1),
+      right: pathBase + getNextPage(1),
+      rightEnd: pathBase + (currentPageList[currentPageList.length - 1] + 1)
+    }
+  }
 
 
-  console.log(currentPageIndex)
+  const paginationGoTo = getPaginationButtonsValues()
+
   return (
     <div className={classesCss.Pagination}>
-      <Link to={pathBase + (currentPageList[0] + 1)}>
+      <Link to={paginationGoTo.leftEnd}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={faAngleDoubleLeft} />}
+          label={<FontAwesomeIcon icon={paginationButtons.leftEnd} />}
         />
       </Link>
 
-      <Link to={pathBase + (getNextPage(-1))}>
+      <Link to={paginationGoTo.left}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={faAngleLeft} />}
+          label={<FontAwesomeIcon icon={paginationButtons.left} />}
         />
       </Link>
 
       <PaginationInput
         totalPagesCount={mode === MODE_VOCABULARY? totalPagesCount : pagesList[currentGroup].length}
-        currentPageIndex={currentPageIndex}
+        currentPageIndex={mode === MODE_VOCABULARY? currentVocabularyPage : currentPageIndex}
       />
 
-      <Link to={pathBase + (getNextPage(1))}>
+      <Link to={paginationGoTo.right}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={faAngleRight} />}
+          label={<FontAwesomeIcon icon={paginationButtons.right} />}
         />
       </Link>
 
-      <Link to={pathBase + totalPagesCount}>
+      <Link to={paginationGoTo.rightEnd}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={faAngleDoubleRight} />}
+          label={<FontAwesomeIcon icon={paginationButtons.rightEnd} />}
         />
       </Link>
     </div>

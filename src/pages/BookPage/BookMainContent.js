@@ -14,7 +14,7 @@ import {
 } from "../../redux/actions.book";
 import { MODE_BOOK, WORD_HARD } from "../../settings";
 
-export default function BookMainContent({setTotalValues}) {
+export default function BookMainContent({setTotalValues, setTotalPagesCount}) {
 
   const [isPagesFirstDeleteComplete, setPageFirstDeleteComplete] = useState(false)
   const { currentWords, getWordsChunk } = useWords();
@@ -122,11 +122,14 @@ export default function BookMainContent({setTotalValues}) {
     dispatch(setCurrentPage(currentExistingPage));
   }, [page, dispatch, group, pagesList]);
 
+  useEffect(() => {
+    setTotalPagesCount(pagesList[group].length);
+  }, [setTotalPagesCount, pagesList, group]);
+
   return (
     <div className={classesCss.BookContent}>
-      {wordsToRender?.length && (() => {console.log(111); return true})() &&
-        wordsToRender.map((word) => {
-          console.log(word)
+      {wordsToRender?.length
+      && wordsToRender.map((word) => {
           if (!word.optional?.deleted) {
             return (
               <WordCard

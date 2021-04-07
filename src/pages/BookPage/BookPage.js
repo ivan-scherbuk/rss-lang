@@ -28,14 +28,18 @@ export default function BookPage() {
   return (
     <div className={classesCss.BookPage}>
       <Route path={`/${MODE_BOOK}/:group/:page`}>
-        <BookMainContent setTotalValues={setTotalValues}/>
+        <BookMainContent
+          setTotalPagesCount={setTotalPagesCount}
+          setTotalValues={setTotalValues}
+        />
       </Route>
-      <Route path={`/${MODE_VOCABULARY}/:sectionVocabulary/:group/:page`}>
-        <Vocabulary setTotalPagesCount={setTotalPagesCount}/>
+      <Route path={`/${MODE_VOCABULARY}/:group/:page`}>
+        <Vocabulary
+          setTotalPagesCount={setTotalPagesCount}
+        />
       </Route>
       <BookMenu
         totalPagesCount={totalPagesCount}
-        setTotalPagesCount={setTotalPagesCount}
         totalValues={totalValues}
         settingsOn={() => setSettingsVisible(true)}
       />
