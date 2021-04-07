@@ -1,10 +1,10 @@
-import React, {useMemo} from "react";
+import React, { useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AuthBlock from "./AuthBlock";
-import AuthForm from "../../components/AuthForm/AuthForm";
+import AuthForm from "../../components/Navigation/AuthForm";
 import Button from "../../components/Buttons/Button";
 import classesCss from "./Navigation.module.scss";
-import {getUserData} from "../../helpers/gameUtils";
+import { getUserData } from "../../helpers/gameUtils";
 // NOT WORKING
 
 export default function NavigationBar() {
@@ -13,7 +13,7 @@ export default function NavigationBar() {
   if (location.pathname === "/")
     navigationClasses.push(classesCss.NavigationCloud);
 
-  const userId = useMemo(() => getUserData()?.id,[]);
+  const userId = useMemo(() => getUserData()?.id, []);
 
   return (
     <div className={navigationClasses.join(" ")}>
@@ -42,16 +42,14 @@ export default function NavigationBar() {
             style={{
               backgroundImage: `url(${process.env.PUBLIC_URL}/static/statistic.jpg)`,
             }}
-            className={[classesCss.BubbleButton, classesCss.StatisticButton].join(
-              " "
-            )}
+            className={[
+              classesCss.BubbleButton,
+              classesCss.StatisticButton,
+            ].join(" ")}
           />
         </NavLink>
       )}
-      <NavLink
-        onClick={() => sessionStorage.setItem("currentPage", 0)}
-        to="/book/group/1"
-      >
+      <NavLink to="/book/1/1">
         <Button
           label={"Учебник"}
           style={{

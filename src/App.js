@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import NavigationBar from "./components/Navigation/NavigationBar"
-import MainPage from "./pages/MainPage";
+import MainPage from "./pages/MainPage/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
 import Sprint from "./pages/Games/Sprint/GamePage";
@@ -49,7 +49,7 @@ export default function App(){
     <>
       <NavigationBar/>
       <Switch location={location}>
-        <Route path="/book"><BookPage/></Route>
+        <Route path={["/book", "/vocabulary"]}><BookPage/></Route>
         <Route path="/statistic"><StatisticsPage/></Route>
         <Route path={getGamePath("savannah")}>
           <GameShell gameData={GAMES.savannah}><Savannah/></GameShell>

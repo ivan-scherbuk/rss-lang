@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import Button from "../Buttons/Button"
-import AuthModal from "../AuthForm/AuthModal"
+import AuthModal from "./AuthModal"
 import classesCss from "./Navigation.module.scss"
 import Avatar from "@material-ui/core/Avatar"
 import { useSelector } from "react-redux"
@@ -36,7 +36,9 @@ export default function AuthBlock({children, classes, className, styles}){
             to="/user">
             <Avatar
               alt={email.toUpperCase()}
-              src={settings?.optional?.image ? `${SETTINGS.AWS_STORE_URL}/${settings.optional.image}`: null}
+              src={settings?.optional?.image ?
+                `${SETTINGS.AWS_STORE_URL}/${settings.optional.image}`
+                : `${SETTINGS.AWS_STORE_URL}/${SETTINGS.DEFAULT_IMAGE}`}
             />
           </NavLink>
       }

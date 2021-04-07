@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AuthBlock from "./AuthBlock";
-import AuthForm from "../AuthForm/AuthForm";
+import AuthForm from "./AuthForm";
 import Button from "../Buttons/Button";
 import classesCss from "./Navigation.module.scss";
 import cx from "classnames"

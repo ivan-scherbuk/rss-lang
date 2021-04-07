@@ -1,5 +1,6 @@
 import React from 'react'
-import Button from "../Buttons/Button"
+import CloseButton from "../Buttons/CloseButton";
+import classesCss from "./Navigation.module.scss"
 
 export default function AuthModal({children, className, style, onClose}){
 	return(
@@ -7,10 +8,11 @@ export default function AuthModal({children, className, style, onClose}){
 			style={style}
 			className={className}
 		>
+      <h3>Привет!</h3>
 			{children}
-			<Button
+			<CloseButton
 				onClick={onClose}
-				label={"X"}
+        className={classesCss.CloseButton}
 			/>
 		</div>
 	)

@@ -64,6 +64,7 @@ export function useUserWordUpdate(){
 		}
 
 		return dispatch(addUserWord(word, {difficulty: difficulty || "normal", optional})).then((word) => {
+			console.log("NEW", word)
 			setUpdatedWord(word)
       return word
 		}).catch(e => setOnError({word, e}))
@@ -73,7 +74,7 @@ export function useUserWordUpdate(){
 
 
 //Usage
-//const {currentUserWords, getUserWordsChunk, subscribedUserWords, onLoading} = useUserWords()
+//const {currentUserWords, getUserWordsChunk, onLoading} = useUserWords()
 
 export function useUserWords(){
 	const user = useSelector(store => store.user)
@@ -82,7 +83,6 @@ export function useUserWords(){
 	const {getWordsChunk} = useWords()
 	const [onLoading, setOnLoading] = useState(false)
 	const [currentUserWords, setCurrentUserWords] = useState(null)
-	const [subscribedUserWords, setSubscribedUserWords] = useState(null)
  	const [subscription, setSubscription] = useState(null)
 
 	const getUserWordsChunk = useCallback((group, page, filters = {}) => {
@@ -98,23 +98,25 @@ export function useUserWords(){
             setCurrentUserWords(
               getUserWordsChunkHelper(resWords, user.words[group][page], filters)
             )
+            return resWords
           })
         }
       } else {
-        setSubscription({group, page})
+        setSubscription({group, page, filters})
         return false
       }
     } else {
 	    console.log("User is not logged in")
     }
-	}, [user.words, words, getWordsChunk])
+	}, [user.words, words, getWordsChunk, user.isLogged])
 
 	useEffect(() => {
-		if(subscription && user.words[subscription.group] && user.words[subscription.group][subscription.page]){
-			setSubscribedUserWords(user.words[subscription.group][subscription.page])
-			setSubscription(null)
-		}
-	}, [user.words, subscription])
+    if(subscription && user.words[subscription.group] && user.words[subscription.group][subscription.page]){
+      const {group, page, filters} = subscription
+      getUserWordsChunk(group, page, filters)
+      setSubscription(null)
+    }
+	}, [user.words, subscription, getUserWordsChunk])
 
 	useEffect(() => {
 		if(onLoading && currentUserWords){
@@ -122,7 +124,7 @@ export function useUserWords(){
 		}
 	}, [currentUserWords, onLoading])
 
-return {currentUserWords, getUserWordsChunk, subscribedUserWords}
+return {currentUserWords, getUserWordsChunk, onLoading}
 }
 
 //Usage
@@ -148,6 +150,7 @@ export function useUserWordsGroup(){
 					setCurrentUserWordsGroup(
 						getUserWordsGroupHelper(resGroup, user.words[group], filters)
 					)
+          return resGroup
 				})
 			}
 		} else {

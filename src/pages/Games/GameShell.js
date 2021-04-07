@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from "react"
+import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { useUserWordUpdate } from "../../hooks/hooks.user";
@@ -14,11 +14,12 @@ import BookButton from "../../components/Buttons/BookButton";
 import ResetButton from "../../components/Buttons/ResetButton";
 import cx from "classnames"
 import BackToGameLink from "./common/BackToGameLink";
-import CloseButton from "../../components/Buttons/CloseButton";
+import CloseLink from "../../components/Buttons/CloseLink";
 import { useStatistic } from "../../hooks/hooks.statistic";
 import {resetGameStatistics} from "../../redux/games/actions";
 import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
-import {getUserData} from "../../helpers/gameUtils";
+import {checkGroup, checkPage} from "../../helpers/utils.checkers";
+
 
 const initialStatistic = {
   rightAnswers: 0,
@@ -42,10 +43,10 @@ export default function GameShell(props){
   const {update: updateUserWord} = useUserWordUpdate()
   const {update: updateStatistic} = useStatistic()
 
-  const {isLogged} = useSelector(state => state.user)
+  const {isLogged, id: userId} = useSelector(state => state.user)
 
   const [currentChunk, setCurrentChunk] = useState(null)
-  const [isGameEnd, setGameEnd] = useState(false)
+  const [gameEndLastWord, setGameEndLastWord] = useState(-1)
   const [gameResetKey, setGameResetKey] = useState(Math.random())
   const [statisticChunk, setStatisticChunk] = useState(null)
   const [statistic, setStatistic] = useState(initialStatistic)
@@ -53,25 +54,16 @@ export default function GameShell(props){
   const [currentSeries, setCurrentSeries] = useState(0)
 
   const {state} = useLocation()
-  const {group: urlGroup, page: urlPage} = state ? state : {}
-
-  function checkGroup(group){
-    if (group < SETTINGS.GROUPS_COUNT) return group
-    return 0
-  }
-
-  function checkPage(page){
-    if (page < SETTINGS.PAGES_COUNT) return page
-    return 0
-  }
+  //const {group: urlGroup, page: urlPage, words: urlWords} = state ? state : {}
+  const {words: urlWords} = state ? state : {}
 
   function levelSelectHandler(index){
     getWordsGroup(index)
   }
 
-  const gameEndHandler = useCallback(() => {
-    setGameEnd(true)
-  }, []);
+  function gameEndHandler(index){
+    setGameEndLastWord(Number.isInteger(index)? index + 1 : currentChunk.length)
+  }
 
   function setGameStartAgain(){
     setGameResetKey(state => state + 1)
@@ -79,7 +71,7 @@ export default function GameShell(props){
     setStatisticChunk([...currentChunk])
     setStatistic(initialStatistic)
     setStatisticWasUpdate(false)
-    setGameEnd(false)
+    setGameEndLastWord(-1)
   }
 
   function updateStatisticChunk(wordForUpdate, dataForUpdate){
@@ -126,21 +118,9 @@ export default function GameShell(props){
 
   }
 
-  const userId = useMemo(() => getUserData()?.id,[]);
-
   useEffect(() => {
-    dispatch(getStatisticsThunk(userId));
-    return () => {
-      dispatch(resetGameStatistics());
-    }
-  }, [dispatch, userId]);
-
-  useEffect(() => {
-    if (urlGroup) {
-      if (urlPage) getWordsChunk(checkGroup(urlGroup), checkPage(urlPage))
-      else getWordsGroup(checkGroup(urlGroup))
-    }
-  }, [urlGroup, urlPage, getWordsGroup, getWordsChunk])
+    if(urlWords?.length) setCurrentChunk([...urlWords])
+  }, [urlWords])
 
   useEffect(() => {
     if (currentWordsGroup) {
@@ -159,24 +139,32 @@ export default function GameShell(props){
   }, [currentChunk])
 
   useEffect(() => {
-    if(isLogged && isGameEnd
-      && !statisticWasUpdate
-      && statisticChunk?.length
-      && statisticChunk[statisticChunk.length - 1].userNewResults){
-      updateStatistic(gameData.key, statistic)
-      setStatisticWasUpdate(true)
-    }
-  }, [isGameEnd, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
 
+    if(isLogged && gameEndLastWord > 0 && !statisticWasUpdate && statisticChunk?.length){
+      if(statisticChunk[gameEndLastWord - 1].userNewResults){
+        updateStatistic(gameData.key, statistic)
+        setStatisticWasUpdate(true)
+      }
+    }
+  }, [gameEndLastWord, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
+
+  useEffect(() => {
+    if(userId){
+      dispatch(getStatisticsThunk(userId));
+      return () => {
+        dispatch(resetGameStatistics());
+      }
+    }
+  }, [dispatch, userId]);
 
   function getGameWithData(){
     const onAnyLoading = onGroupLoading || onLoading
-    if (!isGameEnd && ((children && onAnyLoading)
+    if (gameEndLastWord === -1 && ((children && onAnyLoading)
       || (children && !onAnyLoading && currentChunk?.length))) {
       const gameProps = {
         key: gameResetKey,
         words: currentChunk,
-        onLoading: onGroupLoading || onLoading,
+        onLoading: onAnyLoading,
         onWordSelect: wordSelectHandler,
         onGameEnd: gameEndHandler,
       }
@@ -200,7 +188,7 @@ export default function GameShell(props){
     <div className={[className, classesCss.GameShell].join(" ")} style={style}>
       {
         (() => {
-          if (!isGameEnd) {
+          if (gameEndLastWord === -1) {
             if (gameContent) return gameContent
             return (
               <GameModal
@@ -217,7 +205,7 @@ export default function GameShell(props){
             <>
               <StatisticModal
                 className={classesCss.StatisticModal}
-                words={statisticChunk}
+                words={statisticChunk.filter((word, index) => index < gameEndLastWord)}
               />
               <div className={classesCss.GameEndHelper}>
                 <ResetButton
@@ -229,14 +217,13 @@ export default function GameShell(props){
                 <BackToGameLink
                   className={cx(classesCss.BackLink, classesCss.Button)}
                   classes={{icon: classesCss.Icon}}
-                  group={urlGroup}
-                  page={urlPage}/>
+                  words={urlWords}/>
               </div>
             </>
           )
         })()
       }
-      <CloseButton/>
+      <CloseLink/>
     </div>
   )
 };

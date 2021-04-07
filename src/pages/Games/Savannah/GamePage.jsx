@@ -113,7 +113,7 @@ const Savannah = (props) => {
 
                 <Grid container justify="space-between" alignItems="center">
                     <Grid item container justify="center" className={classes.gameIcons}>
-                      <Lives livesCount={livesCount} gameOver={onGameEnd}/>
+                      <Lives livesCount={livesCount} gameOver={() => onGameEnd(wordCounter - 1)}/>
                       <SoundButton onClick={handleChangeSound} isEnabled={soundOn}/>
                       <FullScreenButton/>
                     </Grid>
