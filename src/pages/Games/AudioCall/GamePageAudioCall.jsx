@@ -58,7 +58,7 @@ export default function AudioCall(props) {
         setArrOfWords([]);
         setLivesCount(0);
         const updatesStatistics = populateStatistics(
-          "savannah", allStatistics, {...currentGameStatistics, wordCounter, createdOn: Date.now()}
+          "audiocall", allStatistics, {...currentGameStatistics, wordCounter, createdOn: Date.now()}
           );
         updatesStatistics.learnedWords = wordCounter;
         dispatch(addStatisticsThunk(userId, updatesStatistics));
@@ -134,15 +134,15 @@ export default function AudioCall(props) {
 
         if (correct) {
             // setSnakeSize(snakeSize + 0.02);
-            setCurrentGameStatistics({...currentGameStatistics, rightAnswers: currentGameStatistics.rightAnswers + 1});
+            // setCurrentGameStatistics({...currentGameStatistics, rightAnswers: currentGameStatistics.rightAnswers + 1});
             setCurrentSeries(currentSeries + 1);
-            onWordSelect(word, {succeed: true});
+            onWordSelect(currentChunk[wordCounter], {succeed: true});
             playSound(true, soundOn);
         } else {
-          currentGameStatistics.wrongAnswers = currentGameStatistics.wrongAnswers + 1;
+          // currentGameStatistics.wrongAnswers = currentGameStatistics.wrongAnswers + 1;
           setLivesCount(livesCount - 1);
           playSound(false, soundOn);
-          onWordSelect(word, {succeed: false});
+          onWordSelect(currentChunk[wordCounter], {failed: true});
 
           if (currentSeries >= currentGameStatistics.bestSeries) {
             currentGameStatistics.bestSeries = currentSeries;
@@ -151,7 +151,7 @@ export default function AudioCall(props) {
 
           setCurrentGameStatistics({...currentGameStatistics});
         }
-    }, [onWordSelect, word, livesCount, updateStats, currentGameStatistics, currentSeries, wordCounter, soundOn]);
+    }, [currentChunk, onWordSelect, word, livesCount, updateStats, currentSeries, wordCounter, soundOn]);
 
     const handleWordClick = useCallback((itemWord) => () => {
         setBtnClicked(true);
@@ -170,22 +170,22 @@ export default function AudioCall(props) {
         <>
           {onLoading ? <Grid container justify="center" alignItems="center">ЗАГРУЗКА</Grid> : (
             <Grid className={classesCss.containerGames}>
-                {isGameOver && (
+                {/* {isGameOver && (
                     <Statistics
                         statisticsArr={statisticsArr}
                         rightAnswers={currentGameStatistics.rightAnswers}
                         wrongAnswers={currentGameStatistics.wrongAnswers}
-                    />)}
+                    />)} */}
 
-                {!isGameOver && (<Grid container justify="space-between" alignItems="center">
+                <Grid container justify="space-between" alignItems="center">
                     <Grid item container justify="center" className={classesCss.gameIcons}>
                       <Lives livesCount={livesCount} gameOver={handleGameOver}/>
                       <SoundButton onClick={handleChangeSound} isEnabled={soundOn}/>
                       <FullScreenButton/>
                     </Grid>
-                </Grid>)}
+                </Grid>)
 
-                {!isGameOver && (<Grid container
+                <Grid container
                       direction="column"
                       justify="space-between"
                       alignItems="center"
@@ -216,7 +216,7 @@ export default function AudioCall(props) {
                         }
                     </Grid>
 
-                </Grid>)}
+                </Grid>)
         </Grid>)}
             <audio id="correctSound" src={correctSound}/>
             <audio id="errorSound" src={errorSound}/>
