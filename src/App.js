@@ -49,7 +49,7 @@ export default function App(){
     <>
       <NavigationBar/>
       <Switch location={location}>
-        <Route path="/book"><BookPage/></Route>
+        <Route path={["/book", "/vocabulary"]}><BookPage/></Route>
         <Route path="/statistic"><StatisticsPage/></Route>
         <Route path={getGamePath("savannah")}>
           <GameShell gameData={GAMES.savannah}><Savannah/></GameShell>

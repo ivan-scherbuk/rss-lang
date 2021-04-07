@@ -9,11 +9,10 @@ $border-radius: 25px;
   margin: 0 0 40px 0;
   border-radius: $border-radius;
   background-color: white;
-  box-shadow:
-    0 1px 2px 1px rgba(0,0,0,0.3),
-    0 2px 4px 1px rgba(0,0,0,0.25),
-    0 2px 8px 2px rgba(0,0,0,0.2),
-    0 4px 16px 4px rgba(0,0,0,0.15);
+  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.3),
+  0 2px 4px 1px rgba(0, 0, 0, 0.25),
+  0 2px 8px 2px rgba(0, 0, 0, 0.2),
+  0 4px 16px 4px rgba(0, 0, 0, 0.15);
 
   .HeaderBlock {
     width: 100%;
@@ -40,6 +39,7 @@ $border-radius: 25px;
       flex-direction: column;
       justify-content: flex-end;
       align-items: flex-end;
+      margin-top: auto;
 
       > div {
         display: flex;
@@ -49,6 +49,7 @@ $border-radius: 25px;
         font-size: 20px;
         align-items: center;
         justify-content: center;
+
         > div {
           &:not(:last-child) {
             margin-right: 15px;
@@ -71,23 +72,37 @@ $border-radius: 25px;
     .ButtonBlock {
       display: flex;
       width: 100%;
-      .StatsCounters{
+      height: 35px;
+      align-items: center;
 
+      .StatsCounters {
         margin-left: auto;
-        .SuccessCounter{
+
+        .SuccessCounter {
           font-size: 1.2em;
           color: #13ce5c;
         }
-        .TotalCounter{
+
+        .TotalCounter {
           font-size: 1.6em;
         }
-
       }
-      .HardButton{
-        margin-top: 3px;
-        margin-right: 5px;
 
+      .Button {
+        width: 25px;
+        padding: 0;
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &.HardButton {
+          margin-top: 3px;
+          margin-right: 5px;
+          height: 32px;
+        }
       }
+
     }
   }
 
@@ -98,18 +113,18 @@ $border-radius: 25px;
     width: 100%;
     box-sizing: border-box;
 
-    .WordBlock{
+    .WordBlock {
       display: flex;
       flex-direction: column;
       text-align: right;
 
-      &:not(:last-child){
+      &:not(:last-child) {
         margin-bottom: 15px;
         padding-bottom: 15px;
         box-shadow: 0 20px 0 -19px #333;
       }
 
-      .Example{
+      .Example {
         font-size: 0.85em;
         margin-top: 5px;
         font-style: italic;
@@ -131,7 +146,8 @@ $border-radius: 25px;
 .Icon {
   font-family: Material Icons;
   font-size: 30px;
-  &:active{
+
+  &:active {
     font-size: 27px;
   }
 }

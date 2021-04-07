@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from "react"
+import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { useUserWordUpdate } from "../../hooks/hooks.user";
@@ -18,7 +18,8 @@ import CloseButton from "../../components/Buttons/CloseButton";
 import { useStatistic } from "../../hooks/hooks.statistic";
 import {resetGameStatistics} from "../../redux/games/actions";
 import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
-import {getUserData} from "../../helpers/gameUtils";
+import {checkGroup, checkPage} from "../../helpers/utils.checkers";
+
 
 const initialStatistic = {
   rightAnswers: 0,
@@ -42,7 +43,7 @@ export default function GameShell(props){
   const {update: updateUserWord} = useUserWordUpdate()
   const {update: updateStatistic} = useStatistic()
 
-  const {isLogged} = useSelector(state => state.user)
+  const {isLogged, id: userId} = useSelector(state => state.user)
 
   const [currentChunk, setCurrentChunk] = useState(null)
   const [isGameEnd, setGameEnd] = useState(false)
@@ -53,25 +54,16 @@ export default function GameShell(props){
   const [currentSeries, setCurrentSeries] = useState(0)
 
   const {state} = useLocation()
-  const {group: urlGroup, page: urlPage} = state ? state : {}
-
-  function checkGroup(group){
-    if (group < SETTINGS.GROUPS_COUNT) return group
-    return 0
-  }
-
-  function checkPage(page){
-    if (page < SETTINGS.PAGES_COUNT) return page
-    return 0
-  }
+  //const {group: urlGroup, page: urlPage, words: urlWords} = state ? state : {}
+  const {words: urlWords} = state ? state : {}
 
   function levelSelectHandler(index){
     getWordsGroup(index)
   }
 
-  const gameEndHandler = useCallback(() => {
+  function gameEndHandler(){
     setGameEnd(true)
-  }, []);
+  }
 
   function setGameStartAgain(){
     setGameResetKey(state => state + 1)
@@ -126,21 +118,9 @@ export default function GameShell(props){
 
   }
 
-  const userId = useMemo(() => getUserData()?.id,[]);
-
   useEffect(() => {
-    dispatch(getStatisticsThunk(userId));
-    return () => {
-      dispatch(resetGameStatistics());
-    }
-  }, [dispatch, userId]);
-
-  useEffect(() => {
-    if (urlGroup) {
-      if (urlPage) getWordsChunk(checkGroup(urlGroup), checkPage(urlPage))
-      else getWordsGroup(checkGroup(urlGroup))
-    }
-  }, [urlGroup, urlPage, getWordsGroup, getWordsChunk])
+    if(urlWords?.length) setCurrentChunk([...urlWords])
+  }, [urlWords])
 
   useEffect(() => {
     if (currentWordsGroup) {
@@ -168,6 +148,14 @@ export default function GameShell(props){
     }
   }, [isGameEnd, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
 
+  useEffect(() => {
+    if(userId){
+      dispatch(getStatisticsThunk(userId));
+      return () => {
+        dispatch(resetGameStatistics());
+      }
+    }
+  }, [dispatch, userId]);
 
   function getGameWithData(){
     const onAnyLoading = onGroupLoading || onLoading
@@ -176,7 +164,7 @@ export default function GameShell(props){
       const gameProps = {
         key: gameResetKey,
         words: currentChunk,
-        onLoading: onGroupLoading || onLoading,
+        onLoading: onAnyLoading,
         onWordSelect: wordSelectHandler,
         onGameEnd: gameEndHandler,
       }
@@ -229,8 +217,7 @@ export default function GameShell(props){
                 <BackToGameLink
                   className={cx(classesCss.BackLink, classesCss.Button)}
                   classes={{icon: classesCss.Icon}}
-                  group={urlGroup}
-                  page={urlPage}/>
+                  words={urlWords}/>
               </div>
             </>
           )

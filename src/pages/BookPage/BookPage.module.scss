@@ -4,23 +4,15 @@
   background: lightgreen;
   min-height: 100vh;
 
-
-  .BookMainContent {
+  .BookContent {
     display: flex;
-    flex-direction: row;
-    color: black;
-    width: 100%;
-
-    .CardsContainer {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      align-items: stretch;
-      padding-top: 60px;
-    }
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: stretch;
+    padding-top: 60px;
   }
 
-  $menu-color: rgba(255,255,255,.3);
+  $menu-color: rgba(255, 255, 255, 0.3);
   //$menu-color: linear-gradient(#ff8351cc, #e25336cc);
   $menu-filter: blur(5px);
   $text-color: #333333;
@@ -40,19 +32,19 @@
     background: $menu-color;
     backdrop-filter: $menu-filter;
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2),
-    0 -10px 5px -10px rgba(0, 0, 0, 0.25),
-    0 -20px 10px -20px rgba(0, 0, 0, 0.3),
-    0 -32px 16px -32px rgba(0, 0, 0, 0.4);
+      0 -10px 5px -10px rgba(0, 0, 0, 0.25),
+      0 -20px 10px -20px rgba(0, 0, 0, 0.3),
+      0 -32px 16px -32px rgba(0, 0, 0, 0.4);
     width: 96%;
-    margin: auto;
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
+    margin: auto auto 0 auto;
 
     .NavigationButton {
       color: inherit;
       text-decoration: none;
       font-size: 30px;
-      transition: color .3s;
+      transition: color 0.3s;
 
       &:not(:first-child) {
         margin-left: 10px;
@@ -72,13 +64,11 @@
       height: 30px;
       align-items: center;
       padding: 0;
-      transition: color .3s, box-shadow .3s;
-
+      transition: color 0.3s, box-shadow 0.3s;
 
       &:hover {
         color: $text-color-hover;
         box-shadow: 0 8px 0 -6px $text-color-hover;
-
       }
     }
 
@@ -88,6 +78,10 @@
       flex-direction: row;
       justify-content: center;
       align-items: center;
+
+      > a {
+        color: inherit;
+      }
 
       .PageCounter {
         display: flex;
@@ -117,7 +111,7 @@
         width: 30px;
         height: 35px;
         padding: 0;
-        transition: color .3s, font-size .3s;
+        transition: color 0.3s, font-size 0.3s;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -133,7 +127,7 @@
       }
     }
 
-    $animation-duration: .3s;
+    $animation-duration: 0.3s;
 
     .PopUpMenu {
       position: absolute;
@@ -142,6 +136,7 @@
       flex-direction: column;
       padding: 10px;
       transition: visibility 0s $animation-duration, opacity $animation-duration;
+      visibility: hidden;
       opacity: 0;
 
       &.Active {
@@ -159,7 +154,7 @@
       display: flex;
       justify-content: center;
 
-      .GroupMenuToggle{
+      .GroupMenuToggle {
         width: 50px;
         height: 50px;
         border-radius: 50%;
@@ -225,7 +220,7 @@
                 opacity: 1;
                 visibility: visible;
                 transition: visibility 0s $animation-duration/2,
-                opacity $animation-duration $animation-duration/2;
+                  opacity $animation-duration $animation-duration/2;
               }
             }
           }
@@ -255,7 +250,6 @@
   }
 }
 
-
 .settingsBlackout {
   top: 0;
   position: absolute;
@@ -277,7 +271,6 @@
 .activeSettings {
   color: gold;
 }
-
 
 .VocabularyHeader {
   display: flex;
