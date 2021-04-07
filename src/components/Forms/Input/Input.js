@@ -13,9 +13,10 @@ export default function Input({blockStyle, className, dataAttr, id, label, name,
 		<div
 			style={blockStyle}
 			className={[classesCss.InputBlock, className].join(" ")}>
-			<label htmlFor={id || `inputId${props.name}`}>{label}</label>
+			<label htmlFor={id || `inputId${name}`}>{label}</label>
 			<input
-				id={id || `inputId${props.name}`}
+				id={id || `inputId${name}`}
+        name={name}
         {...props}
 				{...dataProps}
 			/>

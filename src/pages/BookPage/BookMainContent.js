@@ -124,8 +124,9 @@ export default function BookMainContent({setTotalValues}) {
 
   return (
     <div className={classesCss.BookContent}>
-      {wordsToRender?.length &&
+      {wordsToRender?.length && (() => {console.log(111); return true})() &&
         wordsToRender.map((word) => {
+          console.log(word)
           if (!word.optional?.deleted) {
             return (
               <WordCard
