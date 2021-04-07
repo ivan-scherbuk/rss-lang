@@ -8,7 +8,7 @@ import LevelButtons from "./common/Levels/LevelButtons";
 import GameModal from "./common/GameModal/GameModal";
 import StatisticModal from "./common/StatisticModal/StatisticModal";
 import classesCss from "./Games.module.scss"
-import levelClasses from "../styles/Styles.module.scss"
+import levelClasses from "../LevelStyles.module.scss"
 import { SETTINGS } from "../../settings";
 import BookButton from "../../components/Buttons/BookButton";
 import ResetButton from "../../components/Buttons/ResetButton";

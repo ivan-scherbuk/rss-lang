@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router";
 import { NavLink } from "react-router-dom";
-import WordCard from "../../../components/WordCard/WordCard";
-import { checkGroup, checkPage } from "../../../helpers/utils.checkers";
-import { useUserWordsGroup } from "../../../hooks/hooks.user";
+import WordCard from "../../components/WordCard/WordCard";
+import { checkGroup, checkPage } from "../../helpers/utils.checkers";
+import { useUserWordsGroup } from "../../hooks/hooks.user";
 import {
   setCurrentGroup,
   setCurrentPage,
   setCurrentVocabularyPage,
   setVocabularyMode,
-} from "../../../redux/actions.book";
-import classesCss from "../BookPage.module.scss";
+} from "../../redux/actions.book";
+import classesCss from "./BookPage.module.scss";
 import cx from "classnames"
 import {
   MODE_VOCABULARY,
@@ -19,9 +19,9 @@ import {
   VOCABULARY_MODE_DIFFICULT,
   VOCABULARY_MODE_NORMAL,
   WORD_HARD,
-} from "../../../settings";
+} from "../../settings";
 
-export default function Vocabulary({setTotalPagesCount}){
+export default function VocabularyContent({setTotalPagesCount}){
   const {getUserWordsGroup, onLoading, currentUserWordsGroup} = useUserWordsGroup();
   const [wordsToRender, setWordsToRender] = useState(null);
   const user = useSelector((state) => state.user);

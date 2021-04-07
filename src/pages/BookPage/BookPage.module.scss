@@ -248,29 +248,72 @@
       }
     }
   }
+
+  .SettingsBlock{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(0,0,0,0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+
+    .SettingsContent{
+      width: 40%;
+      min-width: 400px;
+      min-height: 300px;
+      border-radius: 30px;
+      border: 3px solid white;
+      background-color: rgba(255,255,255,0.7);
+      padding: 30px;
+      box-sizing: border-box;
+      position: relative;
+
+      .SettingsCloseButton{
+        position: absolute;
+        right: 20px;
+        top: 10px;
+      }
+
+      h3{
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 25px;
+      }
+
+      .SettingButtonBlock{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .SettingButton{
+          height: 30px;
+          width: 30px;
+          border-radius: 50%;
+          &.Selected{
+            background-color: #ffc764;
+          }
+          &.Disabled{
+            background-color: transparent;
+          }
+        }
+
+        .SettingButtonText{
+          font-size: 20px;
+          margin-left: 15px;
+        }
+      }
+
+    }
+  }
 }
 
-.settingsBlackout {
-  top: 0;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  z-index: 5;
-  background: rgba(41, 41, 41, 0.6);
-}
-
-.settingsContent {
-  position: absolute;
-  top: calc(100vh / 2);
-  left: calc(100vw / 2);
-  color: white;
-  z-index: 10;
-}
-
-.activeSettings {
-  color: gold;
-}
 
 .VocabularyHeader {
   display: flex;

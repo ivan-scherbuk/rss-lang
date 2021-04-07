@@ -14,7 +14,7 @@ import {
 } from "../../redux/actions.book";
 import { MODE_BOOK, WORD_HARD } from "../../settings";
 
-export default function BookMainContent({setTotalValues, setTotalPagesCount}) {
+export default function BookContent({setTotalValues, setTotalPagesCount}) {
 
   const [isPagesFirstDeleteComplete, setPageFirstDeleteComplete] = useState(false)
   const { currentWords, getWordsChunk } = useWords();

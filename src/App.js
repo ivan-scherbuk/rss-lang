@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
-import NavigationBar from "./components/Navigation/NavigationBar"
+import NavigationBar from "./pages/MainPage/Navigation/NavigationBar"
 import MainPage from "./pages/MainPage/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
