@@ -4,6 +4,7 @@ import UserSettingsForm from "./components/UserSettingsForm";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {logOut} from "../../redux/actions.auth";
+import CloseLink from "../../components/Buttons/CloseLink";
 
 
 export default function UserPage(){
@@ -19,6 +20,7 @@ export default function UserPage(){
         onClick={() => dispatch(logOut())}
       >Выйти из аккаунта
       </NavLink>
+      <CloseLink/>
     </div>
   )
 }

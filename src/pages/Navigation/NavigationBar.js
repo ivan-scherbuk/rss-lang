@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import AuthBlock from "./AuthBlock";
-import AuthForm from "../../components/AuthForm/AuthForm";
+import AuthForm from "../../components/Navigation/AuthForm";
 import Button from "../../components/Buttons/Button";
 import classesCss from "./Navigation.module.scss";
 import { getUserData } from "../../helpers/gameUtils";

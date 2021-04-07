@@ -14,7 +14,7 @@ import BookButton from "../../components/Buttons/BookButton";
 import ResetButton from "../../components/Buttons/ResetButton";
 import cx from "classnames"
 import BackToGameLink from "./common/BackToGameLink";
-import CloseButton from "../../components/Buttons/CloseButton";
+import CloseLink from "../../components/Buttons/CloseLink";
 import { useStatistic } from "../../hooks/hooks.statistic";
 import {resetGameStatistics} from "../../redux/games/actions";
 import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
@@ -46,7 +46,7 @@ export default function GameShell(props){
   const {isLogged, id: userId} = useSelector(state => state.user)
 
   const [currentChunk, setCurrentChunk] = useState(null)
-  const [isGameEnd, setGameEnd] = useState(false)
+  const [gameEndLastWord, setGameEndLastWord] = useState(-1)
   const [gameResetKey, setGameResetKey] = useState(Math.random())
   const [statisticChunk, setStatisticChunk] = useState(null)
   const [statistic, setStatistic] = useState(initialStatistic)
@@ -61,8 +61,8 @@ export default function GameShell(props){
     getWordsGroup(index)
   }
 
-  function gameEndHandler(){
-    setGameEnd(true)
+  function gameEndHandler(index){
+    setGameEndLastWord(Number.isInteger(index)? index + 1 : currentChunk.length)
   }
 
   function setGameStartAgain(){
@@ -71,7 +71,7 @@ export default function GameShell(props){
     setStatisticChunk([...currentChunk])
     setStatistic(initialStatistic)
     setStatisticWasUpdate(false)
-    setGameEnd(false)
+    setGameEndLastWord(-1)
   }
 
   function updateStatisticChunk(wordForUpdate, dataForUpdate){
@@ -139,14 +139,14 @@ export default function GameShell(props){
   }, [currentChunk])
 
   useEffect(() => {
-    if(isLogged && isGameEnd
-      && !statisticWasUpdate
-      && statisticChunk?.length
-      && statisticChunk[statisticChunk.length - 1].userNewResults){
-      updateStatistic(gameData.key, statistic)
-      setStatisticWasUpdate(true)
+
+    if(isLogged && gameEndLastWord > 0 && !statisticWasUpdate && statisticChunk?.length){
+      if(statisticChunk[gameEndLastWord - 1].userNewResults){
+        updateStatistic(gameData.key, statistic)
+        setStatisticWasUpdate(true)
+      }
     }
-  }, [isGameEnd, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
+  }, [gameEndLastWord, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
 
   useEffect(() => {
     if(userId){
@@ -159,7 +159,7 @@ export default function GameShell(props){
 
   function getGameWithData(){
     const onAnyLoading = onGroupLoading || onLoading
-    if (!isGameEnd && ((children && onAnyLoading)
+    if (gameEndLastWord === -1 && ((children && onAnyLoading)
       || (children && !onAnyLoading && currentChunk?.length))) {
       const gameProps = {
         key: gameResetKey,
@@ -188,7 +188,7 @@ export default function GameShell(props){
     <div className={[className, classesCss.GameShell].join(" ")} style={style}>
       {
         (() => {
-          if (!isGameEnd) {
+          if (gameEndLastWord === -1) {
             if (gameContent) return gameContent
             return (
               <GameModal
@@ -205,7 +205,7 @@ export default function GameShell(props){
             <>
               <StatisticModal
                 className={classesCss.StatisticModal}
-                words={statisticChunk}
+                words={statisticChunk.filter((word, index) => index < gameEndLastWord)}
               />
               <div className={classesCss.GameEndHelper}>
                 <ResetButton
@@ -223,7 +223,7 @@ export default function GameShell(props){
           )
         })()
       }
-      <CloseButton/>
+      <CloseLink/>
     </div>
   )
 };
