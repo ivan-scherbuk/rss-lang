@@ -28,16 +28,12 @@
     height: 100%;
     position: absolute;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     min-height: 640px;
+    background: linear-gradient(#63c9f5, #ffc764);
 
-    .Gradient{
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: linear-gradient(#63c9f5, #ffc764);
-    }
 
     .Girl {
       z-index: 3;
@@ -76,10 +72,73 @@
       background-repeat: no-repeat;
       background-position: center 120%;
     }
-
   }
 
+  .Footer{
+    background-color: transparent;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px 20px 5px 10px;
+    color: #333;
 
+    .Authors{
+      //color: #333;
+      display: flex;
+      flex-direction: column;
+      margin-left: auto;
+      align-items: flex-end;
+      color: #333333;
+      a{
+        color: inherit;
+        text-decoration: none;
+      }
+      .GHButton{
+        font-size: 18px;
+        transition: color .4s;
+        display: flex;
+        flex-direction: row-reverse;
+        &:hover{
+          color: white;
+        }
+        span{
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .RSSData{
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      height: 100%;
+
+      font-size: 26px;
+
+      .FooterDate{
+        margin-left: 5px;
+      }
+
+      .RSSLink{
+        display: block;
+        height: 40px;
+        width: 110px;
+        margin-right: 20px;
+        margin-bottom: 5px;
+        svg{
+          transition: fill .4s;
+          fill: #333333;
+        }
+        &:hover{
+          svg{
+            fill: white;
+          }
+        }
+      }
+    }
+  }
 }
 
 @keyframes wave-rotate {

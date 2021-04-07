@@ -8,6 +8,7 @@ import {
 } from "../../redux/actions.book";
 
 export default function BookSettings({ settingsOff }) {
+
   const { isTranslateVisible, isButtonsVisible } = useSelector(
     (store) => store.book
   );

@@ -4,7 +4,7 @@ import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
 import {useDispatch, useSelector} from "react-redux";
 import {statisticsSelector} from "../../redux/games/selectors";
 import StatisticsGameCard from "./StatisticsGameCard";
-import CloseButton from "../../components/Buttons/CloseButton";
+import CloseLink from "../../components/Buttons/CloseLink";
 import BarChart from "./BarChart";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -88,7 +88,7 @@ const StatisticsPage = () => {
   return (
     <Grid container alignItems="center" className={classes.container}>
       <Grid container justify="flex-end">
-        <CloseButton/>
+        <CloseLink/>
       </Grid>
       <h1 className={classes.title}>Статистика</h1>
 

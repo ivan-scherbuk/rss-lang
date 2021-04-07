@@ -8,6 +8,7 @@ export const WORD_HARD = "hard"
 export const SETTINGS = {
   SERVER: "https://rss-words-3.herokuapp.com",
   AWS_STORE_URL: "https://travel-app-24.s3.eu-north-1.amazonaws.com",
+  DEFAULT_IMAGE: "KNPXgyDVUUA4SCWSCCFjJ0c001740dbe0b705441ebf5f9f7c9af0.jpg",
   GROUPS_COUNT: 6,
   PAGES_COUNT: 30,
   DEFAULT_WORD_CHUNK_LENGTH: 20,
