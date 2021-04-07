@@ -2,7 +2,7 @@ import { ADD_WORDS_CHUNK, ADD_WORDS_GROUP } from "./types"
 
 const initialState = {}
 
-export default function wordReducer(state = initialState, {type, payload}){
+export default function wordsReducer(state = initialState, {type, payload}){
 	if(type === ADD_WORDS_CHUNK){
 		const newVocabulary = {...state}
 		if(!newVocabulary[payload.group]) newVocabulary[payload.group] = {}

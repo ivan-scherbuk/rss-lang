@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import Button from "../Buttons/Button"
-import Input from "../Forms/Input/Input"
+import Button from "../../../components/Buttons/Button"
+import Input from "../../../components/Forms/Input/Input"
 import { useDispatch, useSelector } from "react-redux"
-import { createUser, signIn } from "../../redux/actions.auth"
+import { createUser, signIn } from "../../../redux/actions.auth"
 import classesCss from "./Navigation.module.scss"
 
 const AuthForm = (props) => {
@@ -43,6 +43,7 @@ const AuthForm = (props) => {
         name={"password"}
         label={'Пароль '}
         onChange={changeHandler}
+        minLength={8}
       />
       <div className={classesCss.AuthButtonSet}>
         <Button

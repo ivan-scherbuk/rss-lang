@@ -1,5 +1,5 @@
 import React from 'react'
-import CloseButton from "../Buttons/CloseButton";
+import CloseButton from "../../../components/Buttons/CloseButton";
 import classesCss from "./Navigation.module.scss"
 
 export default function AuthModal({children, className, style, onClose}){

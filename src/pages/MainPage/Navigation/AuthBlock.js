@@ -1,11 +1,11 @@
 import React, { useState } from "react"
-import Button from "../Buttons/Button"
+import Button from "../../../components/Buttons/Button"
 import AuthModal from "./AuthModal"
 import classesCss from "./Navigation.module.scss"
 import Avatar from "@material-ui/core/Avatar"
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
-import {SETTINGS} from "../../settings";
+import {SETTINGS} from "../../../settings";
 
 
 export default function AuthBlock({children, classes, className, styles}){

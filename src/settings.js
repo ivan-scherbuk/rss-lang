@@ -4,6 +4,10 @@ export const VOCABULARY_MODE_DELETED = "delete"
 export const MODE_VOCABULARY = "vocabulary"
 export const MODE_BOOK = "book"
 export const WORD_HARD = "hard"
+export const WORD_NORMAL = "normal"
+
+export const TOKEN_EXPIRE_TIME = 4 //hours
+export const TOKEN_START_REFRESH = 2//hours
 
 export const SETTINGS = {
   SERVER: "https://rss-words-3.herokuapp.com",
@@ -12,4 +16,5 @@ export const SETTINGS = {
   GROUPS_COUNT: 6,
   PAGES_COUNT: 30,
   DEFAULT_WORD_CHUNK_LENGTH: 20,
+
 }
