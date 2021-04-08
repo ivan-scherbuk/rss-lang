@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Route, useLocation } from "react-router-dom";
-import BookMainContent from "./BookMainContent";
+import BookContent from "./BookContent";
 import BookMenu from "./Menu/BookMenu";
 import BookSettings from "./BookSettings";
 import classesCss from "./BookPage.module.scss";
 import { useDispatch } from "react-redux";
 import { setBookMode } from "../../redux/actions.book";
-import Vocabulary from "./Vocabulary/Vocabulary";
+import VocabularyContent from "./VocabularyContent";
 import { MODE_BOOK, MODE_VOCABULARY } from "../../settings";
 
 export default function BookPage() {
@@ -28,14 +28,18 @@ export default function BookPage() {
   return (
     <div className={classesCss.BookPage}>
       <Route path={`/${MODE_BOOK}/:group/:page`}>
-        <BookMainContent setTotalValues={setTotalValues}/>
+        <BookContent
+          setTotalPagesCount={setTotalPagesCount}
+          setTotalValues={setTotalValues}
+        />
       </Route>
-      <Route path={`/${MODE_VOCABULARY}/:sectionVocabulary/:group/:page`}>
-        <Vocabulary setTotalPagesCount={setTotalPagesCount}/>
+      <Route path={`/${MODE_VOCABULARY}/:group/:page`}>
+        <VocabularyContent
+          setTotalPagesCount={setTotalPagesCount}
+        />
       </Route>
       <BookMenu
         totalPagesCount={totalPagesCount}
-        setTotalPagesCount={setTotalPagesCount}
         totalValues={totalValues}
         settingsOn={() => setSettingsVisible(true)}
       />

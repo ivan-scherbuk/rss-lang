@@ -17,6 +17,7 @@ export default function Input({blockStyle, className, dataAttr, id, label, name,
 			<input
 				id={id || `inputId${name}`}
         name={name}
+
         {...props}
 				{...dataProps}
 			/>

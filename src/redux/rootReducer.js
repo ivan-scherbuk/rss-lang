@@ -1,6 +1,6 @@
 import { combineReducers } from "redux"
-import userReducer from "./userReducer"
-import wordsReducer from "./wordsReducer"
+import userReducer from "./reducer.user"
+import wordsReducer from "./reducer.words"
 import gameReducer from "./games/reducer"
 import bookReducer from "./reducer.book";
 

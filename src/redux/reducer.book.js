@@ -3,9 +3,9 @@ import {
   SET_BOOK_AVAILABLE_PAGES, SET_BOOK_BUTTONS_VISIBLE,
   SET_BOOK_MODE, SET_BOOK_TRANSLATE_VISIBLE,
   SET_CURRENT_GROUP,
-  SET_CURRENT_PAGE, SET_CURRENT_WORDS, SET_VOCABULARY_MODE,
+  SET_CURRENT_PAGE, SET_CURRENT_VOCABULARY_PAGE, SET_CURRENT_WORDS, SET_VOCABULARY_MODE,
 } from "./types";
-import {SETTINGS} from "../settings";
+import { MODE_BOOK, SETTINGS, VOCABULARY_MODE_DIFFICULT, VOCABULARY_MODE_NORMAL } from "../settings";
 
 function getInitPagesList(){
   const initPages = {}
@@ -18,9 +18,10 @@ function getInitPagesList(){
 const initialBookState = {
   currentGroup: 0,
   currentPageIndex: 0,
+  currentVocabularyPage: 0,
   pagesList: getInitPagesList(),
-  mode: "book",
-  vocabularyMode: "difficult",
+  mode: MODE_BOOK,
+  vocabularyMode: VOCABULARY_MODE_NORMAL,
   isButtonsVisible: true,
   isTranslateVisible: true,
   currentWords: []
@@ -109,6 +110,11 @@ export default function bookReducer(state = initialBookState, {type, payload}){
       return {...state, currentWords: words}
     }
 
+    case SET_CURRENT_VOCABULARY_PAGE:{
+      const {page} = payload
+      if(page === state.currentVocabularyPage) return state
+      return {...state, currentVocabularyPage: page}
+    }
 
     default: {
       return state

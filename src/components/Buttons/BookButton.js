@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./Button";
 import { NavLink } from "react-router-dom";
-import classesCss from "../Navigation/Navigation.module.scss";
+import classesCss from "../../pages/MainPage/Navigation/Navigation.module.scss";
 import cx from "classnames";
 import { MODE_BOOK } from "../../settings";
 

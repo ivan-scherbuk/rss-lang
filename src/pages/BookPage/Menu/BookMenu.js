@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import classesCss from "../BookPage.module.scss";
 import Pagination from "./Pagination";
 import GroupMenu from "./GroupMenu";
@@ -11,7 +11,7 @@ import { NavLink } from "react-router-dom";
 import GameMenu from "./GameMenu";
 import { MODE_BOOK, MODE_VOCABULARY, VOCABULARY_MODE_DIFFICULT, VOCABULARY_MODE_NORMAL } from "../../../settings";
 
-export default function BookMenu({settingsOn, totalPagesCount, setTotalPagesCount, totalValues}) {
+export default function BookMenu({settingsOn, totalPagesCount, totalValues}) {
   const { isLogged } = useSelector((store) => store.user);
   const { currentGroup, mode, vocabularyMode } = useSelector(
     (store) => store.book
@@ -44,7 +44,7 @@ export default function BookMenu({settingsOn, totalPagesCount, setTotalPagesCoun
           ) : (
             <NavLink
               className={classesCss.NavigationLink}
-              to={`/${MODE_VOCABULARY}/${VOCABULARY_MODE_NORMAL}/${currentGroup + 1}/1`}
+              to={{pathname:`/${MODE_VOCABULARY}/${currentGroup + 1}/1`}}
             >
               Словарь
             </NavLink>
@@ -55,10 +55,7 @@ export default function BookMenu({settingsOn, totalPagesCount, setTotalPagesCoun
       || (mode === MODE_VOCABULARY && vocabularyMode === VOCABULARY_MODE_DIFFICULT)?
         <GameMenu /> : null
       }
-      <Pagination
-        totalPagesCount={totalPagesCount}
-        setTotalPagesCount={setTotalPagesCount}
-      />
+      <Pagination totalPagesCount={totalPagesCount}/>
 
       {isLogged &&
         !(mode === MODE_VOCABULARY && vocabularyMode !== VOCABULARY_MODE_NORMAL) && (
