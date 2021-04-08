@@ -1,43 +1,175 @@
 .BookPage {
   display: flex;
   flex-direction: column;
-  background: linear-gradient(#4bdb84, #13ce5c);
+  background: lightgreen;
   min-height: 100vh;
 
-  .BookHeader {
-    margin: 0 auto;
+  .BookContent {
     display: flex;
-    flex-direction: row;
-    height: 50px;
-    align-items: center;
-    color: black;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: stretch;
+    padding-top: 60px;
   }
 
-  .Main {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-height: 100vh;
+  $menu-color: rgba(255, 255, 255, 0.3);
+  //$menu-color: linear-gradient(#ff8351cc, #e25336cc);
+  $menu-filter: blur(5px);
+  $text-color: #333333;
+  $text-color-hover: white;
 
-    .BookMainContent {
+  .BookMenu {
+    bottom: 0;
+    position: sticky;
+    display: flex;
+    height: 70px;
+    padding: 5px 15px 0 40px;
+    box-sizing: border-box;
+    font-size: 17px;
+    justify-content: center;
+    color: $text-color;
+    align-items: center;
+    background: $menu-color;
+    backdrop-filter: $menu-filter;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2),
+      0 -10px 5px -10px rgba(0, 0, 0, 0.25),
+      0 -20px 10px -20px rgba(0, 0, 0, 0.3),
+      0 -32px 16px -32px rgba(0, 0, 0, 0.4);
+    width: 96%;
+    border-top-left-radius: 50px;
+    border-top-right-radius: 50px;
+    margin: auto auto 0 auto;
+
+    .NavigationButton {
+      color: inherit;
+      text-decoration: none;
+      font-size: 30px;
+      transition: color 0.3s;
+
+      &:not(:first-child) {
+        margin-left: 10px;
+      }
+
+      &:hover {
+        color: $text-color-hover;
+      }
+    }
+
+    .NavigationLink {
+      margin-left: 15px;
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      box-shadow: 0 6px 0 -6px $text-color;
+      height: 30px;
+      align-items: center;
+      padding: 0;
+      transition: color 0.3s, box-shadow 0.3s;
+
+      &:hover {
+        color: $text-color-hover;
+        box-shadow: 0 8px 0 -6px $text-color-hover;
+      }
+    }
+
+    .Pagination {
+      margin: 0 auto;
       display: flex;
       flex-direction: row;
-      color: black;
-      background: LightGreen;
-      width: 100%;
+      justify-content: center;
+      align-items: center;
 
-      .BookNavbar {
+      > a {
+        color: inherit;
+      }
+
+      .PageCounter {
         display: flex;
-        flex-direction: column;
-        margin: 0 auto;
+        justify-content: center;
         align-items: center;
-        padding: 70px 10px 0 40px;
-        top: 0;
-        min-width: 90px;
-        box-sizing: content-box;
+        margin: 0 10px;
+        width: 60px;
 
-        .BookLink {
+        .SelectedInput {
+          width: 100%;
+          background-color: transparent;
+          outline: none;
+          border: none;
+          border-bottom: 2px solid $text-color;
+          padding: 5px;
+          box-sizing: border-box;
+          color: inherit;
           text-align: center;
+          font-family: inherit;
+          font-size: inherit;
+        }
+      }
+
+      .PaginationButton {
+        font-size: 30px;
+        color: inherit;
+        width: 30px;
+        height: 35px;
+        padding: 0;
+        transition: color 0.3s, font-size 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+          font-size: 33px;
+          color: $text-color-hover/2;
+        }
+
+        &:active {
+          font-size: 28px;
+        }
+      }
+    }
+
+    $animation-duration: 0.3s;
+
+    .PopUpMenu {
+      position: absolute;
+      bottom: 50px;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      transition: visibility 0s $animation-duration, opacity $animation-duration;
+      visibility: hidden;
+      opacity: 0;
+
+      &.Active {
+        opacity: 1;
+        visibility: visible;
+        bottom: 50px;
+        transition: visibility 0s 0s, opacity $animation-duration;
+      }
+    }
+
+    .GroupMenu {
+      position: relative;
+      align-items: center;
+      width: 100px;
+      display: flex;
+      justify-content: center;
+
+      .GroupMenuToggle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid white;
+        color: white;
+        padding: 0;
+      }
+
+      .PopUpMenu {
+        bottom: 60px;
+        align-items: center;
+        .BookLink {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -46,13 +178,9 @@
           border-radius: 50%;
           text-decoration: none;
           color: black;
-          font-size: 24px;
+          font-size: 30px;
           margin: 5px 0;
           transition: width 0.4s, height 0.4s;
-
-          &:last-child:not(.Active) {
-            margin-bottom: 44px !important;
-          }
 
           &.Active {
             height: 90px;
@@ -61,90 +189,131 @@
           }
         }
       }
+    }
 
-      .CardsContainer {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-        align-items: stretch;
-        padding-top: 60px;
+    .GameMenu {
+      position: relative;
+
+      .PopUpMenu {
+        .GameLinkWrap {
+          border-radius: 45px;
+          height: 90px;
+          width: 90px;
+          padding: 5px;
+          box-sizing: border-box;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          background-color: white;
+          color: inherit;
+          text-decoration: none;
+          transition: width $animation-duration;
+
+          &:not(:last-child) {
+            margin-bottom: 10px;
+          }
+
+          &:hover {
+            width: 200px;
+            .GameLink {
+              .GameLabel {
+                opacity: 1;
+                visibility: visible;
+                transition: visibility 0s $animation-duration/2,
+                  opacity $animation-duration $animation-duration/2;
+              }
+            }
+          }
+
+          &.Audiocall {
+            &:hover {
+              width: 250px;
+            }
+          }
+
+          .GameLink {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-size: cover;
+
+            .GameLabel {
+              margin-left: 100px;
+              visibility: hidden;
+              opacity: 0;
+              transition: visibility 0s 0s;
+            }
+          }
+        }
       }
+    }
+  }
+
+  .SettingsBlock{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(0,0,0,0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+
+    .SettingsContent{
+      width: 40%;
+      min-width: 400px;
+      min-height: 300px;
+      border-radius: 30px;
+      border: 3px solid white;
+      background-color: rgba(255,255,255,0.7);
+      padding: 30px;
+      box-sizing: border-box;
+      position: relative;
+
+      .SettingsCloseButton{
+        position: absolute;
+        right: 20px;
+        top: 10px;
+      }
+
+      h3{
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 25px;
+      }
+
+      .SettingButtonBlock{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 10px;
+
+        .SettingButton{
+          height: 30px;
+          width: 30px;
+          border-radius: 50%;
+          &.Selected{
+            background-color: #ffc764;
+          }
+          &.Disabled{
+            background-color: transparent;
+          }
+        }
+
+        .SettingButtonText{
+          font-size: 20px;
+          margin-left: 15px;
+        }
+      }
+
     }
   }
 }
 
-.Pagination {
-  bottom: 0;
-  position: sticky;
-  display: flex;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  //background: white;
-  font-size: 17px;
-  justify-content: center;
-  color: black;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
-}
-
-.selectedInput {
-  width: 20px;
-}
-
-.arrow {
-  font-weight: bold;
-  padding: 10px 13px;
-  border: 2px solid #f1cdb3;
-  border-radius: 100px;
-  margin-left: 5px;
-}
-
-.arrow:hover {
-  cursor: pointer;
-}
-
-.doubleArrow {
-  color: red;
-}
-
-.singleArrow {
-  color: blue;
-  padding: 10px 15px;
-}
-
-.settingsBlackout {
-  top: 0px;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0px;
-  z-index: 5;
-  background: rgba(41, 41, 41, 0.6);
-}
-
-.settingsContent {
-  position: absolute;
-  top: calc(100vh / 2);
-  left: calc(100vw / 2);
-  color: white;
-  z-index: 10;
-}
-
-.activeSettings {
-  color: gold;
-}
-
-.headerLink {
-  color: black;
-  text-decoration: none;
-  margin-left: 10px;
-}
-
-.userHeader {
-  display: flex;
-  margin-left: 10px;
-}
 
 .VocabularyHeader {
   display: flex;

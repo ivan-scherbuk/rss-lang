@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import NavigationBar from "./components/Navigation/NavigationBar";
-import MainPage from "./pages/MainPage";
+import NavigationBar from "./pages/MainPage/Navigation/NavigationBar";
+import MainPage from "./pages/MainPage/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
-import Sprint from "./pages/Games/Sprint";
-import AudioCall from "./pages/Games/AudioCall/AudioCall";
+import Sprint from "./pages/Games/Sprint/GamePage";
+import AudioCall from "./pages/Games/AudioCall/GamePageAudioCall";
 import Savannah from "./pages/Games/Savannah/GamePage";
 import StatisticsPage from "./pages/StatisticsPage/StatisticsPage";
 import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame";
@@ -21,9 +20,9 @@ import "./styles/effect.scss";
 import "./styles/App.module.scss";
 
 export default function App() {
-  const dispatch = useDispatch();
   const location = useLocation();
-  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const { isLogged } = useSelector((store) => store.user);
 
   function getGamePath(game) {
     const basePath = `/games/${game}`;
@@ -32,8 +31,6 @@ export default function App() {
 
   useEffect(() => {
     async function syncUser() {
-      // if token OK or token pre-expire and can be refreshed - return token
-      // if token is expired - return false
       const token = await dispatch(checkToken());
       if (token) {
         await dispatch(getUserWords());
@@ -43,22 +40,16 @@ export default function App() {
       }
     }
 
-    if (user.isLogged) {
+    if (isLogged) {
       syncUser();
     }
-  }, [dispatch, user.isLogged]);
+  }, [dispatch, isLogged]);
 
   return (
     <>
       <NavigationBar />
-      {/*<TransitionGroup>*/}
-      {/*  <CSSTransition*/}
-      {/*    timeout={800}*/}
-      {/*    classNames="transit"*/}
-      {/*    key={location.key || location.pathname}*/}
-      {/*  >*/}
       <Switch location={location}>
-        <Route path="/book">
+        <Route path={["/book", "/vocabulary"]}>
           <BookPage />
         </Route>
         <Route path="/statistic">
@@ -70,10 +61,14 @@ export default function App() {
           </GameShell>
         </Route>
         <Route path={getGamePath("audiocall")}>
-          <AudioCall />
+          <GameShell gameData={GAMES.audiocall}>
+            <AudioCall />
+          </GameShell>
         </Route>
         <Route path={getGamePath("sprint")}>
-          <Sprint />
+          <GameShell gameData={GAMES.sprint}>
+            <Sprint />
+          </GameShell>
         </Route>
         <Route path={getGamePath("puzzle")}>
           <GameShell gameData={GAMES.puzzle}>
@@ -90,8 +85,6 @@ export default function App() {
           <MainPage />
         </Route>
       </Switch>
-      {/*  </CSSTransition>*/}
-      {/*</TransitionGroup>*/}
     </>
   );
 }

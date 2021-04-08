@@ -3,11 +3,11 @@ import classesCss from "./Button.module.scss"
 import CloseIcon from '@material-ui/icons/Close';
 import {Link} from "react-router-dom";
 
-export default function CloseButton(){
+export default function CloseLink(){
     return (
         <Link
           to="/"
-          className={classesCss.CloseButton}>
+          className={classesCss.CloseLinkButton}>
           <CloseIcon className={classesCss.Icon}/>
         </Link>
     );

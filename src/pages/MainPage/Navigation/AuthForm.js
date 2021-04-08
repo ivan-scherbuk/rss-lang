@@ -1,8 +1,9 @@
 import React, { useState } from "react"
-import Button from "../Buttons/Button"
-import Input from "../Forms/Input/Input"
+import Button from "../../../components/Buttons/Button"
+import Input from "../../../components/Forms/Input/Input"
 import { useDispatch, useSelector } from "react-redux"
-import { createUser, signIn } from "../../redux/actions.auth"
+import { createUser, signIn } from "../../../redux/actions.auth"
+import classesCss from "./Navigation.module.scss"
 
 const AuthForm = (props) => {
 
@@ -15,7 +16,7 @@ const AuthForm = (props) => {
     email: "",
     password: "",
   });
-  
+
   const dispatch = useDispatch()
   const {onLoading} = useSelector(state => state.user)
 
@@ -25,11 +26,11 @@ const AuthForm = (props) => {
 
 
   return (
-    <div className={classes?.AuthForm}>
+    <div className={classesCss.AuthForm}>
       <div className={classes?.FormMessage}>{message}</div>
       <Input
         autoComplete={"off"}
-        className={classes?.AuthInput}
+        className={classesCss.AuthInput}
         type={"text"}
         name={"email"}
         label={`Email: `}
@@ -37,20 +38,21 @@ const AuthForm = (props) => {
       />
       <Input
         autoComplete={"off"}
-        className={classes?.AuthInput}
+        className={classesCss.AuthInput}
         type={"password"}
         name={"password"}
         label={'Пароль '}
         onChange={changeHandler}
+        minLength={8}
       />
-      <div className={classes?.AuthButtonSet}>
+      <div className={classesCss.AuthButtonSet}>
         <Button
           onClick={() => {
             dispatch(signIn(form))
           }}
           disabled={onLoading}
-          label={"Sign In"}
-          className={[classes?.SignInButton, classes?.FormButton].join(" ")}
+          label={"Войти"}
+          className={[classesCss.SignInButton, classes?.FormButton].join(" ")}
         />
 
         <Button
@@ -58,8 +60,8 @@ const AuthForm = (props) => {
             dispatch(createUser(form))
           }}
           disabled={onLoading}
-          label={"Register"}
-          className={[classes?.SignUpButton, classes?.FormButton].join(" ")}
+          label={"Регистрация"}
+          className={[classesCss.SignUpButton, classes?.FormButton].join(" ")}
         />
         {onLoading? "Loading....": null}
       </div>
