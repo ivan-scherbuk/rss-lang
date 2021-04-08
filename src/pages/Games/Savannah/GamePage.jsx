@@ -91,7 +91,7 @@ const Savannah = (props) => {
           //currentChunk[wordCounter] = {...currentChunk[wordCounter], status:"succeed"}
           onWordSelect(currentChunk[wordCounter], {failed: true});
         }
-    }, [currentChunk, onWordSelect, livesCount, currentSeries, wordCounter, soundOn, snakeSize]);
+    }, [currentChunk, onWordSelect, word, livesCount, currentSeries, wordCounter, soundOn, snakeSize]);
 
     const handleWordClick = useCallback((itemWord) => () => {
         setBtnClicked(true);
