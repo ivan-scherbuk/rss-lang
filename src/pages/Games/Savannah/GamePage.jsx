@@ -59,11 +59,9 @@ const Savannah = (props) => {
                 setLivesCount(livesCount - 1);
                 playSound(false, soundOn);
                 setWordCounter(wordCounter + 1);
-
-              //currentChunk[wordCounter] = {...currentChunk[wordCounter], status:"succeed"}
               onWordSelect(currentChunk[wordCounter], {failed: true});
             }
-        }, 6000);
+        }, 6800);
 
         return () => {
             clearTimeout(timer);
@@ -82,13 +80,11 @@ const Savannah = (props) => {
         if (correct) {
           setSnakeSize(snakeSize + 0.02);
           setCurrentSeries(currentSeries + 1);
-          //currentChunk[wordCounter] = {...currentChunk[wordCounter], status:"succeed"}
           onWordSelect(currentChunk[wordCounter], {succeed: true});
           playSound(true, soundOn);
         } else {
           setLivesCount(livesCount - 1);
           playSound(false, soundOn);
-          //currentChunk[wordCounter] = {...currentChunk[wordCounter], status:"succeed"}
           onWordSelect(currentChunk[wordCounter], {failed: true});
         }
     }, [currentChunk, onWordSelect, word, livesCount, currentSeries, wordCounter, soundOn, snakeSize]);
