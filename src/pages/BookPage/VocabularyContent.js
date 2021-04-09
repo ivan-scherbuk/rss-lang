@@ -45,7 +45,7 @@ export default function VocabularyContent({setTotalPagesCount}){
       .flat()
       .filter(({optional, difficulty}) => {
         const isDifficultyHard = difficulty === WORD_HARD
-        if (urlVocabularyMode === VOCABULARY_MODE_DIFFICULT) return isDifficultyHard;
+        if (urlVocabularyMode === VOCABULARY_MODE_DIFFICULT) return isDifficultyHard && !optional.deleted;
         if (urlVocabularyMode === VOCABULARY_MODE_DELETED) return optional.deleted;
         return (isDifficultyHard || (optional.failCounter + optional.successCounter)) && !optional.deleted;
       })

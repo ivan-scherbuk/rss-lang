@@ -5,13 +5,7 @@ import cx from "classnames";
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useSelector } from "react-redux";
 import Button from "../Buttons/Button";
-import {
-  MODE_VOCABULARY,
-  VOCABULARY_MODE_DELETED,
-  VOCABULARY_MODE_DIFFICULT,
-  WORD_HARD,
-  WORD_NORMAL,
-} from "../../settings";
+import { MODE_VOCABULARY, VOCABULARY_MODE_DELETED, WORD_HARD, WORD_NORMAL } from "../../settings";
 
 export default function ButtonsBlock({cardInfo}){
 
@@ -19,46 +13,42 @@ export default function ButtonsBlock({cardInfo}){
   const {successCounter, failCounter} = cardInfo?.optional ? cardInfo.optional : {};
   const {isButtonsVisible, vocabularyMode, mode} = useSelector(store => store.book)
 
-  const restoreWord = () => {
-    if (vocabularyMode === VOCABULARY_MODE_DIFFICULT) {
-      update(cardInfo, {difficulty: WORD_NORMAL});
-    }
-    if (vocabularyMode === VOCABULARY_MODE_DELETED) {
-      update(cardInfo, {deleted: false});
-    }
-  };
 
   return (
     <div className={classesCss.ButtonBlock}>
       {
         (() => {
-          const isHardOrDeletedMode = [VOCABULARY_MODE_DIFFICULT, VOCABULARY_MODE_DELETED].includes(vocabularyMode)
-          if(mode === MODE_VOCABULARY && isHardOrDeletedMode){
-            return(
-              <div>
-                <Button
-                  className={cx(classesCss.Button, classesCss.Icon)}
-                  onClick={restoreWord}
-                  label={"восстановить"}
-                />
-                <div>Page: {cardInfo.page + 1}</div>
-              </div>
-            )
-          } else if(isButtonsVisible){
-            return(
+          if (isButtonsVisible) {
+            return (
               <>
-                <HardButton
-                  className={cx(classesCss.Button, classesCss.HardButton)}
-                  onClick={() => {
-                    update(cardInfo, {difficulty: WORD_HARD});
-                  }}
-                />
+                {
+                  !(mode === MODE_VOCABULARY && vocabularyMode === VOCABULARY_MODE_DELETED) ?
+                    <HardButton
+                      className={cx(
+                        classesCss.Button,
+                        classesCss.HardButton,
+                        {[classesCss.Active]: cardInfo.difficulty === WORD_HARD},
+                      )}
+                      onClick={
+                        cardInfo.difficulty === WORD_HARD ?
+                          () => update(cardInfo, {difficulty: WORD_NORMAL})
+                          : () => update(cardInfo, {difficulty: WORD_HARD})
+                      }
+                    /> : null
+                }
+
                 <Button
-                  className={cx(classesCss.Button, classesCss.Icon)}
-                  onClick={() => {
-                    update(cardInfo, {deleted: true});
-                  }}
-                  label={"delete_forever"}
+                  className={cx(
+                    classesCss.Button,
+                    classesCss.Icon,
+                    classesCss.DeleteButton,
+                    {[classesCss.Active]:cardInfo.optional?.deleted},
+                  )}
+                  onClick={
+                    cardInfo.optional?.deleted ?
+                      () => update(cardInfo, {deleted: false})
+                      : () => update(cardInfo, {deleted: true})
+                  }
                 />
               </>
             )

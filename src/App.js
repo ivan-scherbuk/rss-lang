@@ -18,6 +18,8 @@ import GameShell from "./pages/Games/GameShell";
 import { GAMES } from "./pages/Games/gamesData";
 import "./styles/effect.scss";
 import "./styles/App.module.scss";
+import TeamPage from "./pages/TeamPage";
+import AboutPage from "./pages/AboutPage";
 
 export default function App(){
   const location = useLocation();
@@ -62,6 +64,8 @@ export default function App(){
           <GameShell gameData={GAMES.puzzle}><PuzzleGame/></GameShell>
         </Route>
         <Route path="/games" exact><GamesPage/></Route>
+        <Route path="/about" exact><AboutPage/></Route>
+        <Route path="/team" exact><TeamPage/></Route>
         <Route path="/user" exact><UserPage/></Route>
         <Route path="/" exact><MainPage/></Route>
       </Switch>

@@ -8,6 +8,15 @@
   @return $string;
 }
 
+$navigation-z-index: 3;
+$girl-z-index: 4;
+$description-z-index: 2;
+$wave-z-index: 1;
+
+$light-orange: #ff8351;
+$dark-orange: #d43d1e;
+$light-blue: #76d3d5;
+$dark-blue:#40BFC1;
 
 .MainPage {
   width: 100%;
@@ -16,11 +25,16 @@
   justify-content: center;
   align-items: flex-end;
   z-index: 1;
+  color: #333;
 
-  $bgGradTrueColor1: #ff8351;
-  $bgGradTrueColor2: #d43d1e;
+  $bgGradTrueColor1: $light-orange;
+  $bgGradTrueColor2: $dark-orange;
   $bgGradColor1: str-replace('' + $bgGradTrueColor1, '#', '%23');
   $bgGradColor2: str-replace('' + $bgGradTrueColor2, '#', '%23');
+
+  .NavigationZIndex{
+    z-index: $navigation-z-index;
+  }
 
   .Bg{
     top: 0;
@@ -32,11 +46,11 @@
     justify-content: flex-end;
     align-items: center;
     min-height: 640px;
-    background: radial-gradient(#76d3d5, #40BFC1);
+    background: radial-gradient($light-blue, $dark-blue);
 
 
     .Girl {
-      z-index: 3;
+      z-index: $girl-z-index;
       width: 20%;
       min-width: 200px;
       position: absolute;
@@ -54,7 +68,7 @@
 
     .Wave {
       top: 0;
-      z-index: 2;
+      z-index: $wave-z-index;
       background-image: url("data:image/svg+xml,"
     +"%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E"
     +"%3Cdefs%3E"
@@ -144,29 +158,77 @@
   }
 }
 
-@keyframes wave-rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+.DescriptionBlock{
+  position: absolute;
+  left: 5%;
+  width: 25%;
+  min-width: 350px;
+  min-height: 400px;
+  top: 35%;
+  z-index: $description-z-index;
+  display: flex;
+  flex-direction: column;
 
-@keyframes wave-deform {
-  0% {
-    width: 1050px;
-    height: 950px;
-    margin-top: -380px;
+  h2{
+    font-size: 40px;
+    margin: 0 20px 15px 0;
+
   }
-  50%{
-    width: 1000px;
-    height: 1000px;
-    margin-top: -300px;
+
+  .LearnMoreLink{
+
   }
-  100%{
-    width: 1050px;
-    height: 950px;
-    margin-top: -380px;
+
+
+  .SlideBlock{
+    position: relative;
+    .Slide{
+      visibility: hidden;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      box-sizing: border-box;
+      width: 100%;
+      &.Active{
+        position: relative;
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+  }
+
+  .NavigationBlock{
+    height: 30px;
+    display: flex;
+    align-items: center;
+    .Pagination{
+      display: flex;
+      .PaginationButton{
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: white;
+        &:not(:last-child){
+          margin-right: 10px;
+        }
+
+        &.Active{
+          background-color: $light-orange;
+        }
+      }
+    }
+    .ButtonBlock{
+      font-size: 25px;
+      margin: 0 20px 0 auto;
+      color: white;
+      .NavigationButton{
+        &:hover{
+          color: $light-orange;
+        }
+        &:last-child{
+          margin-left: 20px;
+        }
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import AuthBlock from "./AuthBlock";
 import AuthForm from "./AuthForm";
 import Button from "../../../components/Buttons/Button";
@@ -12,11 +12,11 @@ import { setFirstLetterToCapital } from "../../../helpers/gameUtils";
 import GameButton from "../../../components/Buttons/GameButton";
 
 
-export default function NavigationBar() {
+export default function NavigationBar({className}) {
   const {isLogged} = useSelector(store => store.user)
 
   return (
-    <div className={classesCss.Navigation}>
+    <div className={cx(classesCss.Navigation, className)}>
       <AuthBlock
         className={classesCss.AuthBlock}
         classes={{
