@@ -35,19 +35,6 @@ export default function NavigationBar({className}) {
       >
         <AuthForm />
       </AuthBlock>
-      {isLogged && (
-        <NavLink to="/statistic">
-          <Button
-            label={"Статистика"}
-            style={{
-              backgroundImage: `url(${process.env.PUBLIC_URL}/static/statistic.jpg)`,
-            }}
-            className={[classesCss.BubbleButton, classesCss.StatisticButton].join(
-              " "
-            )}
-          />
-        </NavLink>
-      )}
       <BookButton className={cx(classesCss.BookButton)}/>
       {
         GAMES_ARRAY.map(game => {
