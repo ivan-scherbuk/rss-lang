@@ -9,10 +9,12 @@ export default function BookButton({ className, label }) {
   return (
     <NavLink to={`/${MODE_BOOK}/1/1`}>
       <Button
-        label={label || "Учебник"}
-        style={{
-          backgroundImage: `url(${process.env.PUBLIC_URL}/static/book.webp)`,
-        }}
+        label={
+          <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/static/books.png)`}}>
+            <span>{label || "Учебник"}</span>
+          </div>
+          }
+
         className={cx(classesCss.BubbleButton, className)}
       />
     </NavLink>

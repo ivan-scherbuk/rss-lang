@@ -55,9 +55,3 @@ export const getUserData = () => {
 export function setFirstLetterToCapital(word){
   return word[0].toUpperCase() + word.slice(1)
 }
-
-export function getArrayFromObject(games){
-  const gamesArr = []
-  for(let game in games) if(games.hasOwnProperty(game)) gamesArr.push(games[game])
-  return gamesArr
-}

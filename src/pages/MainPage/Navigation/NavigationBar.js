@@ -14,13 +14,9 @@ import GameButton from "../../../components/Buttons/GameButton";
 
 export default function NavigationBar() {
   const {isLogged} = useSelector(store => store.user)
-  const location = useLocation();
 
   return (
-    <div className={cx(
-      classesCss.Navigation,
-      {[classesCss.NavigationCloud] : location.pathname === "/"}
-      )}>
+    <div className={classesCss.Navigation}>
       <AuthBlock
         className={classesCss.AuthBlock}
         classes={{

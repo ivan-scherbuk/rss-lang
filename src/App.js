@@ -33,7 +33,6 @@ export default function App(){
     async function syncUser(){
       const token = await dispatch(checkToken())
       if (token) {
-        await dispatch(getUserWords())
         await dispatch(syncUserWords())
       } else {
         await dispatch(logOut())
@@ -47,7 +46,6 @@ export default function App(){
 
   return (
     <>
-      <NavigationBar/>
       <Switch location={location}>
         <Route path={["/book", "/vocabulary"]}><BookPage/></Route>
         <Route path="/statistic"><StatisticsPage/></Route>

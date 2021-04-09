@@ -236,9 +236,13 @@
             height: 80px;
             border-radius: 50%;
             background-size: cover;
+            >div{
+              display: flex;
+              align-items: center;
+            }
 
             .GameLabel {
-              margin-left: 100px;
+              margin-left: 90px;
               visibility: hidden;
               opacity: 0;
               transition: visibility 0s 0s;

@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
+import cx from "classnames"
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useWords, useWordsGroup } from "../../hooks/hooks.words";
 import { createRandomChunkFromGroup } from "../../helpers/utils.words";
-import LevelButtons from "./common/Levels/LevelButtons";
-import GameModal from "./common/GameModal/GameModal";
-import StatisticModal from "./common/StatisticModal/StatisticModal";
-import classesCss from "./Games.module.scss"
-import levelClasses from "../LevelStyles.module.scss"
-import { SETTINGS } from "../../settings";
-import BookButton from "../../components/Buttons/BookButton";
-import ResetButton from "../../components/Buttons/ResetButton";
-import cx from "classnames"
-import BackToGameLink from "./common/BackToGameLink";
-import CloseLink from "../../components/Buttons/CloseLink";
 import { useStatistic } from "../../hooks/hooks.statistic";
 import {resetGameStatistics} from "../../redux/games/actions";
 import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
-import {checkGroup, checkPage} from "../../helpers/utils.checkers";
-
+import Button from "../../components/Buttons/Button";
+import BookButton from "../../components/Buttons/BookButton";
+import ResetButton from "../../components/Buttons/ResetButton";
+import BackToGameLink from "./common/BackToGameLink";
+import GameModal from "./common/GameModal/GameModal";
+import StatisticModal from "./common/StatisticModal/StatisticModal";
+import LevelButtons from "./common/Levels/LevelButtons";
+import CloseLink from "../../components/Buttons/CloseLink";
+import { SETTINGS } from "../../settings";
+import levelClasses from "../LevelStyles.module.scss"
+import classesCss from "./Games.module.scss"
 
 const initialStatistic = {
   rightAnswers: 0,
@@ -47,6 +46,7 @@ export default function GameShell(props){
 
   const [currentChunk, setCurrentChunk] = useState(null)
   const [gameEndLastWord, setGameEndLastWord] = useState(-1)
+  const [isGameCanStart, setIsGameCanStart] = useState(false)
   const [gameResetKey, setGameResetKey] = useState(Math.random())
   const [statisticChunk, setStatisticChunk] = useState(null)
   const [statistic, setStatistic] = useState(initialStatistic)
@@ -58,6 +58,7 @@ export default function GameShell(props){
 
   function levelSelectHandler(index){
     getWordsGroup(index)
+    setIsGameCanStart(true)
   }
 
   function gameEndHandler(index){
@@ -184,16 +185,23 @@ export default function GameShell(props){
       {
         (() => {
           if (gameEndLastWord === -1) {
-            if (gameContent) return gameContent
+            if (isGameCanStart && gameContent) return gameContent
             return (
               <GameModal
                 gameData={gameData}
               >
-                <LevelButtons
-                  levelNumbers={6}
-                  levelStyles={levelClasses}
-                  onSelect={levelSelectHandler}
-                />
+                {urlWords?
+                  <Button
+                    className={classesCss.StartButton}
+                    onClick={() => setIsGameCanStart(true)}
+                    label={"Начать"}
+                  />
+                  :<LevelButtons
+                    levelNumbers={6}
+                    levelStyles={levelClasses}
+                    onSelect={levelSelectHandler}
+                  />
+                }
               </GameModal>)
           }
           return (

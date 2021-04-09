@@ -32,7 +32,7 @@
     justify-content: flex-end;
     align-items: center;
     min-height: 640px;
-    background: linear-gradient(#63c9f5, #ffc764);
+    background: radial-gradient(#76d3d5, #40BFC1);
 
 
     .Girl {
@@ -71,6 +71,9 @@
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center 120%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 

@@ -1,5 +1,3 @@
-import {getArrayFromObject} from "../../helpers/gameUtils";
-
 export const GAMES = {
   puzzle: {
     navigationImage: "book.webp",
@@ -9,19 +7,19 @@ export const GAMES = {
       " и 30 секунд."
   },
   audiocall: {
-    navigationImage: "audio.jpg",
+    navigationImage: "audio2.png",
     key: "audiocall",
     name: "Аудиовызов",
     greetText: "Тренировка Аудиовызов развивает словарный запас. Вы должны выбрать перевод услышанного слова."
   },
   savannah:{
-    navigationImage: "savannah.jpg",
+    navigationImage: "savannah.png",
     key: "savannah",
     name: "Саванна",
     greetText: "Тренировка Саванна развивает словарный запас. Выбирайте правильный перевод слова из предложенных."
   },
   sprint: {
-    navigationImage: "sprint.jpg",
+    navigationImage: "sprint.png",
     key: "sprint",
     name: "Спринт",
     greetText: "Тренирует навык быстрого перевода с английского языка на русский. " +
@@ -29,4 +27,4 @@ export const GAMES = {
   },
 }
 
-export const GAMES_ARRAY = getArrayFromObject(GAMES)
+export const GAMES_ARRAY = Object.values(GAMES)

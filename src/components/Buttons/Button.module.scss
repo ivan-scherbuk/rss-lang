@@ -67,3 +67,12 @@
 .CloseButton{
   font-size: 25px;
 }
+
+.GameButton{
+ >div{
+   width: 90%;
+   height: 90%;
+   margin: auto;
+   background-size: cover;
+ }
+}
