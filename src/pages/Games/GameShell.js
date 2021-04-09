@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
+import cx from "classnames"
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useWords, useWordsGroup } from "../../hooks/hooks.words";
 import { createRandomChunkFromGroup } from "../../helpers/utils.words";
-import LevelButtons from "./common/Levels/LevelButtons";
-import GameModal from "./common/GameModal/GameModal";
-import StatisticModal from "./common/StatisticModal/StatisticModal";
-import classesCss from "./Games.module.scss"
-import levelClasses from "../LevelStyles.module.scss"
-import { SETTINGS } from "../../settings";
-import BookButton from "../../components/Buttons/BookButton";
-import ResetButton from "../../components/Buttons/ResetButton";
-import cx from "classnames"
-import BackToGameLink from "./common/BackToGameLink";
-import CloseLink from "../../components/Buttons/CloseLink";
 import { useStatistic } from "../../hooks/hooks.statistic";
 import {resetGameStatistics} from "../../redux/games/actions";
 import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
 import Button from "../../components/Buttons/Button";
+import BookButton from "../../components/Buttons/BookButton";
+import ResetButton from "../../components/Buttons/ResetButton";
+import BackToGameLink from "./common/BackToGameLink";
+import GameModal from "./common/GameModal/GameModal";
+import StatisticModal from "./common/StatisticModal/StatisticModal";
+import LevelButtons from "./common/Levels/LevelButtons";
+import CloseLink from "../../components/Buttons/CloseLink";
+import { SETTINGS } from "../../settings";
+import levelClasses from "../LevelStyles.module.scss"
+import classesCss from "./Games.module.scss"
 
 const initialStatistic = {
   rightAnswers: 0,
