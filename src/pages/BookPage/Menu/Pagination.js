@@ -1,13 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import classesCss from "../BookPage.module.scss";
 import Button from "../../../components/Buttons/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleDoubleLeft,
-  faAngleDoubleRight,
-  faAngleLeft,
-  faAngleRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleDoubleLeft, faAngleDoubleRight, faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import PaginationInput from "./PagintaionInput";
@@ -18,17 +13,24 @@ const paginationButtons = {
   leftEnd: faAngleDoubleLeft,
   left: faAngleLeft,
   right: faAngleRight,
-  rightEnd: faAngleDoubleRight
+  rightEnd: faAngleDoubleRight,
 }
 
-export default function Pagination({totalPagesCount}) {
+export default function Pagination({totalPagesCount}){
 
-  const { currentVocabularyPage, currentPageIndex, pagesList, currentGroup, mode } = useSelector(
-    (store) => store.book
-  );
+  const {
+    currentVocabularyPage,
+    currentPageIndex,
+    pagesList,
+    currentGroup,
+    mode,
+    vocabularyMode,
+  } = useSelector((store) => store.book);
+
   const currentPageList = pagesList[currentGroup];
+  const pathBase = `/${mode}/${currentGroup + 1}/`
 
-  function getNextPage(direction) {
+  function getNextPage(direction){
     if (currentPageIndex + direction >= 0 && currentPageIndex + direction < totalPagesCount) {
       return currentPageList[currentPageIndex + direction] + 1;
     }
@@ -43,20 +45,21 @@ export default function Pagination({totalPagesCount}) {
   }
 
   function getPaginationButtonsValues(){
-    const pathBase = `/${mode}/${currentGroup + 1}/`
-    if(mode === MODE_VOCABULARY){
+
+    if (mode === MODE_VOCABULARY) {
+
       return {
-        leftEnd: pathBase + 1,
-        left: pathBase + getNextVocabularyPage(-1),
-        right: pathBase + getNextVocabularyPage(1),
-        rightEnd: pathBase + totalPagesCount
+        leftEnd: {pathname: pathBase + 1, vocabularyMode},
+        left: {pathname: pathBase + getNextVocabularyPage(-1), vocabularyMode},
+        right: {pathname: pathBase + getNextVocabularyPage(1), vocabularyMode},
+        rightEnd: {pathname: pathBase + totalPagesCount, vocabularyMode}
       }
     }
     return {
       leftEnd: pathBase + (currentPageList[0] + 1),
       left: pathBase + getNextPage(-1),
       right: pathBase + getNextPage(1),
-      rightEnd: pathBase + (currentPageList[currentPageList.length - 1] + 1)
+      rightEnd: pathBase + (currentPageList[currentPageList.length - 1] + 1),
     }
   }
 
@@ -68,33 +71,33 @@ export default function Pagination({totalPagesCount}) {
       <Link to={paginationGoTo.leftEnd}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={paginationButtons.leftEnd} />}
+          label={<FontAwesomeIcon icon={paginationButtons.leftEnd}/>}
         />
       </Link>
 
       <Link to={paginationGoTo.left}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={paginationButtons.left} />}
+          label={<FontAwesomeIcon icon={paginationButtons.left}/>}
         />
       </Link>
 
       <PaginationInput
-        totalPagesCount={mode === MODE_VOCABULARY? totalPagesCount : pagesList[currentGroup].length}
-        currentPageIndex={mode === MODE_VOCABULARY? currentVocabularyPage : currentPageIndex}
+        totalPagesCount={mode === MODE_VOCABULARY ? totalPagesCount : pagesList[currentGroup].length}
+        currentPageIndex={mode === MODE_VOCABULARY ? currentVocabularyPage : currentPageIndex}
       />
 
       <Link to={paginationGoTo.right}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={paginationButtons.right} />}
+          label={<FontAwesomeIcon icon={paginationButtons.right}/>}
         />
       </Link>
 
       <Link to={paginationGoTo.rightEnd}>
         <Button
           className={classesCss.PaginationButton}
-          label={<FontAwesomeIcon icon={paginationButtons.rightEnd} />}
+          label={<FontAwesomeIcon icon={paginationButtons.rightEnd}/>}
         />
       </Link>
     </div>

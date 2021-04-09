@@ -1,9 +1,10 @@
 import {
+  LOG_OUT,
   REMOVE_PAGE_FROM_LIST,
   SET_BOOK_AVAILABLE_PAGES, SET_BOOK_BUTTONS_VISIBLE,
   SET_BOOK_MODE, SET_BOOK_TRANSLATE_VISIBLE,
   SET_CURRENT_GROUP,
-  SET_CURRENT_PAGE, SET_CURRENT_VOCABULARY_PAGE, SET_CURRENT_WORDS, SET_VOCABULARY_MODE,
+  SET_CURRENT_PAGE, SET_CURRENT_VOCABULARY_PAGE, SET_CURRENT_WORDS, SET_VOCABULARY_MODE, SIGN_IN,
 } from "./types";
 import { MODE_BOOK, SETTINGS, VOCABULARY_MODE_DIFFICULT, VOCABULARY_MODE_NORMAL } from "../settings";
 
@@ -24,7 +25,11 @@ const initialBookState = {
   vocabularyMode: VOCABULARY_MODE_NORMAL,
   isButtonsVisible: true,
   isTranslateVisible: true,
-  currentWords: []
+  currentWords: [],
+  savedUserSettings:{
+    isButtonsVisible: true,
+    isTranslateVisible: true,
+  }
 }
 
 export default function bookReducer(state = initialBookState, {type, payload}){
@@ -114,6 +119,28 @@ export default function bookReducer(state = initialBookState, {type, payload}){
       const {page} = payload
       if(page === state.currentVocabularyPage) return state
       return {...state, currentVocabularyPage: page}
+    }
+
+    case LOG_OUT:{
+      const {isButtonsVisible, isTranslateVisible} = initialBookState
+      return {
+        ...state,
+        isButtonsVisible,
+        isTranslateVisible,
+        savedUserSettings: {
+          isButtonsVisible: state.isButtonsVisible,
+          isTranslateVisible: state.isTranslateVisible
+        }
+      }
+    }
+
+    case SIGN_IN:{
+      const {isButtonsVisible, isTranslateVisible} = state.savedUserSettings
+      return {
+        ...state,
+        isButtonsVisible,
+        isTranslateVisible
+      }
     }
 
     default: {

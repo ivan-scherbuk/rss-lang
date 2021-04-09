@@ -18,8 +18,7 @@ import CloseLink from "../../components/Buttons/CloseLink";
 import { useStatistic } from "../../hooks/hooks.statistic";
 import {resetGameStatistics} from "../../redux/games/actions";
 import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
-import {checkGroup, checkPage} from "../../helpers/utils.checkers";
-
+import Button from "../../components/Buttons/Button";
 
 const initialStatistic = {
   rightAnswers: 0,
@@ -47,6 +46,7 @@ export default function GameShell(props){
 
   const [currentChunk, setCurrentChunk] = useState(null)
   const [gameEndLastWord, setGameEndLastWord] = useState(-1)
+  const [isGameCanStart, setIsGameCanStart] = useState(false)
   const [gameResetKey, setGameResetKey] = useState(Math.random())
   const [statisticChunk, setStatisticChunk] = useState(null)
   const [statistic, setStatistic] = useState(initialStatistic)
@@ -58,6 +58,7 @@ export default function GameShell(props){
 
   function levelSelectHandler(index){
     getWordsGroup(index)
+    setIsGameCanStart(true)
   }
 
   function gameEndHandler(index){
@@ -184,16 +185,23 @@ export default function GameShell(props){
       {
         (() => {
           if (gameEndLastWord === -1) {
-            if (gameContent) return gameContent
+            if (isGameCanStart && gameContent) return gameContent
             return (
               <GameModal
                 gameData={gameData}
               >
-                <LevelButtons
-                  levelNumbers={6}
-                  levelStyles={levelClasses}
-                  onSelect={levelSelectHandler}
-                />
+                {urlWords?
+                  <Button
+                    className={classesCss.StartButton}
+                    onClick={() => setIsGameCanStart(true)}
+                    label={"Начать"}
+                  />
+                  :<LevelButtons
+                    levelNumbers={6}
+                    levelStyles={levelClasses}
+                    onSelect={levelSelectHandler}
+                  />
+                }
               </GameModal>)
           }
           return (
