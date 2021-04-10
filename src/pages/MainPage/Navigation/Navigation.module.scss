@@ -10,6 +10,7 @@ $navigation-margin-bottom: 120px;
   min-width: 480px;
   box-sizing: border-box;
   transition: width $duration, margin-left $duration, left $duration, top $duration, display 0 0.8s;
+  margin-right: 10%;
 
   a {
     color: inherit;
@@ -219,7 +220,7 @@ $navigation-margin-bottom: 120px;
   }
 
   $book-button-hor: 52%;
-  $book-button-ver: calc(43% - #{$navigation-margin-bottom/2});
+  $book-button-ver: calc(45% - #{$navigation-margin-bottom/2});
   $book-button-size: 170px;
 
   .BookButton {
@@ -261,7 +262,8 @@ $navigation-margin-bottom: 120px;
     font-size: 16px;
     font-weight: bold;
     padding: 0;
-    background: radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 72%);
+    background: white;
+    //background: radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 72%);
 
     >div{
       transition: width .4s, height .4s;
@@ -311,14 +313,15 @@ $navigation-margin-bottom: 120px;
       right: calc(#{$book-button-hor} - 159px);
       >div{
         background-position: -8px;
-
       }
-
     }
 
     &.Puzzle {
       bottom: calc(#{$book-button-ver} + #{$book-button-size} - 187px);
       right: calc(#{$book-button-hor} - 160px);
+      >div{
+        border-radius: 50%;
+      }
     }
   }
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import cx from "classnames";
 import classesCss from "../BookPage.module.scss";
-import levelStyles from "../../LevelStyles.module.scss";
+import levelStyles from "../../../styles/LevelStyles.module.scss";
 import Button from "../../../components/Buttons/Button";
 import { useSelector } from "react-redux";
 

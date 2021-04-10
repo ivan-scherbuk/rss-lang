@@ -42,7 +42,7 @@ export default function WordCard({cardInfo}){
   }
 
   const audioPlayer = new Audio();
-  audioPlayer.volume = 0.1;
+  audioPlayer.volume = 0.5;
 
   function playAudio(url, phase){
     audioPlayer.src = `${SETTINGS.SERVER}/${url}`;

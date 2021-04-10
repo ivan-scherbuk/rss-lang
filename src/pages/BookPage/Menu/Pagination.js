@@ -18,7 +18,7 @@ const paginationButtons = {
 export default function Pagination({totalPagesCount}){
 
   const {
-    currentVocabularyPage,
+    vocabularyCurrentPage,
     currentPageIndex,
     pagesList,
     currentGroup,
@@ -37,16 +37,15 @@ export default function Pagination({totalPagesCount}){
   }
 
   function getNextVocabularyPage(direction){
-    if (currentVocabularyPage + direction >= 0 && currentVocabularyPage + direction < totalPagesCount) {
-      return currentVocabularyPage + direction + 1;
+    if (vocabularyCurrentPage + direction >= 0 && vocabularyCurrentPage + direction < totalPagesCount) {
+      return vocabularyCurrentPage + direction + 1;
     }
-    return currentVocabularyPage + 1;
+    return vocabularyCurrentPage + 1;
   }
 
   function getPaginationButtonsValues(){
 
     if (mode === MODE_VOCABULARY) {
-
       return {
         leftEnd: {pathname: pathBase + 1, state:{vocabularyMode}},
         left: {pathname: pathBase + getNextVocabularyPage(-1), state:{vocabularyMode}},
@@ -82,7 +81,7 @@ export default function Pagination({totalPagesCount}){
 
       <PaginationInput
         totalPagesCount={mode === MODE_VOCABULARY ? totalPagesCount : pagesList[currentGroup].length}
-        currentPageIndex={mode === MODE_VOCABULARY ? currentVocabularyPage : currentPageIndex}
+        currentPageIndex={mode === MODE_VOCABULARY ? vocabularyCurrentPage : currentPageIndex}
       />
 
       <Link to={paginationGoTo.right}>

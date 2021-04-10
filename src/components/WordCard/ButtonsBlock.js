@@ -5,7 +5,13 @@ import cx from "classnames";
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useSelector } from "react-redux";
 import Button from "../Buttons/Button";
-import { MODE_VOCABULARY, VOCABULARY_MODE_DELETED, WORD_HARD, WORD_NORMAL } from "../../settings";
+import {
+  MODE_VOCABULARY,
+  VOCABULARY_MODE_DELETED,
+  VOCABULARY_MODE_NORMAL,
+  WORD_HARD,
+  WORD_NORMAL,
+} from "../../settings";
 
 export default function ButtonsBlock({cardInfo}){
 
@@ -18,7 +24,7 @@ export default function ButtonsBlock({cardInfo}){
     <div className={classesCss.ButtonBlock}>
       {
         (() => {
-          if (isButtonsVisible) {
+          if (isButtonsVisible || (mode === MODE_VOCABULARY && vocabularyMode !== VOCABULARY_MODE_NORMAL)) {
             return (
               <>
                 {

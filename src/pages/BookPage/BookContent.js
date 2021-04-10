@@ -4,13 +4,13 @@ import WordCard from "../../components/WordCard/WordCard.js";
 import { useHistory, useParams } from "react-router-dom";
 import { useUserWords } from "../../hooks/hooks.user";
 import { useDispatch, useSelector } from "react-redux";
-import classesCss from "./BookPage.module.scss";
 import cx from "classnames";
 import { checkGroup, checkPage } from "../../helpers/utils.checkers";
 import { removePagesFromPageList, setCurrentGroup, setCurrentPage, setCurrentWords } from "../../redux/actions.book";
 import { MODE_BOOK, WORD_HARD } from "../../settings";
+import classesCss from "./BookPage.module.scss";
 
-export default function BookContent({setTotalValues, setTotalPagesCount}){
+export default function BookContent({setTotalValues, setTotalPagesCount, setLevelStyle}){
 
   const [isPagesFirstDeleteComplete, setPageFirstDeleteComplete] = useState(false)
   const {currentWords, getWordsChunk} = useWords();
@@ -95,7 +95,8 @@ export default function BookContent({setTotalValues, setTotalPagesCount}){
   useEffect(() => {
     setPageFirstDeleteComplete(false)
     dispatch(setCurrentGroup(group));
-  }, [group, dispatch]);
+    setLevelStyle(group)
+  }, [group, dispatch,setLevelStyle]);
 
   useEffect(() => {
     const currentExistingPageIndex = pagesList[group].findIndex(existingPage => existingPage === Number(page))
@@ -112,7 +113,7 @@ export default function BookContent({setTotalValues, setTotalPagesCount}){
 
 
   return (
-    <div className={classesCss.BookContent}>
+    <div className={cx(classesCss.BookContent)}>
       {wordsToRender?.length ?
         wordsToRender.map((word) => {
           if (!word.optional?.deleted) {

@@ -5,7 +5,12 @@ import { NavLink } from "react-router-dom";
 import WordCard from "../../components/WordCard/WordCard";
 import { checkGroup, checkPage } from "../../helpers/utils.checkers";
 import { useUserWordsGroup } from "../../hooks/hooks.user";
-import { setCurrentGroup, setCurrentVocabularyPage, setVocabularyMode } from "../../redux/actions.book";
+import {
+  setCurrentGroup,
+  setVocabularyCurrentPage,
+  setVocabularyMode,
+  setVocabularyWords,
+} from "../../redux/actions.book";
 import classesCss from "./BookPage.module.scss";
 import cx from "classnames"
 import {
@@ -16,30 +21,31 @@ import {
   VOCABULARY_MODE_NORMAL,
   WORD_HARD,
 } from "../../settings";
+import BookDisclaimerEmpty from "./BookDisclaimerEmpty";
 
 const VOCABULARY_SECTIONS = [
   {
     mode: VOCABULARY_MODE_NORMAL,
-    label: "Изучаемые"
+    label: "Изучаемые",
   },
   {
     mode: VOCABULARY_MODE_DIFFICULT,
-    label: "Сложные"
+    label: "Сложные",
   },
   {
     mode: VOCABULARY_MODE_DELETED,
-    label: "Удаленные"
+    label: "Удаленные",
   },
 ]
 
-export default function VocabularyContent({setTotalPagesCount}){
-  const {getUserWordsGroup, onLoading, currentUserWordsGroup} = useUserWordsGroup();
+export default function VocabularyContent({setTotalPagesCount, setLevelStyle}){
+  const {getUserWordsGroup, currentUserWordsGroup} = useUserWordsGroup();
   const [wordsToRender, setWordsToRender] = useState(null);
   const {words: userWords} = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const {state} = useLocation()
-  const urlVocabularyMode = state? state.vocabularyMode : VOCABULARY_MODE_NORMAL
+  const urlVocabularyMode = state ? state.vocabularyMode : VOCABULARY_MODE_NORMAL
   const {group: urlGroup, page: urlPage = 1} = useParams();
   const group = checkGroup(urlGroup - 1);
   const page = checkPage(urlPage - 1);
@@ -47,7 +53,7 @@ export default function VocabularyContent({setTotalPagesCount}){
   function getVocabularyUrl(mode){
     return {
       pathname: `/${MODE_VOCABULARY}/${group + 1}/1`,
-      state:{vocabularyMode: mode}
+      state: {vocabularyMode: mode},
     }
   }
 
@@ -79,16 +85,21 @@ export default function VocabularyContent({setTotalPagesCount}){
 
   useEffect(() => {
     dispatch(setCurrentGroup(group));
-  }, [group, dispatch]);
+    setLevelStyle(group)
+  }, [group, dispatch,setLevelStyle]);
 
   useEffect(() => {
-    dispatch(setCurrentVocabularyPage(page));
+    console.log(page)
+    dispatch(setVocabularyCurrentPage(page));
   }, [page, dispatch]);
 
   useEffect(() => {
     dispatch(setVocabularyMode(urlVocabularyMode))
   }, [urlVocabularyMode, dispatch])
 
+  useEffect(() => {
+    dispatch(setVocabularyWords(wordsToRender))
+  }, [wordsToRender, dispatch])
 
 
   return (
@@ -97,9 +108,10 @@ export default function VocabularyContent({setTotalPagesCount}){
         {
           VOCABULARY_SECTIONS.map(section => (
             <NavLink
+              key={section.label + section.mode}
               className={cx(
                 classesCss.VocabularySection,
-                {[classesCss.Active]: urlVocabularyMode === section.mode}
+                {[classesCss.Active]: urlVocabularyMode === section.mode},
               )}
               to={getVocabularyUrl(section.mode)}
             >
@@ -109,22 +121,18 @@ export default function VocabularyContent({setTotalPagesCount}){
         }
       </div>
       <div className={classesCss.BookContent}>
-        {Array.isArray(wordsToRender) &&
-        Array.isArray(wordsToRender[0]) &&
-        wordsToRender[page].map((word) => {
-          return (
-            <WordCard
-              className={cx({
-                [classesCss.test]:
-                urlVocabularyMode === VOCABULARY_MODE_NORMAL
-                && word.difficulty === WORD_HARD,
-              })
-              }
-              key={word.id}
-              cardInfo={word}
-            />
-          );
-        })}
+        {
+          wordsToRender?.length && wordsToRender[page]?.length ?
+            wordsToRender[page].map((word) => {
+              return (
+                <WordCard
+                  key={word.id}
+                  cardInfo={word}
+                />
+              );
+            })
+            : <BookDisclaimerEmpty />
+        }
       </div>
     </>
   );

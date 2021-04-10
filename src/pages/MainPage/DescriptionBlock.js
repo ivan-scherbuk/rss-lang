@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import LearnMoreButton from "../../components/Buttons/LearnMoreButton";
 
 const slideCount = 2;
-export default function DescriptionBlock({className}){
+export default function DescriptionBlock(){
 
   const [currentSlide, setCurrentSlide] = useState(0)
 
@@ -24,14 +24,9 @@ export default function DescriptionBlock({className}){
             <LearnMoreButton/>
           </Link>
           <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-            industry's
-            standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to
-            make
-            a type specimen book. It has survived not only five centuries, but also the leap into electronic
-            typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-            containing
+            Теперь учить английский язык легко и увлекательно! Играйте в мини-игры и учите запоминайте слова.
+            Словарь содержит все слова, которые раньше встречались в играх.
+            Повторяйте их каждый день для закрепления результата.
           </p>
         </div>
         <div className={cx(
@@ -58,9 +53,9 @@ export default function DescriptionBlock({className}){
         <div className={classesCss.Pagination}>
           {
             Array(slideCount).fill(null).map((el, index) => {
-              console.log(111)
               return (
                 <Button
+                  key={"paginationMainPageButton"+index}
                   className={cx(
                     classesCss.PaginationButton,
                     {[classesCss.Active]: index === currentSlide},
