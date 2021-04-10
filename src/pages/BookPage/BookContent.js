@@ -16,7 +16,7 @@ export default function BookContent({setTotalValues, setTotalPagesCount}){
   const {currentWords, getWordsChunk} = useWords();
   const {currentUserWords, getUserWordsChunk} = useUserWords();
   const {isLogged, words: userWords} = useSelector((state) => state.user);
-  const {currentWords: wordsToRender, pagesList, currentPageIndex} = useSelector((state) => state.book)
+  const {currentWords: wordsToRender, pagesList, currentPageIndex, } = useSelector((state) => state.book)
 
   const dispatch = useDispatch();
 
@@ -24,6 +24,7 @@ export default function BookContent({setTotalValues, setTotalPagesCount}){
   const {group: urlGroup, page: urlPage = 1} = useParams();
   const group = checkGroup(urlGroup - 1);
   const page = checkPage(urlPage - 1);
+
 
   useEffect(() => {
     function findUserWord(word){
@@ -66,51 +67,29 @@ export default function BookContent({setTotalValues, setTotalPagesCount}){
         }
       })
       setTotalValues(totals)
-
-
     }
   }, [wordsToRender, setTotalValues]);
 
   useEffect(() => {
-    if (!isPagesFirstDeleteComplete && group !== undefined
+    if (isLogged && !isPagesFirstDeleteComplete && group !== undefined
       && userWords && userWords[group]) {
-      const pagesToRemove = [];
-      for (let i in userWords[group]) {
-        if (userWords[group].hasOwnProperty(i)
-          && userWords[group][i].length === 20
-          && userWords[group][i].every(({optional}) => optional?.deleted)
-        ) {
-          pagesToRemove.push(i);
-        }
-      }
+      const pagesToRemove = Object.keys(userWords[group]).filter(pageIndex => {
+        return (userWords[group].hasOwnProperty(pageIndex)
+          && userWords[group][pageIndex].length === 20
+          && userWords[group][pageIndex].every(({optional}) => optional?.deleted))
+      })
       setPageFirstDeleteComplete(true)
       if (pagesToRemove.length) dispatch(removePagesFromPageList(group, pagesToRemove));
     }
-  }, [group, userWords, dispatch, isPagesFirstDeleteComplete]);
+  }, [group, userWords, dispatch, isPagesFirstDeleteComplete, isLogged]);
 
   useEffect(() => {
-
-    if (isLogged)
-      if (isPagesFirstDeleteComplete
-        && userWords[group] && userWords[group][page]?.length === 20
-        && !userWords[group][page].some(({optional}) => !optional?.deleted)) {
-
-        dispatch(removePagesFromPageList(group, page));
-        const lastPageListIndex = pagesList[group].length - 1
-        const newPageIndex = currentPageIndex > lastPageListIndex - 1 ? lastPageListIndex - 1 : currentPageIndex
-        if (currentPageIndex !== newPageIndex) dispatch(setCurrentPage(newPageIndex))
-        history.push(`/${MODE_BOOK}/${group + 1}/${pagesList[group][newPageIndex] + 1}`)
-      }
-  }, [
-    userWords,
-    group,
-    page,
-    isPagesFirstDeleteComplete,
-    dispatch,
-    currentPageIndex,
-    history,
-    pagesList,
-    isLogged])
+    if (isLogged && isPagesFirstDeleteComplete
+      && userWords[group] && userWords[group][page]?.length === 20
+      && !userWords[group][page].some(({optional}) => !optional?.deleted)) {
+      dispatch(removePagesFromPageList(group, page));
+    }
+  }, [userWords, group, page, isPagesFirstDeleteComplete, dispatch, isLogged])
 
 
   useEffect(() => {
@@ -119,32 +98,34 @@ export default function BookContent({setTotalValues, setTotalPagesCount}){
   }, [group, dispatch]);
 
   useEffect(() => {
-    const currentExistingPage = pagesList[group].findIndex(existingPage => existingPage === Number(page))
-    dispatch(setCurrentPage(currentExistingPage));
-  }, [page, dispatch, group, pagesList]);
-
-  useEffect(() => {
+    const currentExistingPageIndex = pagesList[group].findIndex(existingPage => existingPage === Number(page))
     setTotalPagesCount(pagesList[group].length);
-  }, [setTotalPagesCount, pagesList, group]);
+    if (currentExistingPageIndex + 1) {
+      dispatch(setCurrentPage(currentExistingPageIndex));
+    } else {
+      const newPage = pagesList[group].reduce((prev, nextPage) => {
+        return Math.abs(nextPage - page) > Math.abs(prev - page) ? prev : nextPage
+      })
+      history.push(`/${MODE_BOOK}/${group + 1}/${newPage + 1}`)
+    }
+  }, [pagesList, page, dispatch, group, history, currentPageIndex, setTotalPagesCount]);
+
 
   return (
     <div className={classesCss.BookContent}>
       {wordsToRender?.length ?
         wordsToRender.map((word) => {
-        if (!word.optional?.deleted) {
-          return (
-            <WordCard
-              className={cx({
-                [classesCss.DifficultWord]: word.difficulty === WORD_HARD,
-                [classesCss.DeletedWord]: word.optional?.deleted,
-              })}
-              key={word.id}
-              cardInfo={word}
-            />
-          );
-        }
-        return null;
-      }) : null
+          if (!word.optional?.deleted) {
+            return (
+              <WordCard
+                className={cx({[classesCss.DifficultWord]: word.difficulty === WORD_HARD})}
+                key={word.id}
+                cardInfo={word}
+              />
+            );
+          }
+          return null;
+        }) : null
       }
     </div>
   );

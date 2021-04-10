@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import {Line} from 'react-chartjs-2';
-import {makeStyles} from "@material-ui/core";
 import classesCss from "./StatisticPage.module.scss"
 
 const options = { responsive: true, maintainAspectRatio: false };

@@ -28,6 +28,16 @@ $hard-word-color: #fff355;
     }
   }
 
+  &.Deleted{
+    background-color: #7b7b7b;
+    .HeaderBlock{
+      background-blend-mode: saturation;
+      .Overlay{
+        background: linear-gradient(transparent, #7b7b7b)
+      }
+    }
+  }
+
   .HeaderBlock {
     width: 100%;
     height: 260px;
@@ -177,10 +187,6 @@ $hard-word-color: #fff355;
         margin-top: 5px;
         font-style: italic;
       }
-    }
-
-    .IconBlock {
-
     }
   }
 }
