@@ -3,6 +3,7 @@ export const GAMES = {
     navigationImage: "book.webp",
     key: "puzzle",
     name: "Пазл",
+    wordsMinCount: 20,
     greetText: "В этой игре необходимо составить предложение из слов, на каждое предложение у вас будет 2 попытки,"+
       " и 30 секунд."
   },
@@ -22,6 +23,7 @@ export const GAMES = {
     navigationImage: "sprint.png",
     key: "sprint",
     name: "Спринт",
+    wordsMinCount: 60,
     greetText: "Тренирует навык быстрого перевода с английского языка на русский. " +
       "Вам нужно выбрать соответствует ли перевод предложенному слову."
   },

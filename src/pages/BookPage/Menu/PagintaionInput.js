@@ -1,49 +1,56 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom"
 import classesCss from "../BookPage.module.scss";
-import { setCurrentPage } from "../../../redux/actions.book";
-import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { MODE_BOOK } from "../../../settings";
 
-export default function PaginationInput({ totalPagesCount, currentPageIndex }) {
-  let [editMode, setEditMode] = useState(false);
+export default function PaginationInput({totalPagesCount, currentPageIndex}){
+  const [editMode, setEditMode] = useState(false);
+  const [value, setValue] = useState(totalPagesCount !== 0 ? currentPageIndex + 1 : 0)
+  const {currentGroup, vocabularyMode, mode, pagesList} = useSelector((store) => store.book);
+  const history = useHistory()
 
-  const dispatch = useDispatch();
-  const activateEditMode = () => {
-    setEditMode(true);
-  };
+
+  function onChangedHandler(e){
+    if (Number(e.target.value) <= totalPagesCount) setValue(e.target.value)
+  }
+
   const deactivateEditMode = () => {
-    if (currentPageIndex === "") {
-      dispatch(setCurrentPage(0));
+    if(value - 1 !== currentPageIndex){
+      const nextPage = mode === MODE_BOOK ? pagesList[currentGroup][value - 1] + 1 : value
+      history.push({
+        pathname: `/${mode}/${currentGroup + 1}/${nextPage}`,
+        state: {vocabularyMode},
+      })
     }
     setEditMode(false);
   };
 
-  const onPageChanged = (e) => {
-    if (e.target.value > 0 && e.target.value <= totalPagesCount) {
-      dispatch(setCurrentPage(e.target.value - 1));
-    } else if (e.target.value === "") {
-      dispatch(setCurrentPage(e.target.value));
+  useEffect(() => {
+    if (editMode) return
+
+    if (totalPagesCount !== 0) {
+      if (value !== currentPageIndex + 1) setValue(currentPageIndex + 1)
+    } else {
+      setValue(0)
     }
-  };
+  }, [totalPagesCount, currentPageIndex, value, editMode])
 
   return (
     <div className={classesCss.PageCounter}>
-      {!editMode && (
-        <span onClick={activateEditMode}>
-          {typeof currentPageIndex === "number" ? currentPageIndex + 1 : ""} /{" "}
-          {totalPagesCount}
-        </span>
-      )}
-      {editMode && (
+      {editMode ?
         <input
           className={classesCss.SelectedInput}
-          value={
-            typeof currentPageIndex === "number" ? currentPageIndex + 1 : ""
-          }
-          onChange={onPageChanged}
+          value={value}
+          onChange={onChangedHandler}
           autoFocus={true}
           onBlur={deactivateEditMode}
         />
-      )}
+        :
+        <span onClick={() => setEditMode(true)}>
+        {`${value} / ${totalPagesCount}`}
+        </span>
+      }
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
-import NavigationBar from "./pages/MainPage/Navigation/NavigationBar"
 import MainPage from "./pages/MainPage/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
@@ -10,7 +9,6 @@ import Savannah from "./pages/Games/Savannah/GamePage";
 import StatisticsPage from "./pages/StatisticsPage/StatisticsPage";
 import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserWords } from "./redux/actions.user";
 import { syncUserWords } from "./redux/actions.words";
 import { checkToken, logOut } from "./redux/actions.auth";
 import UserPage from "./pages/UserPage/UserPage"
@@ -58,7 +56,7 @@ export default function App(){
           <GameShell gameData={GAMES.audiocall}><AudioCall/></GameShell>
         </Route>
         <Route path={getGamePath("sprint")}>
-          <GameShell gameData={GAMES.sprint} randomLengthStack={60}><Sprint/></GameShell>
+          <GameShell gameData={GAMES.sprint}><Sprint/></GameShell>
         </Route>
         <Route path={getGamePath("puzzle")}>
           <GameShell gameData={GAMES.puzzle}><PuzzleGame/></GameShell>
