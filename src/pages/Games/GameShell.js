@@ -17,8 +17,9 @@ import StatisticModal from "./common/StatisticModal/StatisticModal";
 import LevelButtons from "./common/Levels/LevelButtons";
 import CloseLink from "../../components/Buttons/CloseLink";
 import { SETTINGS } from "../../settings";
-import levelClasses from "../LevelStyles.module.scss"
 import classesCss from "./Games.module.scss"
+import levelClasses from "../LevelStyles.module.scss"
+import buttonClasses from "../../components/Buttons/Button.module.scss"
 
 const initialStatistic = {
   rightAnswers: 0,
@@ -192,7 +193,7 @@ export default function GameShell(props){
               >
                 {urlWords?
                   <Button
-                    className={classesCss.StartButton}
+                    className={cx(buttonClasses.TransparentButton, classesCss.StartButton)}
                     onClick={() => setIsGameCanStart(true)}
                     label={"Начать"}
                   />

@@ -1,8 +1,8 @@
 import React from "react"
 import classesCss from "./MainPage.module.scss"
-import "../../styles/effect.scss"
 import Footer from "./Footer";
 import NavigationBar from "./Navigation/NavigationBar";
+import DescriptionBlock from "./DescriptionBlock";
 
 
 export default function MainPage(){
@@ -12,16 +12,15 @@ export default function MainPage(){
   }
 
   return (
-    <div className={[classesCss.MainPage, "main-page"].join(" ")}>
+    <div className={classesCss.MainPage}>
       <div className={classesCss.Bg}>
-
-        <div className={[classesCss.Wave, "wave"].join(" ")}>
-          <NavigationBar/>
-        </div>
-        <div className={[classesCss.Girl, "girl"].join(" ")}>
+        <div className={classesCss.Girl}>
           <div style={girlStyle}/>
         </div>
-        <Footer />
+        <NavigationBar className={classesCss.NavigationZIndex} />
+        <div className={classesCss.Wave} />
+        <DescriptionBlock />
+        <Footer  />
       </div>
     </div>
   )

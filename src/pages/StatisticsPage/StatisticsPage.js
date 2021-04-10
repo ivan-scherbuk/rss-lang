@@ -1,16 +1,17 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {createStyles, Grid, makeStyles} from "@material-ui/core";
-import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
-import {useDispatch, useSelector} from "react-redux";
-import {statisticsSelector} from "../../redux/games/selectors";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { createStyles, makeStyles } from "@material-ui/core";
+import { getStatisticsThunk } from "../../redux/games/thunk.statistics";
+import { useDispatch, useSelector } from "react-redux";
+import { statisticsSelector } from "../../redux/games/selectors";
 import StatisticsGameCard from "./StatisticsGameCard";
-import CloseLink from "../../components/Buttons/CloseLink";
 import BarChart from "./BarChart";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
-import {getUserData} from "../../helpers/gameUtils";
-import {resetGameStatistics} from "../../redux/games/actions";
+import { getUserData } from "../../helpers/gameUtils";
+import { resetGameStatistics } from "../../redux/games/actions";
+import classesCss from "./StatisticPage.module.scss"
+import cx from "classnames"
 
 const StatisticsPage = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const StatisticsPage = () => {
     if (allStatistics.optional) {
       return parseStatistics(allStatistics);
     }
-  },[allStatistics]);
+  }, [allStatistics]);
 
   const TOTAL = useMemo(() => {
     const todayStatistics = statistics ? getByGameStatistics(statistics, true) : null;
@@ -41,10 +42,10 @@ const StatisticsPage = () => {
     const allStatistics = getByGameStatistics(statistics, false);
     const todayStatistics = getByGameStatistics(statistics, true);
     const defaultGamesData = {
-      savannah: { key: "savannah", translation: "Саванна" },
-      audiocall: { key: "audiocall", translation: "Аудиовызов" },
-      puzzle: { key: "puzzle", translation: "Пазл" },
-      sprint: { key: "sprint", translation: "Спринт" },
+      savannah: {key: "savannah", translation: "Саванна"},
+      audiocall: {key: "audiocall", translation: "Аудиовызов"},
+      puzzle: {key: "puzzle", translation: "Пазл"},
+      sprint: {key: "sprint", translation: "Спринт"},
     };
     if (statistics) {
       Object.keys(defaultGamesData).forEach((key) => {
@@ -60,7 +61,7 @@ const StatisticsPage = () => {
 
   const [value, setValue] = useState(GAMES.savannah.key);
 
-  const userId = useMemo(() => getUserData()?.id,[]);
+  const userId = useMemo(() => getUserData()?.id, []);
 
   useEffect(() => {
     dispatch(getStatisticsThunk(userId));
@@ -83,66 +84,70 @@ const StatisticsPage = () => {
 
   const handleChange = useCallback((event) => {
     setValue(event.target.value);
-  },[]);
+  }, []);
 
   return (
-    <Grid container alignItems="center" className={classes.container}>
-      <Grid container justify="flex-end">
-        <CloseLink/>
-      </Grid>
-      <h1 className={classes.title}>Статистика</h1>
+    <div className={classesCss.StatisticPage}>
+      <h2 className={classesCss.Title}>Статистика</h2>
 
-      <Grid container alignItems="flex-start" className={classes.buttonsContainer}>
-        <RadioGroup row value={value} onChange={handleChange}>
-          <FormControlLabel value="end"
-                            control={<Radio value={GAMES.savannah.key}
-                                            classes={{root: classes.root, checked: classes.checked}}/>}
-                            label="Саванна"/>
-          <FormControlLabel value="end"
-                            control={<Radio value={GAMES.audiocall.key}
-                                            classes={{root: classes.root, checked: classes.checked}}/>}
-                            label="Аудиовызов"/>
-          <FormControlLabel value="end"
-                            control={<Radio value={GAMES.puzzle.key}
-                                            classes={{root: classes.root, checked: classes.checked}}/>}
-                            label="Пазл"/>
-          <FormControlLabel value="end"
-                            control={<Radio value={GAMES.sprint.key}
-                                            classes={{root: classes.root, checked: classes.checked}}/>}
-                            label="Спринт"/>
-        </RadioGroup>
-      </Grid>
-
-      <Grid container justify="center" alignItems="center" className={classes.gamesStatistics}>
-        {Object.keys(GAMES || {}).map((key) => {
-          const gameStatistics = GAMES[key];
-          return key === value ? (
-            <StatisticsGameCard
-              key={key}
-              gameTitle={gameStatistics.name}
-              learnedWords={gameStatistics.todayStatistics.wordCounter}
-              rightAnswersPercent={gameStatistics.todayStatistics.rightAnswersPercent}
-              bestSeries={gameStatistics.todayStatistics.bestSeries}
-            />
-          ) : null;
-        })}
-      </Grid>
-
-      <Grid container justify="space-between" alignItems="flex-start" className={classes.dayStatistics}>
-        <div>Общее количество изученных слов за день: <span>{TOTAL?.totalLearnedWords}</span></div>
-        <div>Процент правильных ответов за день: <span>{TOTAL?.rightAnswersPercentToday} %</span></div>
-      </Grid>
-
-      <Grid container justify="space-around" className={classes.graphics}>
-        <div>
-          <BarChart data={barData}/>
+      <div className={classesCss.DayStatistic}>
+        <div className={classesCss.GamesStatistic}>
+          <div className={classesCss.ToggleBlock}>
+            <RadioGroup value={value} onChange={handleChange}>
+              <FormControlLabel value="end"
+                                control={<Radio value={GAMES.savannah.key}
+                                                classes={{root: classes.root, checked: classes.checked}}/>}
+                                label="Саванна"/>
+              <FormControlLabel value="end"
+                                control={<Radio value={GAMES.audiocall.key}
+                                                classes={{root: classes.root, checked: classes.checked}}/>}
+                                label="Аудиовызов"/>
+              <FormControlLabel value="end"
+                                control={<Radio value={GAMES.puzzle.key}
+                                                classes={{root: classes.root, checked: classes.checked}}/>}
+                                label="Пазл"/>
+              <FormControlLabel value="end"
+                                control={<Radio value={GAMES.sprint.key}
+                                                classes={{root: classes.root, checked: classes.checked}}/>}
+                                label="Спринт"/>
+            </RadioGroup>
+          </div>
+          <div className={classesCss.Statistic}>
+            {Object.keys(GAMES || {}).map((key) => {
+              const gameStatistics = GAMES[key];
+              return key === value ? (
+                <StatisticsGameCard
+                  key={key}
+                  gameTitle={gameStatistics.name}
+                  learnedWords={gameStatistics.todayStatistics.wordCounter}
+                  rightAnswersPercent={gameStatistics.todayStatistics.rightAnswersPercent}
+                  bestSeries={gameStatistics.todayStatistics.bestSeries}
+                />
+              ) : null;
+            })}
+          </div>
         </div>
-        <div>
-          <BarChart data={barDataDelta}/>
-        </div>
-      </Grid>
 
-    </Grid>
+        <div className={cx(classesCss.StatisticStrings)}>
+          <div>
+            <span>Общее количество изученных слов за день: </span>
+            <span className={classesCss.Value}>{TOTAL?.totalLearnedWords}</span>
+          </div>
+          <div>
+            <span>Процент правильных ответов за день: </span>
+            <span className={classesCss.Value}>{TOTAL?.rightAnswersPercentToday}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div className={classesCss.TotalStatistic}>
+
+        <div className={cx(classesCss.StatisticBlock, classesCss.Graphics)}>
+          <BarChart data={barData} label={'Количество изученных слов за каждый день'}/>
+          <BarChart data={barDataDelta} label={'Всего изучено слова'}/>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -155,8 +160,8 @@ const parseStatistics = (allStatistics) => {
 
 const isTodayDate = (date) => {
   const today = new Date();
-  today.setHours(0,0,0,0);
-  date.setHours(0,0,0,0);
+  today.setHours(0, 0, 0, 0);
+  date.setHours(0, 0, 0, 0);
   return today.toString() === date.toString();
 };
 
@@ -174,7 +179,7 @@ const getGameStatistics = (entries, singleDay = false) => {
     }
 
     return gameResult;
-  }, { wordCounter: 0, rightAnswers: 0, wrongAnswers: 0, bestSeries: 0});
+  }, {wordCounter: 0, rightAnswers: 0, wrongAnswers: 0, bestSeries: 0});
 
   gameTotalStatistics.rightAnswersPercent =
     Math.round(gameTotalStatistics.rightAnswers ? (gameTotalStatistics.rightAnswers * 100 / (gameTotalStatistics.rightAnswers + gameTotalStatistics.wrongAnswers)) : 0);
@@ -188,7 +193,7 @@ const getTotalStatistics = (byGameStatistics) => {
     res.rightAnswers = res.rightAnswers + gameStatistics.rightAnswers;
     res.wrongAnswers = res.wrongAnswers + gameStatistics.wrongAnswers;
     return res;
-  }, { totalLearnedWords: 0, wrongAnswers: 0, rightAnswers: 0 });
+  }, {totalLearnedWords: 0, wrongAnswers: 0, rightAnswers: 0});
 
   totalStatistics.rightAnswersPercent =
     Math.round(totalStatistics.rightAnswers * 100 / (totalStatistics.wrongAnswers + totalStatistics.rightAnswers));
@@ -206,7 +211,7 @@ const getByGameStatistics = (statistics, singleDay = false) => {
 
   const totalStatistics = getTotalStatistics(byGameStatistics);
 
-  return { ...byGameStatistics, ...totalStatistics};
+  return {...byGameStatistics, ...totalStatistics};
 };
 
 const getLongTermStatObj = (statistics) => {
@@ -215,7 +220,7 @@ const getLongTermStatObj = (statistics) => {
     const gameStatisticsEntries = statistics.optional[key];
     gameStatisticsEntries.forEach((entry) => {
       const createdOn = new Date(entry.createdOn);
-      createdOn.setHours(0,0,0,0);
+      createdOn.setHours(0, 0, 0, 0);
       const key = createdOn.getTime();
       //если такой ключ в об есть
       if (res[key]) {
@@ -230,56 +235,42 @@ const getLongTermStatObj = (statistics) => {
 
 const longTermStat = (statistics) => {
   const longTermStatObj = getLongTermStatObj(statistics);
-  return Object.keys(longTermStatObj).map((key) => ({ t: new Date(+key), y: longTermStatObj[key] }));
+  return Object.keys(longTermStatObj).map((key) => ({t: new Date(+key), y: longTermStatObj[key]}));
 };
 
 const longTermDeltaStat = (statistics) => {
   const longTermStatObj = getLongTermStatObj(statistics);
   const keys = Object.keys(longTermStatObj);
   const deltaValuesArr = Object.values(longTermStatObj).reduce((res, item, index) => {
-    if(index === 0){
+    if (index === 0) {
       res.push(Object.values(longTermStatObj)[0]);
     } else {
-      res.push(res[index-1] + item);
+      res.push(res[index - 1] + item);
     }
     return res;
-  },[]);
-  return deltaValuesArr.map((item, index) => ({t: new Date(+keys[index]) , y: item }));
+  }, []);
+  return deltaValuesArr.map((item, index) => ({t: new Date(+keys[index]), y: item}));
 };
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    container: {
-      background: '#47d47f',
-      padding: '25px',
-    },
-    title: {
-      color: '#ffffff',
-    },
-    buttonsContainer: {
-      color: '#ffffff',
-      marginBottom: '25px',
-    },
     dayStatistics: {
-      color: '#ffffff',
-      marginBottom: '25px',
+      color: "#ffffff",
+      marginBottom: "25px",
       "& span": {
-        fontSize: '20px',
-        color: '#567df4',
+        fontSize: "20px",
+        color: "#567df4",
       },
     },
-    gamesStatistics: {
-    },
     graphics: {
-      lineHeight: '35px',
+      lineHeight: "35px",
     },
     root: {
-      color: '#f38c71',
-      '&$checked': {
-        color: '#e45731'
-      }
+      color: "#f38c71",
+      "&$checked": {
+        color: "#e45731",
+      },
     },
-    checked: {},
   }),
 );
 

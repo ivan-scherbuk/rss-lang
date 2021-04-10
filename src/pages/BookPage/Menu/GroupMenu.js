@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 export default function GroupMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const { currentGroup, mode } = useSelector((store) => store.book);
+  const { currentGroup, mode, vocabularyMode } = useSelector((store) => store.book);
 
   return (
     <div className={classesCss.GroupMenu}>
@@ -28,7 +28,7 @@ export default function GroupMenu() {
           return (
             <NavLink
               key={"group" + index}
-              to={`/${mode}/${index + 1}/1`}
+              to={{pathname:`/${mode}/${index + 1}/1`, state:{vocabularyMode}}}
               className={cx(
                 classesCss.BookLink,
                 levelStyles[`Level${index + 1}`]

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classesCss from "./WordCard.module.scss";
-import { SETTINGS, WORD_HARD } from "../../settings";
+import { MODE_VOCABULARY, SETTINGS, VOCABULARY_MODE_DIFFICULT, WORD_HARD } from "../../settings";
 import SoundButton from "../Buttons/SoundButton";
 import FastAverageColor from "fast-average-color";
 import ButtonsBlock from "./ButtonsBlock";
@@ -30,7 +30,7 @@ export default function WordCard({cardInfo}){
   const [failCounter, setFailedCounter] = useState(0);
   const [successCounter, setSuccessCounter] = useState(0);
   const {isLogged} = useSelector(store => store.user);
-  const {isTranslateVisible} = useSelector(store => store.book)
+  const {isTranslateVisible, mode, vocabularyMode} = useSelector(store => store.book)
 
   const {sectionVocabulary} = useParams();
 
@@ -94,22 +94,36 @@ export default function WordCard({cardInfo}){
     });
   }
 
+  const isWordHard = cardInfo.difficulty === WORD_HARD
+  const isHardMode = mode === MODE_VOCABULARY && vocabularyMode === VOCABULARY_MODE_DIFFICULT
+  const isWordDeleted = cardInfo.optional?.deleted
+  const isShowHardStyle = isWordHard && !isHardMode && !isWordDeleted
   return (
     <div
-      style={{background: averageColorData?.color || "white"}}
-      className={classesCss.Card}
+      style={!isShowHardStyle && !isWordDeleted ? {background: averageColorData?.color || "white"} : null}
+      className={cx(
+        classesCss.Card,
+        {
+          [classesCss.Hard]: isShowHardStyle,
+          [classesCss.Deleted]: isWordDeleted,
+        },
+      )
+      }
     >
       <div
-        style={{backgroundImage: `url(${SETTINGS.SERVER}/${image})`}}
-        className={classesCss.HeaderBlock}
+        style={{
+          backgroundImage: `${isWordDeleted ? "linear-gradient(black, black)," : ""}
+                                  url(${SETTINGS.SERVER}/${image})`,
+        }}
+        className={cx(classesCss.HeaderBlock)}
       >
         <div
           className={classesCss.Overlay}
-          style={{
+          style={!isShowHardStyle && !isWordDeleted ? {
             background:
               `linear-gradient(transparent, ${averageColorData?.color})` ||
               "transparent",
-          }}
+          } : null}
         >
           {isLogged && (
             <ButtonsBlock

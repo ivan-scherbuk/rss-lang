@@ -1,12 +1,14 @@
 $bubbleButtonDefSize: 100px;
 $duration: .8s;
 
+$navigation-margin-bottom: 120px;
 .Navigation {
   height: 100%;
+  margin-bottom: $navigation-margin-bottom;
   position: relative;
   width: 50%;
-  z-index: 3;
-  min-width: 500px;
+  min-width: 480px;
+  box-sizing: border-box;
   transition: width $duration, margin-left $duration, left $duration, top $duration, display 0 0.8s;
 
   a {
@@ -217,7 +219,7 @@ $duration: .8s;
   }
 
   $book-button-hor: 52%;
-  $book-button-ver: 40%;
+  $book-button-ver: calc(43% - #{$navigation-margin-bottom/2});
   $book-button-size: 170px;
 
   .BookButton {

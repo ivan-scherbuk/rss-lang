@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import PaginationInput from "./PagintaionInput";
 import { MODE_VOCABULARY } from "../../../settings";
 
-
 const paginationButtons = {
   leftEnd: faAngleDoubleLeft,
   left: faAngleLeft,
@@ -49,10 +48,10 @@ export default function Pagination({totalPagesCount}){
     if (mode === MODE_VOCABULARY) {
 
       return {
-        leftEnd: {pathname: pathBase + 1, vocabularyMode},
-        left: {pathname: pathBase + getNextVocabularyPage(-1), vocabularyMode},
-        right: {pathname: pathBase + getNextVocabularyPage(1), vocabularyMode},
-        rightEnd: {pathname: pathBase + totalPagesCount, vocabularyMode}
+        leftEnd: {pathname: pathBase + 1, state:{vocabularyMode}},
+        left: {pathname: pathBase + getNextVocabularyPage(-1), state:{vocabularyMode}},
+        right: {pathname: pathBase + getNextVocabularyPage(1), state:{vocabularyMode}},
+        rightEnd: {pathname: pathBase + totalPagesCount, state:{vocabularyMode}}
       }
     }
     return {
@@ -62,7 +61,6 @@ export default function Pagination({totalPagesCount}){
       rightEnd: pathBase + (currentPageList[currentPageList.length - 1] + 1),
     }
   }
-
 
   const paginationGoTo = getPaginationButtonsValues()
 

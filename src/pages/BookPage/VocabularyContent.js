@@ -17,13 +17,29 @@ import {
   WORD_HARD,
 } from "../../settings";
 
+const VOCABULARY_SECTIONS = [
+  {
+    mode: VOCABULARY_MODE_NORMAL,
+    label: "Изучаемые"
+  },
+  {
+    mode: VOCABULARY_MODE_DIFFICULT,
+    label: "Сложные"
+  },
+  {
+    mode: VOCABULARY_MODE_DELETED,
+    label: "Удаленные"
+  },
+]
+
 export default function VocabularyContent({setTotalPagesCount}){
   const {getUserWordsGroup, onLoading, currentUserWordsGroup} = useUserWordsGroup();
   const [wordsToRender, setWordsToRender] = useState(null);
   const {words: userWords} = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const {vocabularyMode: urlVocabularyMode = VOCABULARY_MODE_NORMAL} = useLocation()
+  const {state} = useLocation()
+  const urlVocabularyMode = state? state.vocabularyMode : VOCABULARY_MODE_NORMAL
   const {group: urlGroup, page: urlPage = 1} = useParams();
   const group = checkGroup(urlGroup - 1);
   const page = checkPage(urlPage - 1);
@@ -31,7 +47,7 @@ export default function VocabularyContent({setTotalPagesCount}){
   function getVocabularyUrl(mode){
     return {
       pathname: `/${MODE_VOCABULARY}/${group + 1}/1`,
-      vocabularyMode: mode,
+      state:{vocabularyMode: mode}
     }
   }
 
@@ -45,7 +61,7 @@ export default function VocabularyContent({setTotalPagesCount}){
       .flat()
       .filter(({optional, difficulty}) => {
         const isDifficultyHard = difficulty === WORD_HARD
-        if (urlVocabularyMode === VOCABULARY_MODE_DIFFICULT) return isDifficultyHard;
+        if (urlVocabularyMode === VOCABULARY_MODE_DIFFICULT) return isDifficultyHard && !optional.deleted;
         if (urlVocabularyMode === VOCABULARY_MODE_DELETED) return optional.deleted;
         return (isDifficultyHard || (optional.failCounter + optional.successCounter)) && !optional.deleted;
       })
@@ -73,27 +89,24 @@ export default function VocabularyContent({setTotalPagesCount}){
     dispatch(setVocabularyMode(urlVocabularyMode))
   }, [urlVocabularyMode, dispatch])
 
+
+
   return (
-    <div>
-      <div className={classesCss.BookContent}>
-        <NavLink
-          className={classesCss.VocabularySection}
-          to={getVocabularyUrl()}
-        >
-          Изучаемые
-        </NavLink>
-        <NavLink
-          className={classesCss.VocabularySection}
-          to={getVocabularyUrl(VOCABULARY_MODE_DIFFICULT)}
-        >
-          Сложные
-        </NavLink>
-        <NavLink
-          className={classesCss.VocabularySection}
-          to={getVocabularyUrl(VOCABULARY_MODE_DELETED)}
-        >
-          Удаленные
-        </NavLink>
+    <>
+      <div className={cx(classesCss.VocabularyHeader)}>
+        {
+          VOCABULARY_SECTIONS.map(section => (
+            <NavLink
+              className={cx(
+                classesCss.VocabularySection,
+                {[classesCss.Active]: urlVocabularyMode === section.mode}
+              )}
+              to={getVocabularyUrl(section.mode)}
+            >
+              {section.label}
+            </NavLink>
+          ))
+        }
       </div>
       <div className={classesCss.BookContent}>
         {Array.isArray(wordsToRender) &&
@@ -113,6 +126,6 @@ export default function VocabularyContent({setTotalPagesCount}){
           );
         })}
       </div>
-    </div>
+    </>
   );
 }
