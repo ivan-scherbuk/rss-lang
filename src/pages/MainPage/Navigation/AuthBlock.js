@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import cx from "classnames"
 import Button from "../../../components/Buttons/Button"
 import AuthModal from "./AuthModal"
 import classesCss from "./Navigation.module.scss"
@@ -6,33 +7,30 @@ import Avatar from "@material-ui/core/Avatar"
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
 import {SETTINGS} from "../../../settings";
+import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 
 
-export default function AuthBlock({children, classes, className, styles}){
+export default function AuthBlock({children}){
 
-  const {isLogged, email, settings} = useSelector(state => state.user)
+  const {isLogged, email, settings, onLoading} = useSelector(state => state.user)
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
-  const modalClasses = [classes.modal, classesCss.AuthModal]
-  const buttonClasses = [classes?.authButton, classes?.loginButton, classesCss.AuthButton]
-  if (modalIsOpen && !isLogged) {
-    modalClasses.push(classes.modalActive, classesCss.ModalActive)
-    buttonClasses.push(classes.authButtonActive)
-  }
-
   return (
-    <div className={className}>
+    <div className={classesCss.AuthBlock}>
       {
         !isLogged
           ? <Button
-            style={styles.authButton}
+            style={{backgroundImage: `url(${process.env.PUBLIC_URL}/static/register2.jpg)`}}
             label={"Войти"}
-            className={buttonClasses.join(" ")}
+            className={cx(
+              classesCss.BubbleButton, classesCss.LoginButton, classesCss.AuthButton,
+              {[classesCss.Active]:modalIsOpen && !isLogged}
+            )}
             onClick={() => setModalIsOpen(!modalIsOpen)}
           />
           :
           <NavLink
-            className={classes.avatar}
+            className={classesCss.Avatar}
             to="/user">
             <Avatar
               alt={email.toUpperCase()}
@@ -44,8 +42,12 @@ export default function AuthBlock({children, classes, className, styles}){
       }
       <AuthModal
         onClose={() => setModalIsOpen(false)}
-        className={modalClasses.join(" ")}
+        className={cx(
+          classesCss.AuthModal,
+          {[classesCss.Active]: modalIsOpen && !isLogged},
+        )}
       >
+        {onLoading? <LoadingOverlay className={classesCss.LoadingOverlay} />: null}
         {children}
       </AuthModal>
     </div>

@@ -8,6 +8,7 @@ import Button from "../../../components/Buttons/Button";
 import UserImageEditor from "./UserImageEditor";
 import classesCss from "../UserPage.module.scss";
 import { SETTINGS } from "../../../settings";
+import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 
 export default function UserSettingsForm(){
   const {settings: userSettings, onLoading, token, id} = useSelector(state => state.user)
@@ -18,12 +19,13 @@ export default function UserSettingsForm(){
   const [form, setForm] = useState({
     name : ""
   })
+  const [onSendLoading, setOnSendLoading] = useState(false)
   const dispatch = useDispatch()
 
   async function sendHandler(){
+    console.log(1)
     const data = new FormData()
     const settingsForServer = {optional: {...userSettings.optional, ...form}}
-    console.log(currentImage)
     if(currentImage.files && currentImage.files[0]?.file){
       data.append("image", currentImage.files[0].file)
     }else if(!currentImage.url){
@@ -31,8 +33,10 @@ export default function UserSettingsForm(){
       settingsForServer.optional.image = ""
     }
     data.append("settings", JSON.stringify(settingsForServer))
+    setOnSendLoading(true)
     const rawRes = await userSettingsRequestWithImage({token, id, data})
     const res = await rawRes.json()
+    setOnSendLoading(false)
     dispatch(setUserSettings({
       optional: res.optional,
     }))
@@ -51,7 +55,7 @@ export default function UserSettingsForm(){
 
   useEffect(() => {
     if (userSettings.optional?.image && !currentImage.url) {
-      setCurrentImage(state => ({...state, url:SETTINGS.AWS_STORE_URL + "/" + userSettings.optional?.image}))
+      setCurrentImage(state => ({...state, url:`${SETTINGS.AWS_STORE_URL}/${userSettings.optional.image}`}))
     }
     if(userSettings.optional?.name){
       setForm({...form, ...userSettings.optional})
@@ -60,6 +64,13 @@ export default function UserSettingsForm(){
 
   return (
     <div className={classesCss.UserSettingsBlock}>
+      {
+        onSendLoading?
+          <LoadingOverlay
+            className={classesCss.LoadingOverlay}
+          />
+          : null
+      }
       <ImageUploading
         value={currentImage.files}
         onChange={imageUpdateHandler}
@@ -100,6 +111,7 @@ export default function UserSettingsForm(){
         placeholder={"Имя"}
       />
       <Button
+        disabled={onSendLoading}
         onClick={sendHandler}
         label={"Сохранить"}
         className={classesCss.SendButton}

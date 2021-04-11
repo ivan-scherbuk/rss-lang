@@ -86,6 +86,10 @@ $navigation-margin-bottom: 120px;
 
           margin: 0 0 40px 0;
         }
+
+        .LoadingOverlay{
+          border-radius: 50%;
+        }
       }
 
       .AuthForm {
@@ -291,7 +295,7 @@ $navigation-margin-bottom: 120px;
 
     &.Savannah {
       bottom: calc(#{$book-button-ver} + #{$book-button-size} + 30px);
-      right: calc(#{$book-button-hor} + 30px);
+      right: calc(#{$book-button-hor} + 40px);
       >div{
         >span{
           top: -10px;
@@ -301,7 +305,7 @@ $navigation-margin-bottom: 120px;
 
     &.Audiocall {
       bottom: calc(#{$book-button-ver} + #{$book-button-size} + 5px);
-      right: calc(#{$book-button-hor} - 79px);
+      right: calc(#{$book-button-hor} - 80px);
       >div{
         border-bottom-left-radius: 50%;
         border-bottom-right-radius: 50%;
@@ -309,18 +313,29 @@ $navigation-margin-bottom: 120px;
     }
 
     &.Sprint {
-      bottom: calc(#{$book-button-ver} + #{$book-button-size} - 75px);
-      right: calc(#{$book-button-hor} - 159px);
+      bottom: calc(#{$book-button-ver} + #{$book-button-size} - 83px);
+      right: calc(#{$book-button-hor} - 167px);
       >div{
         background-position: -8px;
       }
     }
 
     &.Puzzle {
-      bottom: calc(#{$book-button-ver} + #{$book-button-size} - 187px);
+      bottom: calc(#{$book-button-ver} + #{$book-button-size} - 203px);
       right: calc(#{$book-button-hor} - 160px);
       >div{
-        border-radius: 50%;
+        margin-top: -5px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 105%;
+        //border-radius: 50%;
+
+        &:hover{
+          width: 100%;
+          height: 110%;
+        }
+
       }
     }
   }

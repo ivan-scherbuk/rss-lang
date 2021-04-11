@@ -14,10 +14,9 @@ import { checkToken, logOut } from "./redux/actions.auth";
 import UserPage from "./pages/UserPage/UserPage"
 import GameShell from "./pages/Games/GameShell";
 import { GAMES } from "./pages/Games/gamesData";
-import "./styles/effect.scss";
+import "./styles/effects.scss";
 import "./styles/App.module.scss";
-import TeamPage from "./pages/TeamPage";
-import AboutPage from "./pages/AboutPage";
+import AboutPage from "./pages/AboutPage/AboutPage";
 
 export default function App(){
   const location = useLocation();
@@ -63,7 +62,6 @@ export default function App(){
         </Route>
         <Route path="/games" exact><GamesPage/></Route>
         <Route path="/about" exact><AboutPage/></Route>
-        <Route path="/team" exact><TeamPage/></Route>
         <Route path="/user" exact><UserPage/></Route>
         <Route path="/" exact><MainPage/></Route>
       </Switch>
