@@ -1,12 +1,13 @@
 import React from 'react';
 import {createStyles, makeStyles} from "@material-ui/core";
+import classesCss from "./StatisticPage.module.scss"
 
 const StatisticsGameCard = (props) => {
   const { learnedWords, rightAnswersPercent, bestSeries, gameTitle } = props;
   const classes = useStyles();
 
   return (
-    <table className={classes.container}>
+    <table className={classesCss.StatisticTable}>
       <thead>
       <tr>
         <th className={classes.title}>{gameTitle}</th>
@@ -35,15 +36,6 @@ const StatisticsGameCard = (props) => {
 };
 const useStyles = makeStyles((theme) =>
   createStyles({
-    container: {
-      width: '350px',
-      transition: 'all linear 1s',
-      backgroundColor: '#89eab0',
-      padding: '30px',
-      boxShadow: '0 1px 2px 0 rgb(0 0 0 / 25%), 0 2px 4px 1px rgb(0 0 0 / 20%), 0 4px 8px 2px rgb(0 0 0 / 15%), 0 8px 16px 4px rgb(0 0 0 / 10%)',
-      borderRadius: '40px',
-      marginBottom: '25px',
-    },
     title: {
       color: '#e45731',
       fontSize: '18px',
@@ -51,7 +43,6 @@ const useStyles = makeStyles((theme) =>
     },
     line: {
       lineHeight: '25px',
-      color: '#666666',
       "& td:last-child": {
         fontSize: '20px',
         color: '#567df4',

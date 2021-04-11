@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
-import NavigationBar from "./pages/MainPage/Navigation/NavigationBar";
 import MainPage from "./pages/MainPage/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
 import GamesPage from "./pages/GamesPage";
@@ -10,14 +9,14 @@ import Savannah from "./pages/Games/Savannah/GamePage";
 import StatisticsPage from "./pages/StatisticsPage/StatisticsPage";
 import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserWords } from "./redux/actions.user";
 import { syncUserWords } from "./redux/actions.words";
 import { checkToken, logOut } from "./redux/actions.auth";
 import UserPage from "./pages/UserPage/UserPage";
 import GameShell from "./pages/Games/GameShell";
 import { GAMES } from "./pages/Games/gamesData";
-import "./styles/effect.scss";
+import "./styles/effects.scss";
 import "./styles/App.module.scss";
+import AboutPage from "./pages/AboutPage/AboutPage";
 
 export default function App() {
   const location = useLocation();
@@ -33,7 +32,6 @@ export default function App() {
     async function syncUser() {
       const token = await dispatch(checkToken());
       if (token) {
-        await dispatch(getUserWords());
         await dispatch(syncUserWords());
       } else {
         await dispatch(logOut());
@@ -47,7 +45,6 @@ export default function App() {
 
   return (
     <>
-      <NavigationBar />
       <Switch location={location}>
         <Route path={["/book", "/vocabulary"]}>
           <BookPage />
@@ -77,6 +74,9 @@ export default function App() {
         </Route>
         <Route path="/games" exact>
           <GamesPage />
+        </Route>
+        <Route path="/about" exact>
+          <AboutPage />
         </Route>
         <Route path="/user" exact>
           <UserPage />

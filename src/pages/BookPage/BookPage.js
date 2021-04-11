@@ -8,10 +8,13 @@ import { useDispatch } from "react-redux";
 import { setBookMode } from "../../redux/actions.book";
 import VocabularyContent from "./VocabularyContent";
 import { MODE_BOOK, MODE_VOCABULARY } from "../../settings";
+import cx from "classnames";
+import levelStyles from "../../styles/LevelStyles.module.scss";
 
 export default function BookPage() {
   const [isSettingsVisible, setSettingsVisible] = useState(false);
   const [totalPagesCount, setTotalPagesCount] = useState();
+  const [levelStyle, setLevelStyle] = useState(0);
   const [totalValues, setTotalValues] = useState({
     success: 0,
     fail: 0,
@@ -26,16 +29,21 @@ export default function BookPage() {
   }, [location.pathname, dispatch]);
 
   return (
-    <div className={classesCss.BookPage}>
+    <div className={cx(
+      classesCss.BookPage,
+      levelStyles[`Level${levelStyle+1}`]
+    )}>
       <Route path={`/${MODE_BOOK}/:group/:page`}>
         <BookContent
           setTotalPagesCount={setTotalPagesCount}
           setTotalValues={setTotalValues}
+          setLevelStyle={setLevelStyle}
         />
       </Route>
       <Route path={`/${MODE_VOCABULARY}/:group/:page`}>
         <VocabularyContent
           setTotalPagesCount={setTotalPagesCount}
+          setLevelStyle={setLevelStyle}
         />
       </Route>
       <BookMenu

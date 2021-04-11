@@ -6,15 +6,16 @@ import GameButton from "../../../components/Buttons/GameButton";
 import cx from "classnames";
 import { setFirstLetterToCapital } from "../../../helpers/gameUtils";
 import { useSelector } from "react-redux";
-import { MODE_VOCABULARY, VOCABULARY_MODE_DIFFICULT, WORD_HARD } from "../../../settings";
+import { MODE_VOCABULARY } from "../../../settings";
 
-export default function GameMenu({className}){
+export default function GameMenu(){
   const [isOpen, setIsOpen] = useState(false);
-  const {currentWords, mode, vocabularyMode} = useSelector(store => store.book)
+  const {currentWords, mode, vocabularyCurrentPage, vocabularyWords, currentGroup} = useSelector(store => store.book)
 
   const wordsToTransmit = (function(){
-    if(mode === MODE_VOCABULARY && vocabularyMode === VOCABULARY_MODE_DIFFICULT) {
-      return currentWords.filter(({optional, difficulty}) => !optional?.deleted && difficulty === WORD_HARD)
+    if(mode === MODE_VOCABULARY) {
+      if(vocabularyWords) return vocabularyWords[vocabularyCurrentPage]
+      return []
     }
     return currentWords.filter(({optional}) => !optional?.deleted)
   })()
@@ -32,7 +33,11 @@ export default function GameMenu({className}){
         {GAMES_ARRAY.map((game) => {
           return (
             <GameButton
-              gameCallValues={{words: wordsToTransmit}}
+              gameCallValues={{
+                words: wordsToTransmit,
+                group: currentGroup,
+                fullWordsSet: mode === MODE_VOCABULARY? vocabularyWords? vocabularyWords.flat() : null : null
+              }}
               game={game}
               key={game.key}
               className={classesCss.GameLink}

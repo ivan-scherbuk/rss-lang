@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import classesCss from "../BookPage.module.scss";
 import Button from "../../../components/Buttons/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,14 +22,16 @@ const paginationButtons = {
 
 export default function Pagination({ totalPagesCount }) {
   const {
-    currentVocabularyPage,
+    vocabularyCurrentPage,
     currentPageIndex,
     pagesList,
     currentGroup,
     mode,
-    vocabularyMode: currentVocabularyMode,
+    vocabularyMode,
   } = useSelector((store) => store.book);
+
   const currentPageList = pagesList[currentGroup];
+  const pathBase = `/${mode}/${currentGroup + 1}/`;
 
   function getNextPage(direction) {
     if (
@@ -43,25 +45,30 @@ export default function Pagination({ totalPagesCount }) {
 
   function getNextVocabularyPage(direction) {
     if (
-      currentVocabularyPage + direction >= 0 &&
-      currentVocabularyPage + direction < totalPagesCount
+      vocabularyCurrentPage + direction >= 0 &&
+      vocabularyCurrentPage + direction < totalPagesCount
     ) {
-      return currentVocabularyPage + direction + 1;
+      return vocabularyCurrentPage + direction + 1;
     }
-    return currentVocabularyPage + 1;
-  }
-  function getFullVocabularyPath(pathname) {
-    return { pathname, vocabularyMode: currentVocabularyMode };
+    return vocabularyCurrentPage + 1;
   }
 
   function getPaginationButtonsValues() {
-    const pathBase = `/${mode}/${currentGroup + 1}/`;
     if (mode === MODE_VOCABULARY) {
       return {
-        leftEnd: getFullVocabularyPath(pathBase + 1),
-        left: getFullVocabularyPath(pathBase + getNextVocabularyPage(-1)),
-        right: getFullVocabularyPath(pathBase + getNextVocabularyPage(1)),
-        rightEnd: getFullVocabularyPath(pathBase + totalPagesCount),
+        leftEnd: { pathname: pathBase + 1, state: { vocabularyMode } },
+        left: {
+          pathname: pathBase + getNextVocabularyPage(-1),
+          state: { vocabularyMode },
+        },
+        right: {
+          pathname: pathBase + getNextVocabularyPage(1),
+          state: { vocabularyMode },
+        },
+        rightEnd: {
+          pathname: pathBase + totalPagesCount,
+          state: { vocabularyMode },
+        },
       };
     }
     return {
@@ -97,7 +104,7 @@ export default function Pagination({ totalPagesCount }) {
             : pagesList[currentGroup].length
         }
         currentPageIndex={
-          mode === MODE_VOCABULARY ? currentVocabularyPage : currentPageIndex
+          mode === MODE_VOCABULARY ? vocabularyCurrentPage : currentPageIndex
         }
       />
 

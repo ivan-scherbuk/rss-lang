@@ -13,6 +13,17 @@
   }
 }
 
+.TransparentButton{
+  padding: 10px 15px;
+  border-radius: 15px;
+  border: 3px solid white;
+  color: white;
+  &:hover{
+    background-color: rgba(255,255,255,0.5);
+    color: #d43d1e;
+  }
+}
+
 
 .ResetButton{
   font-size: 40px;
@@ -66,4 +77,13 @@
 
 .CloseButton{
   font-size: 25px;
+}
+
+.GameButton{
+ >div{
+   width: 90%;
+   height: 90%;
+   margin: auto;
+   background-size: cover;
+ }
 }

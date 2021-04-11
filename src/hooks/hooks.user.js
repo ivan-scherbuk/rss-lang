@@ -64,7 +64,6 @@ export function useUserWordUpdate(){
 		}
 
 		return dispatch(addUserWord(word, {difficulty: difficulty || "normal", optional})).then((word) => {
-			console.log("NEW", word)
 			setUpdatedWord(word)
       return word
 		}).catch(e => setOnError({word, e}))

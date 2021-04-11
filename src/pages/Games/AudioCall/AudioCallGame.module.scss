@@ -1,18 +1,22 @@
-.container {
-  height: 100vh;
-  position: relative;
-}
-.exitContainer {
-  position: absolute;
-  padding: 1rem;
-  z-index: 10;
-  top: 0;
-}
-.backgroundImg {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
+// .container {
+//   height: 100vh;
+//   position: relative;
+// }
+// .exitContainer {
+//   position: absolute;
+//   padding: 1rem;
+//   z-index: 10;
+//   top: 0;
+// }
+// .backgroundImg {
+//   position: absolute;
+//   width: 100vw;
+//   height: 100vh;
 
+// }
+
+.AudioCall{
+  width: 100%;
 }
 
 .containerGame {
@@ -30,11 +34,11 @@
 
 
 .wrapperFalling {
-  position: absolute,
+  position: absolute;
 }
 
 .animation {
-  animation: falling 7s infinite,
+  //animation: falling 7s infinite,
 }
 
 .noAnimation {

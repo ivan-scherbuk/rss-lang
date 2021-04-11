@@ -1,8 +1,18 @@
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+  @return $string;
+}
+
+
 //COLORS
-$orange-light: #ff8351;
-$orange-dark:#d43d1e;
-$blue-light: #76d3d5;
-$blue-dark:#40BFC1;
+$light-orange: #ff8758;
+$dark-orange: #d43d1e;
+$light-blue: #76d3d5;
+$dark-blue: #40BFC1;
 
 
 //SHADOWS

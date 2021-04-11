@@ -1,38 +1,27 @@
 $bubbleButtonDefSize: 100px;
 $duration: .8s;
 
+$navigation-margin-bottom: 120px;
 .Navigation {
-
-  top: 10px;
-  left: 0;
-  margin-left: 10px;
-  margin-right: 20px;
-  width: calc(100% - 20px);
-  height: 60px;
-  position: absolute;
-  z-index: 3;
+  height: 100%;
+  margin-bottom: $navigation-margin-bottom;
+  position: relative;
+  width: 50%;
+  min-width: 480px;
+  box-sizing: border-box;
   transition: width $duration, margin-left $duration, left $duration, top $duration, display 0 0.8s;
-  display: none;
+  margin-right: 10%;
 
   a {
     color: inherit;
     text-decoration: none;
   }
 
-
-  &.NavigationCloud {
-    top: 10%;
-    min-width: 500px;
-    width: 35%;
-    left: 50%;
-    margin-left: -17.5%;
-    display: block;
-  }
-
-
   .AuthBlock {
     z-index: 10;
-    position: relative;
+    position:absolute;
+    top: 15%;
+    left: 10%;
     width: 100px;
 
     .AuthModal {
@@ -96,6 +85,10 @@ $duration: .8s;
           font-size: 30px;
 
           margin: 0 0 40px 0;
+        }
+
+        .LoadingOverlay{
+          border-radius: 50%;
         }
       }
 
@@ -217,24 +210,12 @@ $duration: .8s;
     }
   }
 
-
-  .BookButton {
-    position: absolute;
-    right: 120px;
-    top: 100px;
-    height: 170px;
-    width: 170px;
-    background-size: cover;
-    color: black;
-    font-weight: bold;
-  }
-
   .StatisticButton {
     position: absolute;
     height: 120px;
     width: 120px;
-    top: 190px;
-    left: 40px;
+    bottom: 0;
+    left: 0;
     font-size: 18px;
     background-size: 90%;
     background-repeat: no-repeat;
@@ -242,34 +223,120 @@ $duration: .8s;
     background-color: white;
   }
 
+  $book-button-hor: 52%;
+  $book-button-ver: calc(45% - #{$navigation-margin-bottom/2});
+  $book-button-size: 170px;
+
+  .BookButton {
+    position: absolute;
+    right: $book-button-hor;
+    margin-right: -85px;
+    bottom: $book-button-ver;
+    height: $book-button-size;
+    width: $book-button-size;
+    color: white;
+    font-weight: bold;
+    >div{
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      transition: width .4s, height .4s;
+      margin: auto;
+
+      &:hover{
+        width: 105%;
+        height: 105%;
+      }
+
+      >span{
+        margin-top: 90%;
+      }
+    }
+  }
+
   .GameButton {
     position: absolute;
-    height: 80px;
-    width: 80px;
+    height: 100px;
+    width: 100px;
+    margin-right: -50px;
     color: black;
     font-size: 16px;
     font-weight: bold;
     padding: 0;
-    background-size: cover;
+    background: white;
+    //background: radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 72%);
+
+    >div{
+      transition: width .4s, height .4s;
+      position: relative;
+      &:hover{
+        width: 105%;
+        height: 105%;
+        >span{
+          visibility: visible;
+          opacity: 1;
+          transition: visibility 0s 0s, opacity .4s;
+        }
+      }
+
+      >span{
+        position: absolute;
+        left: 100%;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s .4s, opacity .4s;
+        color: white;
+        font-size: 20px;
+      }
+    }
 
     &.Savannah {
-      top: 0;
-      right: 165px;
+      bottom: calc(#{$book-button-ver} + #{$book-button-size} + 30px);
+      right: calc(#{$book-button-hor} + 40px);
+      >div{
+        >span{
+          top: -10px;
+        }
+      }
     }
 
     &.Audiocall {
-      top: 30px;
-      right: 60px;
+      bottom: calc(#{$book-button-ver} + #{$book-button-size} + 5px);
+      right: calc(#{$book-button-hor} - 80px);
+      >div{
+        border-bottom-left-radius: 50%;
+        border-bottom-right-radius: 50%;
+      }
     }
 
     &.Sprint {
-      top: 115px;
-      right: 10px;
+      bottom: calc(#{$book-button-ver} + #{$book-button-size} - 83px);
+      right: calc(#{$book-button-hor} - 167px);
+      >div{
+        background-position: -8px;
+      }
     }
 
     &.Puzzle {
-      top: 215px;
-      right: 25px;
+      bottom: calc(#{$book-button-ver} + #{$book-button-size} - 203px);
+      right: calc(#{$book-button-hor} - 160px);
+      >div{
+        margin-top: -5px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 105%;
+        //border-radius: 50%;
+
+        &:hover{
+          width: 100%;
+          height: 110%;
+        }
+
+      }
     }
   }
 }

@@ -9,7 +9,12 @@ import { faCog, faHome } from "@fortawesome/free-solid-svg-icons";
 import cx from "classnames";
 import { NavLink } from "react-router-dom";
 import GameMenu from "./GameMenu";
-import { MODE_BOOK, MODE_VOCABULARY, VOCABULARY_MODE_DIFFICULT, VOCABULARY_MODE_NORMAL } from "../../../settings";
+import {
+  MODE_BOOK,
+  MODE_VOCABULARY,
+  VOCABULARY_MODE_DELETED,
+  VOCABULARY_MODE_NORMAL,
+} from "../../../settings";
 
 export default function BookMenu({settingsOn, totalPagesCount, totalValues}) {
   const { isLogged } = useSelector((store) => store.user);
@@ -52,7 +57,7 @@ export default function BookMenu({settingsOn, totalPagesCount, totalValues}) {
         </>
       )}
       {mode === MODE_BOOK
-      || (mode === MODE_VOCABULARY && vocabularyMode === VOCABULARY_MODE_DIFFICULT)?
+      || (mode === MODE_VOCABULARY && vocabularyMode !== VOCABULARY_MODE_DELETED)?
         <GameMenu /> : null
       }
       <Pagination totalPagesCount={totalPagesCount}/>

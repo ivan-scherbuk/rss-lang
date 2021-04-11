@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
+import cx from "classnames"
 import { useUserWordUpdate } from "../../hooks/hooks.user";
 import { useWords, useWordsGroup } from "../../hooks/hooks.words";
 import { createRandomChunkFromGroup } from "../../helpers/utils.words";
-import LevelButtons from "./common/Levels/LevelButtons";
-import GameModal from "./common/GameModal/GameModal";
-import StatisticModal from "./common/StatisticModal/StatisticModal";
-import classesCss from "./Games.module.scss"
-import levelClasses from "../LevelStyles.module.scss"
-import { SETTINGS } from "../../settings";
+import { useStatistic } from "../../hooks/hooks.statistic";
+import { resetGameStatistics } from "../../redux/games/actions";
+import { getStatisticsThunk } from "../../redux/games/thunk.statistics";
+import Button from "../../components/Buttons/Button";
 import BookButton from "../../components/Buttons/BookButton";
 import ResetButton from "../../components/Buttons/ResetButton";
-import cx from "classnames"
 import BackToGameLink from "./common/BackToGameLink";
+import GameModal from "./common/GameModal/GameModal";
+import StatisticModal from "./common/StatisticModal/StatisticModal";
+import LevelButtons from "./common/Levels/LevelButtons";
 import CloseLink from "../../components/Buttons/CloseLink";
-import { useStatistic } from "../../hooks/hooks.statistic";
-import {resetGameStatistics} from "../../redux/games/actions";
-import {getStatisticsThunk} from "../../redux/games/thunk.statistics";
-import {checkGroup, checkPage} from "../../helpers/utils.checkers";
-
+import { SETTINGS } from "../../settings";
+import classesCss from "./Games.module.scss"
+import levelClasses from "../../styles/LevelStyles.module.scss"
+import buttonClasses from "../../components/Buttons/Button.module.scss"
 
 const initialStatistic = {
   rightAnswers: 0,
   wrongAnswers: 0,
   wordCounter: 0,
-  bestSeries: 0
+  bestSeries: 0,
 }
+
+const {DEFAULT_WORD_CHUNK_LENGTH} = SETTINGS
 
 export default function GameShell(props){
   const {
@@ -34,8 +36,11 @@ export default function GameShell(props){
     gameData,
     className,
     style,
-    randomLengthStack = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH,
   } = props
+
+  console.log(gameData)
+  const wordsBundleLength =
+    gameData.wordsMinCount > DEFAULT_WORD_CHUNK_LENGTH ? gameData.wordsMinCount : DEFAULT_WORD_CHUNK_LENGTH
 
   const dispatch = useDispatch();
   const {currentWordsGroup, getWordsGroup, onGroupLoading} = useWordsGroup()
@@ -47,6 +52,7 @@ export default function GameShell(props){
 
   const [currentChunk, setCurrentChunk] = useState(null)
   const [gameEndLastWord, setGameEndLastWord] = useState(-1)
+  const [isGameCanStart, setIsGameCanStart] = useState(false)
   const [gameResetKey, setGameResetKey] = useState(Math.random())
   const [statisticChunk, setStatisticChunk] = useState(null)
   const [statistic, setStatistic] = useState(initialStatistic)
@@ -54,14 +60,15 @@ export default function GameShell(props){
   const [currentSeries, setCurrentSeries] = useState(0)
 
   const {state} = useLocation()
-  const {words: urlWords} = state ? state : {}
+  const {words: urlWords, group: urlGroup, fullWordsSet} = state ? state : {}
 
   function levelSelectHandler(index){
     getWordsGroup(index)
+    setIsGameCanStart(true)
   }
 
   function gameEndHandler(index){
-    setGameEndLastWord(Number.isInteger(index)? index + 1 : currentChunk.length)
+    setGameEndLastWord(Number.isInteger(index) ? index + 1 : currentChunk.length)
   }
 
   function setGameStartAgain(){
@@ -114,18 +121,59 @@ export default function GameShell(props){
       setStatistic({...statistic, ...statisticForUpdate})
     }
     updateStatisticChunk(word, {result: paramsForUpdate})
+  }
 
+  function complementChunkToMinimum (initialChunk, sourceChunk, length){
+    const missingWordsCount = length - initialChunk.length
+    const missingWordsSet = sourceChunk.reduce((reducer, word) => {
+      if (reducer.length < missingWordsCount
+        && !(initialChunk.findIndex(urlWord => urlWord.id === word.id) + 1)) {
+        reducer.push(word)
+      }
+      return reducer
+    }, [])
+    return [...initialChunk, ...missingWordsSet]
   }
 
   useEffect(() => {
-    if(urlWords?.length) setCurrentChunk([...urlWords])
-  }, [urlWords])
+    if (!urlWords?.length) return
+    if (urlWords.length >= wordsBundleLength) {
+      setCurrentChunk([...urlWords])
+      return
+    }
+    if (fullWordsSet) {
+      if (fullWordsSet.length === wordsBundleLength) {
+        setCurrentChunk([...fullWordsSet])
+        return
+      }
+      if (fullWordsSet.length > wordsBundleLength) {
+        const complementChunk = complementChunkToMinimum(urlWords, fullWordsSet, wordsBundleLength)
+        setCurrentChunk(complementChunk)
+        return
+      }
+    }
+    getWordsGroup(urlGroup)
+  }, [urlWords, wordsBundleLength, urlGroup, fullWordsSet, getWordsGroup])
 
   useEffect(() => {
-    if (currentWordsGroup) {
-      setCurrentChunk(createRandomChunkFromGroup(currentWordsGroup, randomLengthStack))
+    if(!urlWords || !currentWordsGroup) return
+
+    const randomChunk = createRandomChunkFromGroup(currentWordsGroup, wordsBundleLength)
+    if(fullWordsSet?.length){
+      const complementChunk = complementChunkToMinimum(fullWordsSet, randomChunk, wordsBundleLength)
+      setCurrentChunk(complementChunk)
+      return
     }
-  }, [currentWordsGroup, randomLengthStack])
+    const complementChunk = complementChunkToMinimum(urlWords, randomChunk, wordsBundleLength)
+    setCurrentChunk(complementChunk)
+  }, [currentWordsGroup,urlWords, fullWordsSet, wordsBundleLength])
+
+
+  useEffect(() => {
+    if(urlWords || !currentWordsGroup) return
+    const randomChunk = createRandomChunkFromGroup(currentWordsGroup, wordsBundleLength)
+    setCurrentChunk(randomChunk)
+  }, [currentWordsGroup, wordsBundleLength, urlWords])
 
   useEffect(() => {
     if (currentChunk?.length) {
@@ -134,9 +182,8 @@ export default function GameShell(props){
   }, [currentChunk])
 
   useEffect(() => {
-
-    if(isLogged && gameEndLastWord > 0 && !statisticWasUpdate && statisticChunk?.length){
-      if(statisticChunk[gameEndLastWord - 1].userNewResults){
+    if (isLogged && gameEndLastWord > 0 && !statisticWasUpdate && statisticChunk?.length) {
+      if (statisticChunk[gameEndLastWord - 1].userNewResults) {
         updateStatistic(gameData.key, statistic)
         setStatisticWasUpdate(true)
       }
@@ -144,7 +191,7 @@ export default function GameShell(props){
   }, [gameEndLastWord, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
 
   useEffect(() => {
-    if(userId){
+    if (userId) {
       dispatch(getStatisticsThunk(userId));
       return () => {
         dispatch(resetGameStatistics());
@@ -184,16 +231,23 @@ export default function GameShell(props){
       {
         (() => {
           if (gameEndLastWord === -1) {
-            if (gameContent) return gameContent
+            if (isGameCanStart && gameContent) return gameContent
             return (
               <GameModal
                 gameData={gameData}
               >
-                <LevelButtons
-                  levelNumbers={6}
-                  levelStyles={levelClasses}
-                  onSelect={levelSelectHandler}
-                />
+                {urlWords ?
+                  <Button
+                    className={cx(buttonClasses.TransparentButton, classesCss.StartButton)}
+                    onClick={() => setIsGameCanStart(true)}
+                    label={"Начать"}
+                  />
+                  : <LevelButtons
+                    levelNumbers={6}
+                    levelStyles={levelClasses}
+                    onSelect={levelSelectHandler}
+                  />
+                }
               </GameModal>)
           }
           return (
