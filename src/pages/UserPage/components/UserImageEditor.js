@@ -11,7 +11,7 @@ export default function UserImageEditor({image, onUpdate, onRemove}){
   return(
     <div
       className={classesCss.ImageEditor}
-      style={{backgroundImage: `url(${image})`}}
+      style={{backgroundImage: `url(${image})`, color: "white"}}
       onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
 

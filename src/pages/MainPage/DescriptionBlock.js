@@ -20,7 +20,7 @@ export default function DescriptionBlock(){
           {[classesCss.Active]: currentSlide === 0},
         )}>
           <h2>RSLang</h2>
-          <Link className={classesCss.LearnMoreLink} to={"/about"}>
+          <Link className={classesCss.LearnMoreLink} to={{pathname:"/about"}}>
             <LearnMoreButton/>
           </Link>
           <p>
@@ -34,7 +34,7 @@ export default function DescriptionBlock(){
           {[classesCss.Active]: currentSlide === 1},
         )}>
           <h2>Наша команда</h2>
-          <Link className={classesCss.LearnMoreLink} to={"/team"}>
+          <Link className={classesCss.LearnMoreLink} to={{pathname:"/about", hash:"team"}}>
             <LearnMoreButton />
           </Link>
           <p>

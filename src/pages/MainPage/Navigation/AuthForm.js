@@ -5,12 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { createUser, signIn } from "../../../redux/actions.auth"
 import classesCss from "./Navigation.module.scss"
 
-const AuthForm = (props) => {
-
-  const {
-    classes,
-    message,
-  } = props
+const AuthForm = () => {
 
   const [form, setForm] = useState({
     email: "",
@@ -27,7 +22,6 @@ const AuthForm = (props) => {
 
   return (
     <div className={classesCss.AuthForm}>
-      <div className={classes?.FormMessage}>{message}</div>
       <Input
         autoComplete={"off"}
         className={classesCss.AuthInput}
@@ -52,7 +46,7 @@ const AuthForm = (props) => {
           }}
           disabled={onLoading}
           label={"Войти"}
-          className={[classesCss.SignInButton, classes?.FormButton].join(" ")}
+          className={[classesCss.SignInButton].join(" ")}
         />
 
         <Button
@@ -61,9 +55,8 @@ const AuthForm = (props) => {
           }}
           disabled={onLoading}
           label={"Регистрация"}
-          className={[classesCss.SignUpButton, classes?.FormButton].join(" ")}
+          className={[classesCss.SignUpButton].join(" ")}
         />
-        {onLoading? "Loading....": null}
       </div>
     </div>
   );

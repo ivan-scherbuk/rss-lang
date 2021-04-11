@@ -4,12 +4,11 @@ import Footer from "./Footer";
 import NavigationBar from "./Navigation/NavigationBar";
 import DescriptionBlock from "./DescriptionBlock";
 
+const girlStyle = {
+  backgroundImage: `url(${process.env.PUBLIC_URL}/static/girl.png)`,
+}
 
 export default function MainPage(){
-
-  const girlStyle = {
-    backgroundImage: `url(${process.env.PUBLIC_URL}/static/girl.png)`,
-  }
 
   return (
     <div className={classesCss.MainPage}>
