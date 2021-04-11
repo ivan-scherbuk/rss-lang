@@ -13,55 +13,66 @@ import { Link } from "react-router-dom";
 import PaginationInput from "./PagintaionInput";
 import { MODE_VOCABULARY } from "../../../settings";
 
-
 const paginationButtons = {
   leftEnd: faAngleDoubleLeft,
   left: faAngleLeft,
   right: faAngleRight,
-  rightEnd: faAngleDoubleRight
-}
+  rightEnd: faAngleDoubleRight,
+};
 
-export default function Pagination({totalPagesCount}) {
-
-  const { currentVocabularyPage, currentPageIndex, pagesList, currentGroup, mode } = useSelector(
-    (store) => store.book
-  );
+export default function Pagination({ totalPagesCount }) {
+  const {
+    currentVocabularyPage,
+    currentPageIndex,
+    pagesList,
+    currentGroup,
+    mode,
+    vocabularyMode: currentVocabularyMode,
+  } = useSelector((store) => store.book);
   const currentPageList = pagesList[currentGroup];
 
   function getNextPage(direction) {
-    if (currentPageIndex + direction >= 0 && currentPageIndex + direction < totalPagesCount) {
+    if (
+      currentPageIndex + direction >= 0 &&
+      currentPageIndex + direction < totalPagesCount
+    ) {
       return currentPageList[currentPageIndex + direction] + 1;
     }
     return currentPageList[currentPageIndex] + 1;
   }
 
-  function getNextVocabularyPage(direction){
-    if (currentVocabularyPage + direction >= 0 && currentVocabularyPage + direction < totalPagesCount) {
+  function getNextVocabularyPage(direction) {
+    if (
+      currentVocabularyPage + direction >= 0 &&
+      currentVocabularyPage + direction < totalPagesCount
+    ) {
       return currentVocabularyPage + direction + 1;
     }
     return currentVocabularyPage + 1;
   }
+  function getFullVocabularyPath(pathname) {
+    return { pathname, vocabularyMode: currentVocabularyMode };
+  }
 
-  function getPaginationButtonsValues(){
-    const pathBase = `/${mode}/${currentGroup + 1}/`
-    if(mode === MODE_VOCABULARY){
+  function getPaginationButtonsValues() {
+    const pathBase = `/${mode}/${currentGroup + 1}/`;
+    if (mode === MODE_VOCABULARY) {
       return {
-        leftEnd: pathBase + 1,
-        left: pathBase + getNextVocabularyPage(-1),
-        right: pathBase + getNextVocabularyPage(1),
-        rightEnd: pathBase + totalPagesCount
-      }
+        leftEnd: getFullVocabularyPath(pathBase + 1),
+        left: getFullVocabularyPath(pathBase + getNextVocabularyPage(-1)),
+        right: getFullVocabularyPath(pathBase + getNextVocabularyPage(1)),
+        rightEnd: getFullVocabularyPath(pathBase + totalPagesCount),
+      };
     }
     return {
       leftEnd: pathBase + (currentPageList[0] + 1),
       left: pathBase + getNextPage(-1),
       right: pathBase + getNextPage(1),
-      rightEnd: pathBase + (currentPageList[currentPageList.length - 1] + 1)
-    }
+      rightEnd: pathBase + (currentPageList[currentPageList.length - 1] + 1),
+    };
   }
 
-
-  const paginationGoTo = getPaginationButtonsValues()
+  const paginationGoTo = getPaginationButtonsValues();
 
   return (
     <div className={classesCss.Pagination}>
@@ -80,8 +91,14 @@ export default function Pagination({totalPagesCount}) {
       </Link>
 
       <PaginationInput
-        totalPagesCount={mode === MODE_VOCABULARY? totalPagesCount : pagesList[currentGroup].length}
-        currentPageIndex={mode === MODE_VOCABULARY? currentVocabularyPage : currentPageIndex}
+        totalPagesCount={
+          mode === MODE_VOCABULARY
+            ? totalPagesCount
+            : pagesList[currentGroup].length
+        }
+        currentPageIndex={
+          mode === MODE_VOCABULARY ? currentVocabularyPage : currentPageIndex
+        }
       />
 
       <Link to={paginationGoTo.right}>
