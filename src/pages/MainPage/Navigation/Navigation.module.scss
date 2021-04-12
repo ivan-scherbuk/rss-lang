@@ -1,5 +1,5 @@
 $bubbleButtonDefSize: 100px;
-$duration: .8s;
+$duration: 0.8s;
 
 $navigation-margin-bottom: 120px;
 .Navigation {
@@ -9,7 +9,8 @@ $navigation-margin-bottom: 120px;
   width: 50%;
   min-width: 480px;
   box-sizing: border-box;
-  transition: width $duration, margin-left $duration, left $duration, top $duration, display 0 0.8s;
+  transition: width $duration, margin-left $duration, left $duration,
+    top $duration, display 0 0.8s;
   margin-right: 10%;
 
   a {
@@ -19,14 +20,14 @@ $navigation-margin-bottom: 120px;
 
   .AuthBlock {
     z-index: 10;
-    position:absolute;
+    position: absolute;
     top: 15%;
     left: 10%;
     width: 100px;
 
     .AuthModal {
       z-index: 1;
-      background: radial-gradient(#76d3d5, #40BFC1);
+      background: radial-gradient(#76d3d5, #40bfc1);
       position: absolute;
       height: $bubbleButtonDefSize;
       width: $bubbleButtonDefSize;
@@ -40,17 +41,10 @@ $navigation-margin-bottom: 120px;
       align-items: center;
       opacity: 0;
       color: white;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3),
-      0 2px 4px rgba(0, 0, 0, 0.25),
-      0 4px 8px rgba(0, 0, 0, 0.2),
-      0 8px 16px rgba(0, 0, 0, 0.2);
-      transition: width .5s,
-      visibility 0s 0.5s,
-      height .5s,
-      padding .5s,
-      opacity .5s,
-      top .5s,
-      left .5s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.25),
+        0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.2);
+      transition: width 0.5s, visibility 0s 0.5s, height 0.5s, padding 0.5s,
+        opacity 0.5s, top 0.5s, left 0.5s;
       top: 0;
       left: 0;
 
@@ -59,7 +53,6 @@ $navigation-margin-bottom: 120px;
       }
 
       &.Active {
-
         height: 400px;
         width: 400px;
         padding: 30px;
@@ -68,17 +61,12 @@ $navigation-margin-bottom: 120px;
         left: -50px;
         opacity: 100%;
         visibility: visible;
-        transition: width .5s,
-        visibility 0s 0s,
-        height .5s,
-        padding .5s,
-        opacity .5s,
-        top .5s,
-        left .5s;
+        transition: width 0.5s, visibility 0s 0s, height 0.5s, padding 0.5s,
+          opacity 0.5s, top 0.5s, left 0.5s;
 
         > * {
           visibility: visible;
-          transition: visibility 0s .3s;
+          transition: visibility 0s 0.3s;
         }
 
         h3 {
@@ -87,7 +75,7 @@ $navigation-margin-bottom: 120px;
           margin: 0 0 40px 0;
         }
 
-        .LoadingOverlay{
+        .LoadingOverlay {
           border-radius: 50%;
         }
       }
@@ -124,26 +112,25 @@ $navigation-margin-bottom: 120px;
           }
         }
 
-        .AuthButtonSet{
+        .AuthButtonSet {
           margin-top: 15px;
-          .SignInButton{
+          .SignInButton {
             border: 2px solid white;
             padding: 10px 15px;
             border-radius: 10px;
             margin-right: 20px;
 
-            &:hover{
-              background-color: rgba(255,255,255,0.5);
+            &:hover {
+              background-color: rgba(255, 255, 255, 0.5);
               color: #d43d1e;
             }
-
           }
 
-          .SignUpButton{
+          .SignUpButton {
             box-shadow: 0 0 0 0 #d43d1e;
-            transition: color .5s, box-shadow .5s;
+            transition: color 0.5s, box-shadow 0.5s;
 
-            &:hover{
+            &:hover {
               color: #d43d1e;
               box-shadow: 0 2px 0 0 #d43d1e;
             }
@@ -151,12 +138,12 @@ $navigation-margin-bottom: 120px;
         }
       }
 
-      .CloseButton{
+      .CloseButton {
         position: absolute;
         top: 10px;
         left: -10px;
         font-size: 40px;
-        transition: color .4s;
+        transition: color 0.4s;
       }
     }
 
@@ -169,12 +156,8 @@ $navigation-margin-bottom: 120px;
       color: black;
       font-weight: bold;
       z-index: 2;
-      transition: width .5s,
-      height .5s,
-      padding .5s,
-      top .5s,
-      left .5s,
-      opacity .5s;
+      transition: width 0.5s, height 0.5s, padding 0.5s, top 0.5s, left 0.5s,
+        opacity 0.5s;
 
       &.Active {
         height: 400px;
@@ -184,13 +167,8 @@ $navigation-margin-bottom: 120px;
         left: -50px;
         opacity: 0;
         visibility: hidden;
-        transition: width .5s,
-        height .5s,
-        padding .5s,
-        top .5s,
-        left .5s,
-        opacity .5s,
-        visibility 0s .5s;
+        transition: width 0.5s, height 0.5s, padding 0.5s, top 0.5s, left 0.5s,
+          opacity 0.5s, visibility 0s 0.5s;
       }
     }
 
@@ -236,22 +214,22 @@ $navigation-margin-bottom: 120px;
     width: $book-button-size;
     color: white;
     font-weight: bold;
-    >div{
+    > div {
       height: 100%;
       width: 100%;
       background-size: cover;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      transition: width .4s, height .4s;
+      transition: width 0.4s, height 0.4s;
       margin: auto;
 
-      &:hover{
+      &:hover {
         width: 105%;
         height: 105%;
       }
 
-      >span{
+      > span {
         margin-top: 90%;
       }
     }
@@ -269,25 +247,25 @@ $navigation-margin-bottom: 120px;
     background: white;
     //background: radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 72%);
 
-    >div{
-      transition: width .4s, height .4s;
+    > div {
+      transition: width 0.4s, height 0.4s;
       position: relative;
-      &:hover{
+      &:hover {
         width: 105%;
         height: 105%;
-        >span{
+        > span {
           visibility: visible;
           opacity: 1;
-          transition: visibility 0s 0s, opacity .4s;
+          transition: visibility 0s 0s, opacity 0.4s;
         }
       }
 
-      >span{
+      > span {
         position: absolute;
         left: 100%;
         visibility: hidden;
         opacity: 0;
-        transition: visibility 0s .4s, opacity .4s;
+        transition: visibility 0s 0.4s, opacity 0.4s;
         color: white;
         font-size: 20px;
       }
@@ -296,8 +274,8 @@ $navigation-margin-bottom: 120px;
     &.Savannah {
       bottom: calc(#{$book-button-ver} + #{$book-button-size} + 30px);
       right: calc(#{$book-button-hor} + 40px);
-      >div{
-        >span{
+      > div {
+        > span {
           top: -10px;
         }
       }
@@ -306,7 +284,7 @@ $navigation-margin-bottom: 120px;
     &.Audiocall {
       bottom: calc(#{$book-button-ver} + #{$book-button-size} + 5px);
       right: calc(#{$book-button-hor} - 80px);
-      >div{
+      > div {
         border-bottom-left-radius: 50%;
         border-bottom-right-radius: 50%;
       }
@@ -315,7 +293,7 @@ $navigation-margin-bottom: 120px;
     &.Sprint {
       bottom: calc(#{$book-button-ver} + #{$book-button-size} - 83px);
       right: calc(#{$book-button-hor} - 167px);
-      >div{
+      > div {
         background-position: -8px;
       }
     }
@@ -323,7 +301,7 @@ $navigation-margin-bottom: 120px;
     &.Puzzle {
       bottom: calc(#{$book-button-ver} + #{$book-button-size} - 203px);
       right: calc(#{$book-button-hor} - 160px);
-      >div{
+      > div {
         margin-top: -5px;
         background-size: contain;
         background-position: center;
@@ -331,16 +309,14 @@ $navigation-margin-bottom: 120px;
         height: 105%;
         //border-radius: 50%;
 
-        &:hover{
+        &:hover {
           width: 100%;
           height: 110%;
         }
-
       }
     }
   }
 }
-
 
 .BubbleButton {
   height: $bubbleButtonDefSize;
@@ -351,4 +327,3 @@ $navigation-margin-bottom: 120px;
   z-index: 4;
   background-size: cover;
 }
-
