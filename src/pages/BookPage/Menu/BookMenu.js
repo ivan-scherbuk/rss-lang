@@ -5,7 +5,7 @@ import Pagination from "./Pagination";
 import GroupMenu from "./GroupMenu";
 import { useSelector } from "react-redux";
 import GameMenu from "./GameMenu";
-import { MODE_BOOK, MODE_VOCABULARY, VOCABULARY_MODE_DELETED, VOCABULARY_MODE_NORMAL } from "../../../settings";
+import { MODE_BOOK, MODE_VOCABULARY, VOCABULARY_MODE_DELETED, VOCABULARY_MODE_NORMAL } from "../../../settings/settings";
 import ModeToggle from "./ModeToggle";
 import HomeLink from "../../../components/Buttons/HomeLink";
 import SettingsButton from "../../../components/Buttons/SettingsButton";

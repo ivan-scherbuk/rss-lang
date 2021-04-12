@@ -13,11 +13,7 @@ export function createRandomChunkFromGroup(group, length = 20){
 	return chunk
 }
 
-//if deleted === undefined - dont filter by deleted flag
-//if deleted === false - return words without deleted
-//if deleted === true - return only deleted words
-
-export function getUserWordsChunk(chunk, userChunk, {difficulty, deleted, ...options} = {}){
+export function getUserWordsChunk(chunk, userChunk, {difficulty, deleted} = {}){
 	if (userChunk.length > 0) {
 		let filteredWords = [...userChunk]
 		if (typeof deleted === "boolean") {
@@ -37,7 +33,7 @@ export function getUserWordsChunk(chunk, userChunk, {difficulty, deleted, ...opt
 	return []
 }
 
-export function getUserWordsGroup(group, userGroup, {difficulty, deleted, ...options} = {}){
+export function getUserWordsGroup(group, userGroup, {difficulty, deleted} = {}){
 	const crossedGroup = {}
 	if (userGroup) {
 		for (let page in userGroup) {

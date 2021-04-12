@@ -6,7 +6,7 @@ import classesCss from "./Navigation.module.scss"
 import Avatar from "@material-ui/core/Avatar"
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
-import { SETTINGS } from "../../../settings";
+import { SETTINGS } from "../../../settings/settings";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 
 

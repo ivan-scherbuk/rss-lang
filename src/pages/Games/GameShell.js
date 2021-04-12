@@ -16,7 +16,7 @@ import GameModal from "./common/GameModal/GameModal";
 import StatisticModal from "./common/StatisticModal/StatisticModal";
 import LevelButtons from "./common/Levels/LevelButtons";
 import CloseLink from "../../components/Buttons/CloseLink";
-import { SETTINGS } from "../../settings";
+import { SETTINGS } from "../../settings/settings";
 import classesCss from "./Games.module.scss"
 import levelClasses from "../../styles/LevelStyles.module.scss"
 import buttonClasses from "../../components/Buttons/Button.module.scss"

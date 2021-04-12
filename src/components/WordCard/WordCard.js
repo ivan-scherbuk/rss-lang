@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classesCss from "./WordCard.module.scss";
-import { MODE_VOCABULARY, SETTINGS, VOCABULARY_MODE_DIFFICULT, WORD_HARD } from "../../settings";
+import { MODE_VOCABULARY, SETTINGS, VOCABULARY_MODE_DIFFICULT, WORD_HARD } from "../../settings/settings";
 import SoundButton from "../Buttons/SoundButton";
 import FastAverageColor from "fast-average-color";
 import ButtonsBlock from "./ButtonsBlock";

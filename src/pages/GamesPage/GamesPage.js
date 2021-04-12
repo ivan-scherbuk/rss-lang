@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import CloseLink from "../../components/Buttons/CloseLink";
 import AboutCard from "../../components/AboutCard/AboutCard";
-import { GAMES_ARRAY } from "../Games/gamesData";
+import { GAMES_ARRAY } from "../../settings/data";
 import classesCss from "./GamesPage.module.scss";
 
 export default function GamesPage(){

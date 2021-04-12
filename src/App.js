@@ -13,7 +13,7 @@ import { syncUserWords } from "./redux/actions.words";
 import { checkToken, logOut } from "./redux/actions.auth";
 import UserPage from "./pages/UserPage/UserPage";
 import GameShell from "./pages/Games/GameShell";
-import { GAMES } from "./pages/Games/gamesData";
+import { GAMES } from "./settings/data";
 import "./styles/effects.scss";
 import "./styles/App.module.scss";
 import AboutPage from "./pages/AboutPage/AboutPage";

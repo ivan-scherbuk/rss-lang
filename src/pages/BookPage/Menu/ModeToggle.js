@@ -1,6 +1,6 @@
 import React from "react"
 import cx from "classnames"
-import { MODE_BOOK, MODE_VOCABULARY } from "../../../settings";
+import { MODE_BOOK, MODE_VOCABULARY } from "../../../settings/settings";
 import { NavLink } from "react-router-dom";
 import classesCss from "../BookPage.module.scss";
 

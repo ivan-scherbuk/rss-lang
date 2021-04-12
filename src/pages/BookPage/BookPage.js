@@ -7,7 +7,7 @@ import BookContent from "./BookContent";
 import BookMenu from "./Menu/BookMenu";
 import BookSettings from "./BookSettings";
 import VocabularyContent from "./VocabularyContent";
-import { MODE_DETECT_PATTERN, MODE_BOOK, MODE_VOCABULARY } from "../../settings";
+import { MODE_DETECT_PATTERN, MODE_BOOK, MODE_VOCABULARY } from "../../settings/settings";
 import classesCss from "./BookPage.module.scss";
 import levelStyles from "../../styles/LevelStyles.module.scss";
 

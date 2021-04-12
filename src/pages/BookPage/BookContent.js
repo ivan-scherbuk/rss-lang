@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import cx from "classnames";
 import { checkGroup, checkPage } from "../../helpers/utils.checkers";
 import { removePagesFromPageList, setCurrentGroup, setCurrentPage, setCurrentWords } from "../../redux/actions.book";
-import { MODE_BOOK, WORD_HARD } from "../../settings";
+import { MODE_BOOK, WORD_HARD } from "../../settings/settings";
 import classesCss from "./BookPage.module.scss";
 
 export default function BookContent({setTotalValues, setTotalPagesCount}){

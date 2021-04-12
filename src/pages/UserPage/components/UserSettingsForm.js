@@ -7,7 +7,7 @@ import { userSettingsRequestWithImage } from "../../../helpers/requsts.server";
 import Button from "../../../components/Buttons/Button";
 import UserImageEditor from "./UserImageEditor";
 import classesCss from "../UserPage.module.scss";
-import { SETTINGS } from "../../../settings";
+import { SETTINGS } from "../../../settings/settings";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 
 export default function UserSettingsForm(){

@@ -4,10 +4,11 @@ import Footer from "../MainPage/Footer";
 import CloseLink from "../../components/Buttons/CloseLink";
 import SvgWave from "../../components/Effects/SvgWave";
 import AboutCard from "../../components/AboutCard/AboutCard";
-import { GAMES_ARRAY } from "../Games/gamesData";
-import { WAVES } from "../../waves";
+import { GAMES_ARRAY, TEAM } from "../../settings/data";
+import { WAVES } from "../../settings/waves";
 import classesCss from "./AboutPage.module.scss"
 
+const wavesColors = ["#ff8758", "#d43d1e"]
 
 export default function AboutPage(){
   return (
@@ -44,7 +45,7 @@ export default function AboutPage(){
 
 
         <SvgWave
-          colors={["#ff8758", "#d43d1e"]}
+          colors={wavesColors}
           viewBox={"0 300 1920 1700"}
         >
           <path d={WAVES[0]}/>
@@ -70,7 +71,7 @@ export default function AboutPage(){
           </div>
         </div>
 
-        <SvgWave colors={["#ff8758", "#d43d1e"]}>
+        <SvgWave colors={wavesColors}>
           <path d={WAVES[1]}/>
         </SvgWave>
 
@@ -83,34 +84,22 @@ export default function AboutPage(){
               <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/static/team.png)`,}}/>
             </div>
             <div className={classesCss.CardsContainer}>
-              <AboutCard
-                cardImageRound
-                image={"anton.jpg"}
-                head={"Антон"}
-                text={"Тимлид, разработал архитектуру приложения и руководил командой. Разработал дизайн приложения, настроил аутентификацию, участвовал в разработке учебника, разработал игру Пазл."}
-              />
-              <AboutCard
-                cardImageBottomRound
-                image={"ann.png"}
-                head={"Анна"}
-                text={"Разработала игры Саванна и Спринт, сделала страницу статистики"}
-              />
-              <AboutCard
-                cardImageBottomRound
-                image={"van.png"}
-                head={"Иван"}
-                text={"Разработал страницы словаря и учебника, написал Unit-тесты"}
-              />
-              <AboutCard
-                cardImageRound
-                image={"tn.png"}
-                head={"Татьяна"}
-                text={"Сделала игру Аудиовызов, написала логику для карточек слов."}
-              />
+              {
+                TEAM.map(({image, name, about}) => {
+                  return(
+                    <AboutCard
+                      cardImageRound
+                      image={image}
+                      head={name}
+                      text={about}
+                    />
+                  )
+                })
+              }
             </div>
           </div>
         </div>
-        <SvgWave colors={["#ff8758", "#d43d1e"]}>
+        <SvgWave colors={wavesColors}>
           <path d={WAVES[2]}/>
         </SvgWave>
       </div>

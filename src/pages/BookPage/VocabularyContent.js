@@ -19,7 +19,7 @@ import {
   VOCABULARY_MODE_DIFFICULT,
   VOCABULARY_MODE_NORMAL,
   WORD_HARD,
-} from "../../settings";
+} from "../../settings/settings";
 import classesCss from "./BookPage.module.scss";
 
 const VOCABULARY_SECTIONS = [

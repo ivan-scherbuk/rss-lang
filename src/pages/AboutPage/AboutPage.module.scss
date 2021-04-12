@@ -1,5 +1,4 @@
 @import "../../styles/settings";
-
 .AboutPage {
   width: 100%;
   background-image: radial-gradient($light-blue, $dark-blue);
@@ -35,10 +34,10 @@
         margin: 0 0 45px 0;
         font-size: 90px;
       }
+    }
 
-      .RowContent {
-        display: flex;
-      }
+    .RowContent {
+      display: flex;
     }
 
     .CardsContainer {
@@ -49,10 +48,6 @@
       justify-content: space-evenly;
     }
 
-    $bgGradColor1: str-replace('' + $light-orange, '#', '%23');
-    $bgGradColor2: str-replace('' + $dark-orange, '#', '%23');
-    $gradientType: "linear";
-    $gradientRotate: 90;
 
     &.Special {
       > svg {
@@ -72,7 +67,6 @@
           padding-top: 122%;
         }
       }
-
     }
 
 
@@ -105,4 +99,68 @@
 .CloseLink{
   z-index: 5;
   position: fixed;
+}
+
+
+@media screen and (max-width: 1300px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .Asset {
+          margin: 150px 0 0 0;
+          > div {
+            padding-top: 122%;
+          }
+        }
+      }
+      &.Team {
+        .RowContent{
+          flex-direction: column;
+          align-items: center;
+        }
+        .Asset {
+          width: 450px;
+          margin: 0 0 40px 0;
+          > div {
+            padding-top: 80%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .RowContent{
+          flex-direction: column-reverse;
+        }
+        .Asset {
+          margin: 0 auto;
+          > div {
+            padding-top: 122%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 670px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .Content{
+          h2{
+            width: 100%;
+            margin-right: 0;
+            text-align: center;
+            font-size: 60px;
+          }
+        }
+      }
+    }
+  }
 }
