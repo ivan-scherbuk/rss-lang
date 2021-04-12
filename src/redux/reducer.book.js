@@ -12,7 +12,7 @@ import {
   SET_VOCABULARY_MODE, SET_VOCABULARY_WORDS,
   SIGN_IN,
 } from "./types";
-import { MODE_BOOK, SETTINGS, VOCABULARY_MODE_NORMAL } from "../settings";
+import { MODE_BOOK, SETTINGS, VOCABULARY_MODE_NORMAL } from "../settings/settings";
 
 function getInitPagesList(){
   const initPages = {}

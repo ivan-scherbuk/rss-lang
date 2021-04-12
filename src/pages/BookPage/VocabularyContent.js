@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router";
-import { NavLink } from "react-router-dom";
-import WordCard from "../../components/WordCard/WordCard";
+import { NavLink, useHistory, useLocation, useParams } from "react-router-dom";
+import cx from "classnames"
 import { checkGroup, checkPage } from "../../helpers/utils.checkers";
 import { useUserWordsGroup } from "../../hooks/hooks.user";
 import {
@@ -11,8 +10,8 @@ import {
   setVocabularyMode,
   setVocabularyWords,
 } from "../../redux/actions.book";
-import classesCss from "./BookPage.module.scss";
-import cx from "classnames"
+import WordCard from "../../components/WordCard/WordCard";
+import BookDisclaimerEmpty from "./BookDisclaimerEmpty";
 import {
   MODE_VOCABULARY,
   SETTINGS,
@@ -20,8 +19,8 @@ import {
   VOCABULARY_MODE_DIFFICULT,
   VOCABULARY_MODE_NORMAL,
   WORD_HARD,
-} from "../../settings";
-import BookDisclaimerEmpty from "./BookDisclaimerEmpty";
+} from "../../settings/settings";
+import classesCss from "./BookPage.module.scss";
 
 const VOCABULARY_SECTIONS = [
   {
@@ -38,12 +37,15 @@ const VOCABULARY_SECTIONS = [
   },
 ]
 
-export default function VocabularyContent({setTotalPagesCount, setLevelStyle}){
+const maxWordsInPage = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH
+
+export default function VocabularyContent({setTotalPagesCount}){
   const {getUserWordsGroup, currentUserWordsGroup} = useUserWordsGroup();
   const [wordsToRender, setWordsToRender] = useState(null);
   const {words: userWords} = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  const history = useHistory()
   const {state} = useLocation()
   const urlVocabularyMode = state ? state.vocabularyMode : VOCABULARY_MODE_NORMAL
   const {group: urlGroup, page: urlPage = 1} = useParams();
@@ -71,12 +73,10 @@ export default function VocabularyContent({setTotalPagesCount, setLevelStyle}){
         if (urlVocabularyMode === VOCABULARY_MODE_DELETED) return optional.deleted;
         return (isDifficultyHard || (optional.failCounter + optional.successCounter)) && !optional.deleted;
       })
-      const maxWordsInPage = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH
       const pagesNumber = Math.ceil(userFlatWords.length / maxWordsInPage)
-      const slicedUserWords = [];
-      for (let i = 0; i < pagesNumber; i++) {
-        slicedUserWords.push(userFlatWords.slice(i * maxWordsInPage, maxWordsInPage * (i + 1)));
-      }
+      const slicedUserWords = Array(pagesNumber).fill(null).map((el, index) => {
+        return userFlatWords.slice(index * maxWordsInPage, maxWordsInPage * (index + 1))
+      });
       setWordsToRender(slicedUserWords);
       setTotalPagesCount(pagesNumber);
 
@@ -85,11 +85,9 @@ export default function VocabularyContent({setTotalPagesCount, setLevelStyle}){
 
   useEffect(() => {
     dispatch(setCurrentGroup(group));
-    setLevelStyle(group)
-  }, [group, dispatch,setLevelStyle]);
+  }, [group, dispatch]);
 
   useEffect(() => {
-    console.log(page)
     dispatch(setVocabularyCurrentPage(page));
   }, [page, dispatch]);
 
@@ -99,8 +97,17 @@ export default function VocabularyContent({setTotalPagesCount, setLevelStyle}){
 
   useEffect(() => {
     dispatch(setVocabularyWords(wordsToRender))
+
   }, [wordsToRender, dispatch])
 
+  useEffect(() => {
+    if (wordsToRender?.length && wordsToRender.length < urlPage) {
+      history.push({
+        pathname: `/${MODE_VOCABULARY}/${group + 1}/${wordsToRender?.length}`,
+        state: urlVocabularyMode
+      })
+    }
+  }, [wordsToRender, urlPage, history, group, urlVocabularyMode])
 
   return (
     <>
@@ -131,7 +138,7 @@ export default function VocabularyContent({setTotalPagesCount, setLevelStyle}){
                 />
               );
             })
-            : <BookDisclaimerEmpty />
+            : <BookDisclaimerEmpty/>
         }
       </div>
     </>

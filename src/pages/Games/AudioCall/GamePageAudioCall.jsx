@@ -2,7 +2,7 @@ import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import {getRandomNumber,shuffle} from '../../../helpers/gameUtils';
 import {Grid} from "@material-ui/core";
 import classNames from "classnames";
-import { SETTINGS } from "../../../settings";
+import { SETTINGS } from "../../../settings/settings";
 import Lives from "../common/Lives";
 import SoundButton from "../common/SoundButton";
 import correctSound from "../../../assets/audio/correct.mp3";

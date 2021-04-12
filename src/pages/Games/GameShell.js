@@ -16,7 +16,7 @@ import GameModal from "./common/GameModal/GameModal";
 import StatisticModal from "./common/StatisticModal/StatisticModal";
 import LevelButtons from "./common/Levels/LevelButtons";
 import CloseLink from "../../components/Buttons/CloseLink";
-import { SETTINGS } from "../../settings";
+import { SETTINGS } from "../../settings/settings";
 import classesCss from "./Games.module.scss"
 import levelClasses from "../../styles/LevelStyles.module.scss"
 import buttonClasses from "../../components/Buttons/Button.module.scss"
@@ -38,7 +38,6 @@ export default function GameShell(props){
     style,
   } = props
 
-  console.log(gameData)
   const wordsBundleLength =
     gameData.wordsMinCount > DEFAULT_WORD_CHUNK_LENGTH ? gameData.wordsMinCount : DEFAULT_WORD_CHUNK_LENGTH
 
@@ -266,7 +265,7 @@ export default function GameShell(props){
                 <BackToGameLink
                   className={cx(classesCss.BackLink, classesCss.Button)}
                   classes={{icon: classesCss.Icon}}
-                  words={urlWords}/>
+                  state={state}/>
               </div>
             </>
           )

@@ -14,7 +14,7 @@ import parrot1 from "../../../assets/images/parrot1.png";
 import parrot2 from "../../../assets/images/parrot2.png";
 import parrot3 from "../../../assets/images/parrot3.png";
 import parrot4 from "../../../assets/images/parrot4.png";
-import {SETTINGS} from "../../../settings";
+import {SETTINGS} from "../../../settings/settings";
 import {getRandomNumber, shuffle} from "../../../helpers/gameUtils";
 import background from "../../../assets/images/photo_2021-04-09_11-20-47.jpg";
 import classNames from "classnames";

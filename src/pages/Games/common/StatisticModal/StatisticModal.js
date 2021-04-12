@@ -1,6 +1,6 @@
 import React from "react"
 import cx from "classnames"
-import { SETTINGS } from "../../../../settings";
+import { SETTINGS } from "../../../../settings/settings";
 import classesCss from "./StatisticModal.module.scss"
 import SoundButton from "../../../../components/Buttons/SoundButton";
 

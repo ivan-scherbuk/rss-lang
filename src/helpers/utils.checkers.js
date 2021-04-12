@@ -1,4 +1,4 @@
-import { SETTINGS } from "../settings";
+import { SETTINGS } from "../settings/settings";
 
 export function checkGroup(group){
   if (group < SETTINGS.GROUPS_COUNT) return group

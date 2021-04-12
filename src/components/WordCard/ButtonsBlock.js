@@ -11,7 +11,7 @@ import {
   VOCABULARY_MODE_NORMAL,
   WORD_HARD,
   WORD_NORMAL,
-} from "../../settings";
+} from "../../settings/settings";
 
 export default function ButtonsBlock({cardInfo}){
 
