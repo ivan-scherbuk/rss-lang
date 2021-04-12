@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/rss-lang/static/css/main.2b2e0fd0.chunk.css",
-    "main.js": "/rss-lang/static/js/main.3063949c.chunk.js",
-    "main.js.map": "/rss-lang/static/js/main.3063949c.chunk.js.map",
+    "main.css": "/rss-lang/static/css/main.f77ef8f4.chunk.css",
+    "main.js": "/rss-lang/static/js/main.e6cfcfb3.chunk.js",
+    "main.js.map": "/rss-lang/static/js/main.e6cfcfb3.chunk.js.map",
     "runtime-main.js": "/rss-lang/static/js/runtime-main.6513bc35.js",
     "runtime-main.js.map": "/rss-lang/static/js/runtime-main.6513bc35.js.map",
     "static/js/2.6a6971d9.chunk.js": "/rss-lang/static/js/2.6a6971d9.chunk.js",
     "static/js/2.6a6971d9.chunk.js.map": "/rss-lang/static/js/2.6a6971d9.chunk.js.map",
     "index.html": "/rss-lang/index.html",
-    "static/css/main.2b2e0fd0.chunk.css.map": "/rss-lang/static/css/main.2b2e0fd0.chunk.css.map",
+    "static/css/main.f77ef8f4.chunk.css.map": "/rss-lang/static/css/main.f77ef8f4.chunk.css.map",
     "static/js/2.6a6971d9.chunk.js.LICENSE.txt": "/rss-lang/static/js/2.6a6971d9.chunk.js.LICENSE.txt",
     "static/media/2.43a3b8b5.jpg": "/rss-lang/static/media/2.43a3b8b5.jpg",
     "static/media/AudioCallGame.module.scss": "/rss-lang/static/media/audiocall.a4a61913.jpg",
@@ -21,7 +21,7 @@
   "entrypoints": [
     "static/js/runtime-main.6513bc35.js",
     "static/js/2.6a6971d9.chunk.js",
-    "static/css/main.2b2e0fd0.chunk.css",
-    "static/js/main.3063949c.chunk.js"
+    "static/css/main.f77ef8f4.chunk.css",
+    "static/js/main.e6cfcfb3.chunk.js"
   ]
 }
