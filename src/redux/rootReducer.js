@@ -6,6 +6,7 @@ import bookReducer from "./reducer.book";
 import {persistReducer} from "redux-persist";
 import storage from 'redux-persist/lib/storage'
 import localforage from "localforage";
+import vocabularySearchReducer from "./reducer.vocabularySearch";
 
 const rootPersistConfig = {
   key: "root",
@@ -30,7 +31,8 @@ const reducers = combineReducers({
 	user: persistReducer(userPersistConfig, userReducer),
 	words: wordsReducer,
 	gameWords: gameReducer,
-  book: persistReducer(bookPersistConfig, bookReducer)
+  book: persistReducer(bookPersistConfig, bookReducer),
+  vocabularySearch: vocabularySearchReducer
 })
 
 export const rootReducer = persistReducer(rootPersistConfig, reducers)

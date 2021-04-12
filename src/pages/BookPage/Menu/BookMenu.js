@@ -11,6 +11,7 @@ import HomeLink from "../../../components/Buttons/HomeLink";
 import SettingsButton from "../../../components/Buttons/SettingsButton";
 import TotalValuesDisplay from "./TotalValuesDisplay";
 import PopUpMenuButton from "../../../components/Buttons/PopUpMenuButton";
+import SearchMenu from "./SearchMenu";
 
 export default function BookMenu({settingsOn, totalPagesCount, totalValues}){
   const {isLogged} = useSelector(({user}) => user);
@@ -37,6 +38,7 @@ export default function BookMenu({settingsOn, totalPagesCount, totalValues}){
         <div className={cx(classesCss.PopUpMenu, {[classesCss.Active]: isSmallMenuOpened})}>
           <HomeLink/>
           <SettingsButton onClick={settingsOn}/>
+          <SearchMenu />
           <ModeToggle mode={mode} currentGroup={currentGroup}/>
           {isGameMenuVisible ? <GameMenu/> : null}
           <GroupMenu/>
@@ -48,6 +50,10 @@ export default function BookMenu({settingsOn, totalPagesCount, totalValues}){
 
       {isLogged?
         <SettingsButton onClick={settingsOn} className={classesCss.HideWithSmallWidth}/>
+        : null}
+
+      {isLogged && mode === MODE_VOCABULARY?
+        <SearchMenu  className={classesCss.HideWithSmallWidth}/>
         : null}
 
       {isLogged?

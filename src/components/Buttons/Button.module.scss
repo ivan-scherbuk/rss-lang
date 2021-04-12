@@ -96,3 +96,14 @@
     transform: rotate(180deg);
   }
 }
+
+.SearchButton{
+  font-size: 30px;
+  color: #333;
+  &:hover{
+    color: white;
+  }
+  &.Active{
+    color: white
+  }
+}
