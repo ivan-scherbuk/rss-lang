@@ -11,6 +11,7 @@ import { MODE_DETECT_PATTERN, MODE_BOOK, MODE_VOCABULARY } from "../../settings/
 import classesCss from "./BookPage.module.scss";
 import levelStyles from "../../styles/LevelStyles.module.scss";
 
+
 export default function BookPage() {
   const [isSettingsVisible, setSettingsVisible] = useState(false);
   const [totalPagesCount, setTotalPagesCount] = useState();
