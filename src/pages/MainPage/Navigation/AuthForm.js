@@ -32,10 +32,10 @@ const AuthForm = () => {
     const validEmail = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
     if (!validEmail.test(form.email)) {
       setError(true);
-      setErrorMessage("Not valid email");
+      setErrorMessage("Невалидный Email");
     } else if (form.password.length < 8) {
       setError(true);
-      setErrorMessage("Min length of password - 8 symbols");
+      setErrorMessage("Минимальная длина пароля - 8 символов");
     } else {
       if (mode === "login") {
         dispatch(signIn(form));
