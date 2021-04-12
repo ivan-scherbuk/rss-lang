@@ -11,60 +11,80 @@ import PuzzleGame from "./pages/Games/PuzzleGame/PuzzleGame";
 import { useDispatch, useSelector } from "react-redux";
 import { syncUserWords } from "./redux/actions.words";
 import { checkToken, logOut } from "./redux/actions.auth";
-import UserPage from "./pages/UserPage/UserPage"
+import UserPage from "./pages/UserPage/UserPage";
 import GameShell from "./pages/Games/GameShell";
 import { GAMES } from "./pages/Games/gamesData";
 import "./styles/effects.scss";
 import "./styles/App.module.scss";
 import AboutPage from "./pages/AboutPage/AboutPage";
 
-export default function App(){
+export default function App() {
   const location = useLocation();
   const dispatch = useDispatch();
-  const {isLogged} = useSelector((store) => store.user);
+  const { isLogged } = useSelector((store) => store.user);
 
-  function getGamePath(game){
-    const basePath = `/games/${game}`
-    return [`${basePath}/:group/:page`, `${basePath}/:group`, basePath]
+  function getGamePath(game) {
+    const basePath = `/games/${game}`;
+    return [`${basePath}/:group/:page`, `${basePath}/:group`, basePath];
   }
 
   useEffect(() => {
-    async function syncUser(){
-      const token = await dispatch(checkToken())
+    async function syncUser() {
+      const token = await dispatch(checkToken());
       if (token) {
-        await dispatch(syncUserWords())
+        await dispatch(syncUserWords());
       } else {
-        await dispatch(logOut())
+        await dispatch(logOut());
       }
     }
 
     if (isLogged) {
-      syncUser()
+      syncUser();
     }
-  }, [dispatch, isLogged])
+  }, [dispatch, isLogged]);
 
   return (
     <>
       <Switch location={location}>
-        <Route path={["/book", "/vocabulary"]}><BookPage/></Route>
-        <Route path="/statistic"><StatisticsPage/></Route>
+        <Route path={["/book", "/vocabulary"]}>
+          <BookPage />
+        </Route>
+        <Route path="/statistic">
+          <StatisticsPage />
+        </Route>
         <Route path={getGamePath("savannah")}>
-          <GameShell gameData={GAMES.savannah}><Savannah/></GameShell>
+          <GameShell gameData={GAMES.savannah}>
+            <Savannah />
+          </GameShell>
         </Route>
         <Route path={getGamePath("audiocall")}>
-          <GameShell gameData={GAMES.audiocall}><AudioCall/></GameShell>
+          <GameShell gameData={GAMES.audiocall}>
+            <AudioCall />
+          </GameShell>
         </Route>
         <Route path={getGamePath("sprint")}>
-          <GameShell gameData={GAMES.sprint}><Sprint/></GameShell>
+          <GameShell gameData={GAMES.sprint}>
+            <Sprint />
+          </GameShell>
         </Route>
         <Route path={getGamePath("puzzle")}>
-          <GameShell gameData={GAMES.puzzle}><PuzzleGame/></GameShell>
+          <GameShell gameData={GAMES.puzzle}>
+            <PuzzleGame />
+          </GameShell>
         </Route>
-        <Route path="/games" exact><GamesPage/></Route>
-        <Route path="/about" exact><AboutPage/></Route>
-        <Route path="/user" exact><UserPage/></Route>
-        <Route path="/" exact><MainPage/></Route>
+        <Route path="/games" exact>
+          <GamesPage />
+        </Route>
+        <Route path="/about" exact>
+          <AboutPage />
+        </Route>
+        <Route path="/user" exact>
+          <UserPage />
+        </Route>
+        <Route path="/" exact>
+          <MainPage />
+        </Route>
       </Switch>
     </>
-  )
+  );
 }
