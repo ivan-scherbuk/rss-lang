@@ -42,7 +42,9 @@ const maxWordsInPage = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH
 export default function VocabularyContent({setTotalPagesCount}){
   const {getUserWordsGroup, currentUserWordsGroup} = useUserWordsGroup();
   const [wordsToRender, setWordsToRender] = useState(null);
-  const {words: userWords} = useSelector((state) => state.user);
+  const [searchWordSet, setSearchWordSet] = useState(null)
+  const {words: userWords} = useSelector(({user}) => user);
+  const {searchWord, isSearchMenuOpened} = useSelector(({vocabularySearch})=> vocabularySearch)
   const dispatch = useDispatch();
 
   const history = useHistory()
@@ -58,6 +60,21 @@ export default function VocabularyContent({setTotalPagesCount}){
       state: {vocabularyMode: mode},
     }
   }
+
+  useEffect(() => {
+    if(searchWord){
+      const filteredWords = wordsToRender.flat().filter((word) => {
+        return (word.word.search(searchWord) + 1) || (word.wordTranslate.search(searchWord) + 1)
+      })
+      setSearchWordSet(filteredWords)
+      return
+    }
+    if(isSearchMenuOpened) setSearchWordSet(null)
+  }, [searchWord, wordsToRender, isSearchMenuOpened])
+
+  useEffect(() => {
+    if(!isSearchMenuOpened) setSearchWordSet(null)
+  }, [isSearchMenuOpened])
 
   useEffect(() => {
     if (userWords[group] && Object.keys(userWords[group])) getUserWordsGroup(group);
@@ -129,17 +146,34 @@ export default function VocabularyContent({setTotalPagesCount}){
       </div>
       <div className={classesCss.BookContent}>
         {
-          wordsToRender?.length && wordsToRender[page]?.length ?
-            wordsToRender[page].map((word) => {
-              return (
-                <WordCard
-                  key={word.id}
-                  cardInfo={word}
-                />
-              );
-            })
-            : <BookDisclaimerEmpty/>
+          (() => {
+            if(searchWordSet){
+              if(searchWordSet.length){
+                return searchWordSet.map((word) => {
+                  return (
+                    <WordCard
+                      key={word.id}
+                      cardInfo={word}
+                    />
+                  );
+                })
+              }
+              return <BookDisclaimerEmpty/>
+            }
+            if(wordsToRender?.length && wordsToRender[page]?.length){
+              return wordsToRender[page].map((word) => {
+                return (
+                  <WordCard
+                    key={word.id}
+                    cardInfo={word}
+                  />
+                );
+              })
+            }
+            return <BookDisclaimerEmpty/>
+          })()
         }
+
       </div>
     </>
   );

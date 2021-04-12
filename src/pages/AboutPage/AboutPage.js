@@ -7,6 +7,7 @@ import AboutCard from "../../components/AboutCard/AboutCard";
 import { GAMES_ARRAY, TEAM } from "../../settings/data";
 import { WAVES } from "../../settings/waves";
 import classesCss from "./AboutPage.module.scss"
+import GitHubButton from "../../components/Buttons/GitHubButton";
 
 const wavesColors = ["#ff8758", "#d43d1e"]
 
@@ -85,12 +86,12 @@ export default function AboutPage(){
             </div>
             <div className={classesCss.CardsContainer}>
               {
-                TEAM.map(({image, name, about}) => {
+                TEAM.map(({image, name, about, github}) => {
                   return(
                     <AboutCard
                       cardImageRound
                       image={image}
-                      head={name}
+                      head={<GitHubButton nickName={github} label={name}/>}
                       text={about}
                     />
                   )

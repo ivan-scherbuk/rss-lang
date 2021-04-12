@@ -6,6 +6,7 @@ import Lives from "./components/Lives";
 import WordList from "./components/WordsList";
 import {SETTINGS} from "./settings";
 import classesCss from "./PuzzleGame.module.scss"
+import FullScreenButton from "../common/FullScreenButton";
 
 const {TOTAL_LIVES, SECONDS_FOR_COMPLETE, TIC} = SETTINGS
 
@@ -63,6 +64,7 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
 
   return (
     <div className={classesCss.PuzzleGame}>
+      <FullScreenButton className={classesCss.FullScreenButton}/>
       {
         (() => {
           if(onLoading){
