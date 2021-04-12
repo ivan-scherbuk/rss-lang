@@ -6,9 +6,9 @@ import { setUserSettings } from "../../../redux/actions.user";
 import { userSettingsRequestWithImage } from "../../../helpers/requsts.server";
 import Button from "../../../components/Buttons/Button";
 import UserImageEditor from "./UserImageEditor";
-import classesCss from "../UserPage.module.scss";
-import { SETTINGS } from "../../../settings/settings";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
+import { SETTINGS } from "../../../settings/settings";
+import classesCss from "../UserPage.module.scss";
 
 export default function UserSettingsForm(){
   const {settings: userSettings, onLoading, token, id} = useSelector(state => state.user)
@@ -16,14 +16,11 @@ export default function UserSettingsForm(){
     url: null,
     files : null
   })
-  const [form, setForm] = useState({
-    name : ""
-  })
+  const [form, setForm] = useState({name : ""})
   const [onSendLoading, setOnSendLoading] = useState(false)
   const dispatch = useDispatch()
 
   async function sendHandler(){
-    console.log(1)
     const data = new FormData()
     const settingsForServer = {optional: {...userSettings.optional, ...form}}
     if(currentImage.files && currentImage.files[0]?.file){
@@ -54,13 +51,19 @@ export default function UserSettingsForm(){
   }
 
   useEffect(() => {
-    if (userSettings.optional?.image && !currentImage.url) {
-      setCurrentImage(state => ({...state, url:`${SETTINGS.AWS_STORE_URL}/${userSettings.optional.image}`}))
+    if (!currentImage.url && userSettings.optional?.image) {
+      setCurrentImage(imageData => {
+        return {...imageData, url: `${SETTINGS.AWS_STORE_URL}/${userSettings.optional.image}`}
+      })
     }
-    if(userSettings.optional?.name){
-      setForm({...form, ...userSettings.optional})
+  }, [userSettings.optional?.image])
+
+
+  useEffect(() => {
+    if(userSettings.optional?.name) {
+      setForm(currentFormData => ({...currentFormData, name: userSettings.optional.name}))
     }
-  }, [userSettings.optional])
+  }, [userSettings.optional?.name])
 
   return (
     <div className={classesCss.UserSettingsBlock}>
