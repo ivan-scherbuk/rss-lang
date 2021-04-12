@@ -483,3 +483,15 @@ $book-button-size: 170px;
     }
   }
 }
+
+
+.BubbleButton {
+  height: $bubbleButtonDefSize;
+  width: $bubbleButtonDefSize;
+  font-family: Rubik, sans-serif;
+  font-size: 25px;
+  border-radius: 50%;
+  z-index: 4;
+  background-size: cover;
+}
+
