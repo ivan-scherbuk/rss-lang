@@ -1,23 +1,15 @@
 import React from "react"
-import {useLocation} from "react-router-dom"
 import cx from "classnames"
-import { WAVES } from "./waves";
-import classesCss from "./AboutPage.module.scss"
-import SvgWave from "../../components/Effects/SvgWave";
-import AboutCard from "./AboutCard";
-import { GAMES_ARRAY } from "../Games/gamesData";
 import Footer from "../MainPage/Footer";
 import CloseLink from "../../components/Buttons/CloseLink";
+import SvgWave from "../../components/Effects/SvgWave";
+import AboutCard from "../../components/AboutCard/AboutCard";
+import { GAMES_ARRAY } from "../Games/gamesData";
+import { WAVES } from "../../waves";
+import classesCss from "./AboutPage.module.scss"
+
 
 export default function AboutPage(){
-
-  const location = useLocation()
-  console.log(location)
-
-  // function scrollTo(hash) {
-  //   location.hash = "#" + hash;
-  // }
-
   return (
     <div className={classesCss.AboutPage}>
       <CloseLink className={classesCss.CloseLink}/>
@@ -92,45 +84,36 @@ export default function AboutPage(){
             </div>
             <div className={classesCss.CardsContainer}>
               <AboutCard
-                className={classesCss.CardImageRound}
+                cardImageRound
                 image={"anton.jpg"}
                 head={"Антон"}
                 text={"Тимлид, разработал архитектуру приложения и руководил командой. Разработал дизайн приложения, настроил аутентификацию, участвовал в разработке учебника, разработал игру Пазл."}
               />
               <AboutCard
-                className={classesCss.CardImageBottomRound}
+                cardImageBottomRound
                 image={"ann.png"}
                 head={"Анна"}
                 text={"Разработала игры Саванна и Спринт, сделала страницу статистики"}
               />
               <AboutCard
-                className={classesCss.CardImageBottomRound}
+                cardImageBottomRound
                 image={"van.png"}
                 head={"Иван"}
                 text={"Разработал страницы словаря и учебника, написал Unit-тесты"}
               />
               <AboutCard
-                className={classesCss.CardImageRound}
+                cardImageRound
                 image={"tn.png"}
                 head={"Татьяна"}
                 text={"Сделала игру Аудиовызов, написала логику для карточек слов."}
               />
             </div>
-
           </div>
         </div>
         <SvgWave colors={["#ff8758", "#d43d1e"]}>
           <path d={WAVES[2]}/>
         </SvgWave>
       </div>
-      {/*<div className={cx(classesCss.Section, classesCss.Instructions)}>*/}
-      {/*  <div className={classesCss.Content}>*/}
-      {/*    <h2>Инструкция</h2>*/}
-      {/*  </div>*/}
-      {/*  <SvgWave colors={["#ff8758", "#d43d1e"]}>*/}
-      {/*    <path d={WAVES[4]}/>*/}
-      {/*  </SvgWave>*/}
-      {/*</div>*/}
       <Footer />
     </div>)
 }

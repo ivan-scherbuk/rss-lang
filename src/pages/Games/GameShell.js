@@ -38,7 +38,6 @@ export default function GameShell(props){
     style,
   } = props
 
-  console.log(gameData)
   const wordsBundleLength =
     gameData.wordsMinCount > DEFAULT_WORD_CHUNK_LENGTH ? gameData.wordsMinCount : DEFAULT_WORD_CHUNK_LENGTH
 
@@ -266,7 +265,7 @@ export default function GameShell(props){
                 <BackToGameLink
                   className={cx(classesCss.BackLink, classesCss.Button)}
                   classes={{icon: classesCss.Icon}}
-                  words={urlWords}/>
+                  state={state}/>
               </div>
             </>
           )

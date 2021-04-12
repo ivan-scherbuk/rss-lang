@@ -6,12 +6,12 @@ import levelStyles from "../../../styles/LevelStyles.module.scss";
 import Button from "../../../components/Buttons/Button";
 import { useSelector } from "react-redux";
 
-export default function GroupMenu() {
+export default function GroupMenu({className}) {
   const [isOpen, setIsOpen] = useState(false);
   const { currentGroup, mode, vocabularyMode } = useSelector((store) => store.book);
 
   return (
-    <div className={classesCss.GroupMenu}>
+    <div className={cx(classesCss.GroupMenu, className)}>
       <Button
         className={cx(
           classesCss.GroupMenuToggle,

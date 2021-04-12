@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import MainPage from "./pages/MainPage/MainPage";
 import BookPage from "./pages/BookPage/BookPage";
-import GamesPage from "./pages/GamesPage";
+import GamesPage from "./pages/GamesPage/GamesPage";
 import Sprint from "./pages/Games/Sprint/GamePage";
 import AudioCall from "./pages/Games/AudioCall/GamePageAudioCall";
 import Savannah from "./pages/Games/Savannah/GamePage";

@@ -8,7 +8,7 @@ import { setFirstLetterToCapital } from "../../../helpers/gameUtils";
 import { useSelector } from "react-redux";
 import { MODE_VOCABULARY } from "../../../settings";
 
-export default function GameMenu(){
+export default function GameMenu({className}){
   const [isOpen, setIsOpen] = useState(false);
   const {currentWords, mode, vocabularyCurrentPage, vocabularyWords, currentGroup} = useSelector(store => store.book)
 
@@ -21,7 +21,7 @@ export default function GameMenu(){
   })()
 
   return (
-    <div className={classesCss.GameMenu}>
+    <div className={cx(classesCss.GameMenu, className)}>
       <Button
         className={cx(classesCss.NavigationLink, classesCss.GameMenuToggler)}
         onClick={() => setIsOpen(!isOpen)}

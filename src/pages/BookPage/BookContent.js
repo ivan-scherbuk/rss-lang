@@ -10,7 +10,7 @@ import { removePagesFromPageList, setCurrentGroup, setCurrentPage, setCurrentWor
 import { MODE_BOOK, WORD_HARD } from "../../settings";
 import classesCss from "./BookPage.module.scss";
 
-export default function BookContent({setTotalValues, setTotalPagesCount, setLevelStyle}){
+export default function BookContent({setTotalValues, setTotalPagesCount}){
 
   const [isPagesFirstDeleteComplete, setPageFirstDeleteComplete] = useState(false)
   const {currentWords, getWordsChunk} = useWords();
@@ -95,8 +95,7 @@ export default function BookContent({setTotalValues, setTotalPagesCount, setLeve
   useEffect(() => {
     setPageFirstDeleteComplete(false)
     dispatch(setCurrentGroup(group));
-    setLevelStyle(group)
-  }, [group, dispatch,setLevelStyle]);
+  }, [group, dispatch]);
 
   useEffect(() => {
     const currentExistingPageIndex = pagesList[group].findIndex(existingPage => existingPage === Number(page))

@@ -4,8 +4,8 @@ import PuzzleField from "./PuzzleField"
 import Timer from "../common/Timer";
 import Lives from "./components/Lives";
 import WordList from "./components/WordsList";
-import classesCss from "./PuzzleGame.module.scss"
 import {SETTINGS} from "./settings";
+import classesCss from "./PuzzleGame.module.scss"
 
 const {TOTAL_LIVES, SECONDS_FOR_COMPLETE, TIC} = SETTINGS
 
@@ -41,9 +41,7 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
         currentChunk[currentWord] = {...currentChunk[currentWord], status:"succeed"}
         onWordSelect(currentChunk[currentWord], {succeed: true})
       }
-      setCurrentWord(current => {
-        return current + 1
-      })
+      setCurrentWord(current => current + 1)
       if(lives < TOTAL_LIVES) setLives(TOTAL_LIVES)
     }
     if(currentWord + 1 === currentChunk.length) {

@@ -6,7 +6,7 @@ import classesCss from "./Navigation.module.scss"
 import Avatar from "@material-ui/core/Avatar"
 import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
-import {SETTINGS} from "../../../settings";
+import { SETTINGS } from "../../../settings";
 import LoadingOverlay from "../../../components/Loading/LoadingOverlay";
 
 
@@ -20,11 +20,15 @@ export default function AuthBlock({children}){
       {
         !isLogged
           ? <Button
-            style={{backgroundImage: `url(${process.env.PUBLIC_URL}/static/register2.jpg)`}}
-            label={"Войти"}
+            label={
+              <div
+                style={{backgroundImage: `url(${process.env.PUBLIC_URL}/static/hi.png)`}}>
+                <span>{"Войти"}</span>
+              </div>
+            }
             className={cx(
               classesCss.BubbleButton, classesCss.LoginButton, classesCss.AuthButton,
-              {[classesCss.Active]:modalIsOpen && !isLogged}
+              {[classesCss.Active]: modalIsOpen && !isLogged},
             )}
             onClick={() => setModalIsOpen(!modalIsOpen)}
           />
@@ -47,7 +51,7 @@ export default function AuthBlock({children}){
           {[classesCss.Active]: modalIsOpen && !isLogged},
         )}
       >
-        {onLoading? <LoadingOverlay className={classesCss.LoadingOverlay} />: null}
+        {onLoading ? <LoadingOverlay className={classesCss.LoadingOverlay}/> : null}
         {children}
       </AuthModal>
     </div>

@@ -87,3 +87,12 @@
    background-size: cover;
  }
 }
+
+.PopUpMenuButton{
+  transition: transform .4s, color .4s;
+  font-size: 30px;
+  &.Active{
+    color: white;
+    transform: rotate(180deg);
+  }
+}
