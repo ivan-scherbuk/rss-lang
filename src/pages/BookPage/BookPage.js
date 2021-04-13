@@ -18,21 +18,22 @@ export default function BookPage() {
   const [totalValues, setTotalValues] = useState({
     success: 0,
     fail: 0,
-    learned: 0
-  })
+    learned: 0,
+  });
   const location = useLocation();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const [, urlMode] = location.pathname.match(new RegExp(`(${MODE_BOOK}|${MODE_VOCABULARY})`));
+    const [, urlMode] = location.pathname.match(
+      new RegExp(`(${MODE_BOOK}|${MODE_VOCABULARY})`)
+    );
     dispatch(setBookMode(urlMode));
   }, [location.pathname, dispatch]);
 
   return (
-    <div className={cx(
-      classesCss.BookPage,
-      levelStyles[`Level${levelStyle+1}`]
-    )}>
+    <div
+      className={cx(classesCss.BookPage, levelStyles[`Level${levelStyle + 1}`])}
+    >
       <Route path={`/${MODE_BOOK}/:group/:page`}>
         <BookContent
           setTotalPagesCount={setTotalPagesCount}
@@ -44,6 +45,7 @@ export default function BookPage() {
         <VocabularyContent
           setTotalPagesCount={setTotalPagesCount}
           setLevelStyle={setLevelStyle}
+          setTotalValues={setTotalValues}
         />
       </Route>
       <BookMenu
