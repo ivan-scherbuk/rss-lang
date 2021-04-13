@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router";
-import { NavLink } from "react-router-dom";
-import WordCard from "../../components/WordCard/WordCard";
+import { NavLink, useHistory, useLocation, useParams } from "react-router-dom";
+import cx from "classnames";
 import { checkGroup, checkPage } from "../../helpers/utils.checkers";
 import { useUserWordsGroup } from "../../hooks/hooks.user";
 import {
@@ -11,8 +10,8 @@ import {
   setVocabularyMode,
   setVocabularyWords,
 } from "../../redux/actions.book";
-import classesCss from "./BookPage.module.scss";
-import cx from "classnames";
+import WordCard from "../../components/WordCard/WordCard";
+import BookDisclaimerEmpty from "./BookDisclaimerEmpty";
 import {
   MODE_VOCABULARY,
   SETTINGS,
@@ -20,8 +19,8 @@ import {
   VOCABULARY_MODE_DIFFICULT,
   VOCABULARY_MODE_NORMAL,
   WORD_HARD,
-} from "../../settings";
-import BookDisclaimerEmpty from "./BookDisclaimerEmpty";
+} from "../../settings/settings";
+import classesCss from "./BookPage.module.scss";
 
 const VOCABULARY_SECTIONS = [
   {
@@ -38,16 +37,22 @@ const VOCABULARY_SECTIONS = [
   },
 ];
 
+const maxWordsInPage = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH;
+
 export default function VocabularyContent({
   setTotalPagesCount,
   setTotalValues,
-  setLevelStyle,
 }) {
   const { getUserWordsGroup, currentUserWordsGroup } = useUserWordsGroup();
   const [wordsToRender, setWordsToRender] = useState(null);
-  const { words: userWords } = useSelector((state) => state.user);
+  const [searchWordSet, setSearchWordSet] = useState(null);
+  const { words: userWords } = useSelector(({ user }) => user);
+  const { searchWord, isSearchMenuOpened } = useSelector(
+    ({ vocabularySearch }) => vocabularySearch
+  );
   const dispatch = useDispatch();
 
+  const history = useHistory();
   const { state } = useLocation();
   const urlVocabularyMode = state
     ? state.vocabularyMode
@@ -62,6 +67,24 @@ export default function VocabularyContent({
       state: { vocabularyMode: mode },
     };
   }
+
+  useEffect(() => {
+    if (searchWord) {
+      const filteredWords = wordsToRender.flat().filter((word) => {
+        return (
+          word.word.search(searchWord) + 1 ||
+          word.wordTranslate.search(searchWord) + 1
+        );
+      });
+      setSearchWordSet(filteredWords);
+      return;
+    }
+    if (isSearchMenuOpened) setSearchWordSet(null);
+  }, [searchWord, wordsToRender, isSearchMenuOpened]);
+
+  useEffect(() => {
+    if (!isSearchMenuOpened) setSearchWordSet(null);
+  }, [isSearchMenuOpened]);
 
   useEffect(() => {
     if (userWords[group] && Object.keys(userWords[group]))
@@ -84,14 +107,15 @@ export default function VocabularyContent({
             !optional.deleted
           );
         });
-      const maxWordsInPage = SETTINGS.DEFAULT_WORD_CHUNK_LENGTH;
       const pagesNumber = Math.ceil(userFlatWords.length / maxWordsInPage);
-      const slicedUserWords = [];
-      for (let i = 0; i < pagesNumber; i++) {
-        slicedUserWords.push(
-          userFlatWords.slice(i * maxWordsInPage, maxWordsInPage * (i + 1))
-        );
-      }
+      const slicedUserWords = Array(pagesNumber)
+        .fill(null)
+        .map((el, index) => {
+          return userFlatWords.slice(
+            index * maxWordsInPage,
+            maxWordsInPage * (index + 1)
+          );
+        });
       setWordsToRender(slicedUserWords);
       setTotalPagesCount(pagesNumber);
     }
@@ -99,8 +123,7 @@ export default function VocabularyContent({
 
   useEffect(() => {
     dispatch(setCurrentGroup(group));
-    setLevelStyle(group);
-  }, [group, dispatch, setLevelStyle]);
+  }, [group, dispatch]);
 
   useEffect(() => {
     dispatch(setVocabularyCurrentPage(page));
@@ -136,6 +159,15 @@ export default function VocabularyContent({
     }
   }, [wordsToRender, setTotalValues, page]);
 
+  useEffect(() => {
+    if (wordsToRender?.length && wordsToRender.length < urlPage) {
+      history.push({
+        pathname: `/${MODE_VOCABULARY}/${group + 1}/${wordsToRender?.length}`,
+        state: urlVocabularyMode,
+      });
+    }
+  }, [wordsToRender, urlPage, history, group, urlVocabularyMode]);
+
   return (
     <>
       <div className={cx(classesCss.VocabularyHeader)}>
@@ -152,13 +184,22 @@ export default function VocabularyContent({
         ))}
       </div>
       <div className={classesCss.BookContent}>
-        {wordsToRender?.length && wordsToRender[page]?.length ? (
-          wordsToRender[page].map((word) => {
-            return <WordCard key={word.id} cardInfo={word} />;
-          })
-        ) : (
-          <BookDisclaimerEmpty />
-        )}
+        {(() => {
+          if (searchWordSet) {
+            if (searchWordSet.length) {
+              return searchWordSet.map((word) => {
+                return <WordCard key={word.id} cardInfo={word} />;
+              });
+            }
+            return <BookDisclaimerEmpty />;
+          }
+          if (wordsToRender?.length && wordsToRender[page]?.length) {
+            return wordsToRender[page].map((word) => {
+              return <WordCard key={word.id} cardInfo={word} />;
+            });
+          }
+          return <BookDisclaimerEmpty />;
+        })()}
       </div>
     </>
   );

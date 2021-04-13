@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import classesCss from "../BookPage.module.scss";
 import Button from "../../../components/Buttons/Button";
-import { GAMES_ARRAY } from "../../Games/gamesData";
+import { GAMES_ARRAY } from "../../../settings/data";
 import GameButton from "../../../components/Buttons/GameButton";
 import cx from "classnames";
 import { setFirstLetterToCapital } from "../../../helpers/gameUtils";
 import { useSelector } from "react-redux";
-import { MODE_VOCABULARY } from "../../../settings";
+import { MODE_VOCABULARY } from "../../../settings/settings";
 
-export default function GameMenu(){
+export default function GameMenu({className}){
   const [isOpen, setIsOpen] = useState(false);
   const {currentWords, mode, vocabularyCurrentPage, vocabularyWords, currentGroup} = useSelector(store => store.book)
 
@@ -21,7 +21,7 @@ export default function GameMenu(){
   })()
 
   return (
-    <div className={classesCss.GameMenu}>
+    <div className={cx(classesCss.GameMenu, className)}>
       <Button
         className={cx(classesCss.NavigationLink, classesCss.GameMenuToggler)}
         onClick={() => setIsOpen(!isOpen)}

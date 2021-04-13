@@ -6,7 +6,7 @@ import AuthForm from "./AuthForm";
 import BookButton from "../../../components/Buttons/BookButton";
 import GameButton from "../../../components/Buttons/GameButton";
 import classesCss from "./Navigation.module.scss";
-import { GAMES_ARRAY } from "../../Games/gamesData";
+import { GAMES_ARRAY } from "../../../settings/data";
 
 
 export default function NavigationBar({className}) {

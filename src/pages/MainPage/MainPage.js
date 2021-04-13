@@ -13,10 +13,10 @@ export default function MainPage(){
   return (
     <div className={classesCss.MainPage}>
       <div className={classesCss.Bg}>
+        <NavigationBar className={classesCss.NavigationZIndex} />
         <div className={classesCss.Girl}>
           <div style={girlStyle}/>
         </div>
-        <NavigationBar className={classesCss.NavigationZIndex} />
         <div className={classesCss.Wave} />
         <DescriptionBlock />
         <Footer  />

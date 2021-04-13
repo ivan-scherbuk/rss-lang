@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom"
 import classesCss from "../BookPage.module.scss";
 import { useSelector } from "react-redux";
-import { MODE_BOOK } from "../../../settings";
+import { MODE_BOOK } from "../../../settings/settings";
 
 export default function PaginationInput({totalPagesCount, currentPageIndex}){
   const [editMode, setEditMode] = useState(false);

@@ -1,4 +1,4 @@
-import {SETTINGS} from "../settings";
+import {SETTINGS} from "../settings/settings";
 
 const SERVER = SETTINGS.SERVER
 

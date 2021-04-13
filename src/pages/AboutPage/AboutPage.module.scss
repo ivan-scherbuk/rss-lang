@@ -1,5 +1,4 @@
 @import "../../styles/settings";
-
 .AboutPage {
   width: 100%;
   background-image: radial-gradient($light-blue, $dark-blue);
@@ -35,10 +34,10 @@
         margin: 0 0 45px 0;
         font-size: 90px;
       }
+    }
 
-      .RowContent {
-        display: flex;
-      }
+    .RowContent {
+      display: flex;
     }
 
     .CardsContainer {
@@ -49,10 +48,6 @@
       justify-content: space-evenly;
     }
 
-    $bgGradColor1: str-replace('' + $light-orange, '#', '%23');
-    $bgGradColor2: str-replace('' + $dark-orange, '#', '%23');
-    $gradientType: "linear";
-    $gradientRotate: 90;
 
     &.Special {
       > svg {
@@ -72,11 +67,8 @@
           padding-top: 122%;
         }
       }
-
     }
 
-    &.Games {
-    }
 
     &.Team {
       > svg {
@@ -89,9 +81,6 @@
           padding-top: 80%;
         }
       }
-    }
-
-    &.Instructions {
     }
 
     .Asset {
@@ -107,67 +96,71 @@
 }
 
 
-.Card {
-  width: 350px;
-  min-height: 400px;
-  border-radius: 50px;
-  margin: 0 50px 50px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.CloseLink{
+  z-index: 5;
+  position: fixed;
+}
 
-  &.CardImageBottomRound{
-    .CardImage{
-      >div{
-        border-bottom-right-radius: 50%;
-        border-bottom-left-radius: 50%;
+
+@media screen and (max-width: 1300px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .Asset {
+          margin: 150px 0 0 0;
+          > div {
+            padding-top: 122%;
+          }
+        }
       }
-    }
-  }
-  &.CardImageRound{
-    .CardImage{
-      >div{
-        border-radius: 50%;
+      &.Team {
+        .RowContent{
+          flex-direction: column;
+          align-items: center;
+        }
+        .Asset {
+          width: 450px;
+          margin: 0 0 40px 0;
+          > div {
+            padding-top: 80%;
+          }
+        }
       }
-    }
-  }
-
-  .CardImage{
-    height: 230px;
-    width: 230px;
-    display: flex;
-    margin-bottom: 15px;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    border-radius: 50%;
-    >div{
-
-      height: 100%;
-      width: 100%;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-  }
-
-  .CardText{
-    box-sizing: border-box;
-    width: 100%;
-    padding: 0 15px;
-    text-align: center;
-    color: white;
-
-    h3{
-      font-size: 25px;
-      margin-bottom: 10px;
-      margin-top: 0;
-      text-align: center;
     }
   }
 }
 
-.CloseLink{
-  z-index: 5;
-  position: fixed;
+@media screen and (max-width: 1200px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .RowContent{
+          flex-direction: column-reverse;
+        }
+        .Asset {
+          margin: 0 auto;
+          > div {
+            padding-top: 122%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 670px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .Content{
+          h2{
+            width: 100%;
+            margin-right: 0;
+            text-align: center;
+            font-size: 60px;
+          }
+        }
+      }
+    }
+  }
 }

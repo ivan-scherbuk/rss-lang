@@ -11,7 +11,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import PaginationInput from "./PagintaionInput";
-import { MODE_VOCABULARY } from "../../../settings";
+import { MODE_VOCABULARY } from "../../../settings/settings";
 
 const paginationButtons = {
   leftEnd: faAngleDoubleLeft,
