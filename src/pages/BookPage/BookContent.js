@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWords } from "../../hooks/hooks.words";
 import WordCard from "../../components/WordCard/WordCard.js";
-import { NotificationManager } from "react-notifications";
 import { useHistory, useParams } from "react-router-dom";
 import { useUserWords } from "../../hooks/hooks.user";
 import { useDispatch, useSelector } from "react-redux";
@@ -107,7 +106,6 @@ export default function BookContent({setTotalValues, setTotalPagesCount}){
       const newPage = pagesList[group].reduce((prev, nextPage) => {
         return Math.abs(nextPage - page) > Math.abs(prev - page) ? prev : nextPage
       })
-      NotificationManager.info("Info message", "title", 2000)
       history.push(`/${MODE_BOOK}/${group + 1}/${newPage + 1}`)
     }
   }, [pagesList, page, dispatch, group, history, currentPageIndex, setTotalPagesCount]);

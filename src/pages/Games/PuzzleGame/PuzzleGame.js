@@ -37,7 +37,7 @@ export default function PuzzleGame({words, onLoading, onWordSelect, onGameEnd}){
       if(autoComplete) {
         setAutoComplete(false)
         currentChunk[currentWord] = {...currentChunk[currentWord], status:"failed"}
-        onWordSelect(currentChunk[currentWord], {succeed: true})
+        onWordSelect(currentChunk[currentWord], {succeed: false})
       } else {
         currentChunk[currentWord] = {...currentChunk[currentWord], status:"succeed"}
         onWordSelect(currentChunk[currentWord], {succeed: true})
