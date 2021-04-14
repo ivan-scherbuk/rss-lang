@@ -7,10 +7,13 @@ import BookContent from "./BookContent";
 import BookMenu from "./Menu/BookMenu";
 import BookSettings from "./BookSettings";
 import VocabularyContent from "./VocabularyContent";
-import { MODE_DETECT_PATTERN, MODE_BOOK, MODE_VOCABULARY } from "../../settings/settings";
+import {
+  MODE_DETECT_PATTERN,
+  MODE_BOOK,
+  MODE_VOCABULARY,
+} from "../../settings/settings";
 import classesCss from "./BookPage.module.scss";
 import levelStyles from "../../styles/LevelStyles.module.scss";
-
 
 export default function BookPage() {
   const [isSettingsVisible, setSettingsVisible] = useState(false);
@@ -18,10 +21,10 @@ export default function BookPage() {
   const [totalValues, setTotalValues] = useState({
     success: 0,
     fail: 0,
-    learned: 0
-  })
-  const {pathname} = useLocation();
-  const {currentGroup} = useSelector(({book}) => book)
+    learned: 0,
+  });
+  const { pathname } = useLocation();
+  const { currentGroup } = useSelector(({ book }) => book);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,10 +33,12 @@ export default function BookPage() {
   }, [pathname, dispatch]);
 
   return (
-    <div className={cx(
-      classesCss.BookPage,
-      levelStyles[`Level${currentGroup+1}`]
-    )}>
+    <div
+      className={cx(
+        classesCss.BookPage,
+        levelStyles[`Level${currentGroup + 1}`]
+      )}
+    >
       <Route path={`/${MODE_BOOK}/:group/:page`}>
         <BookContent
           setTotalPagesCount={setTotalPagesCount}
@@ -41,14 +46,19 @@ export default function BookPage() {
         />
       </Route>
       <Route path={`/${MODE_VOCABULARY}/:group/:page`}>
-        <VocabularyContent setTotalPagesCount={setTotalPagesCount}/>
+        <VocabularyContent
+          setTotalPagesCount={setTotalPagesCount}
+          setTotalValues={setTotalValues}
+        />
       </Route>
       <BookMenu
         totalPagesCount={totalPagesCount}
         totalValues={totalValues}
         settingsOn={() => setSettingsVisible(true)}
       />
-      {isSettingsVisible ? (<BookSettings settingsOff={() => setSettingsVisible(false)} />) : null}
+      {isSettingsVisible ? (
+        <BookSettings settingsOff={() => setSettingsVisible(false)} />
+      ) : null}
     </div>
   );
 }
