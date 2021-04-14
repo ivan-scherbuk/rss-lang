@@ -35,6 +35,7 @@ export default function BookContent({ setTotalValues, setTotalPagesCount }) {
   const group = checkGroup(urlGroup - 1);
   const page = checkPage(urlPage - 1);
 
+
   useEffect(() => {
     function findUserWord(word) {
       const userWord = currentUserWords.find(

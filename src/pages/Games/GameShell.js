@@ -122,16 +122,16 @@ export default function GameShell(props){
     updateStatisticChunk(word, {result: paramsForUpdate})
   }
 
-  function complementChunkToMinimum (initialChunk, sourceChunk, length){
-    const missingWordsCount = length - initialChunk.length
-    const missingWordsSet = sourceChunk.reduce((reducer, word) => {
-      if (reducer.length < missingWordsCount
-        && !(initialChunk.findIndex(urlWord => urlWord.id === word.id) + 1)) {
-        reducer.push(word)
+  function complementChunkToMinimum(startChunk, sourceChunk, requireLength){
+    const requireToComplementWordsCount = requireLength - startChunk.length
+    const requiredToComplementWords = sourceChunk.reduce((reducer, sourceWord) => {
+      if (reducer.length < requireToComplementWordsCount){
+        const isWordInStartChunk = !!(startChunk.findIndex(initialWord => initialWord.id === sourceWord.id) + 1)
+        if(!isWordInStartChunk) reducer.push(sourceWord)
       }
       return reducer
     }, [])
-    return [...initialChunk, ...missingWordsSet]
+    return [...startChunk, ...requiredToComplementWords]
   }
 
   useEffect(() => {
@@ -155,33 +155,33 @@ export default function GameShell(props){
   }, [urlWords, wordsBundleLength, urlGroup, fullWordsSet, getWordsGroup])
 
   useEffect(() => {
-    if(!urlWords || !currentWordsGroup) return
+    if (!urlWords || !currentWordsGroup) return
 
-    const randomChunk = createRandomChunkFromGroup(currentWordsGroup, wordsBundleLength)
-    if(fullWordsSet?.length){
-      const complementChunk = complementChunkToMinimum(fullWordsSet, randomChunk, wordsBundleLength)
+    function complementAndSetChunk(wordsSet){
+      const randomChunk = createRandomChunkFromGroup(currentWordsGroup, wordsBundleLength)
+      const complementChunk = complementChunkToMinimum(wordsSet, randomChunk, wordsBundleLength)
       setCurrentChunk(complementChunk)
-      return
     }
-    const complementChunk = complementChunkToMinimum(urlWords, randomChunk, wordsBundleLength)
-    setCurrentChunk(complementChunk)
-  }, [currentWordsGroup,urlWords, fullWordsSet, wordsBundleLength])
+
+    if (fullWordsSet?.length) complementAndSetChunk(fullWordsSet)
+    else complementAndSetChunk(urlWords)
+  }, [currentWordsGroup, urlWords, fullWordsSet, wordsBundleLength])
 
 
   useEffect(() => {
-    if(urlWords || !currentWordsGroup) return
+    if (urlWords || !currentWordsGroup) return
     const randomChunk = createRandomChunkFromGroup(currentWordsGroup, wordsBundleLength)
     setCurrentChunk(randomChunk)
   }, [currentWordsGroup, wordsBundleLength, urlWords])
 
   useEffect(() => {
-    if (currentChunk?.length) {
-      setStatisticChunk([...currentChunk])
-    }
+    if (!currentChunk?.length) return
+    setStatisticChunk([...currentChunk])
   }, [currentChunk])
 
   useEffect(() => {
-    if (isLogged && gameEndLastWord > 0 && !statisticWasUpdate && statisticChunk?.length) {
+    if(!isLogged) return
+    if (gameEndLastWord > 0 && !statisticWasUpdate && statisticChunk?.length) {
       if (statisticChunk[gameEndLastWord - 1].userNewResults) {
         updateStatistic(gameData.key, statistic)
         setStatisticWasUpdate(true)
@@ -190,15 +190,12 @@ export default function GameShell(props){
   }, [gameEndLastWord, statisticChunk, isLogged, statisticWasUpdate, updateStatistic, gameData?.key, statistic])
 
   useEffect(() => {
-    if (userId) {
-      dispatch(getStatisticsThunk(userId));
-      return () => {
-        dispatch(resetGameStatistics());
-      }
-    }
+    if (!userId) return
+    dispatch(getStatisticsThunk(userId));
+    return () => dispatch(resetGameStatistics());
   }, [dispatch, userId]);
 
-  function getGameWithData(){
+  const gameContent = (() => {
     const onAnyLoading = onGroupLoading || onLoading
     if (gameEndLastWord === -1 && ((children && onAnyLoading)
       || (children && !onAnyLoading && currentChunk?.length))) {
@@ -221,9 +218,7 @@ export default function GameShell(props){
         })
     }
     return null
-  }
-
-  const gameContent = getGameWithData()
+  })()
 
   return (
     <div className={[className, classesCss.GameShell].join(" ")} style={style}>
