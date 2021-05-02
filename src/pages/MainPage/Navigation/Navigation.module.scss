@@ -1,0 +1,496 @@
+$bubbleButtonDefSize: 100px;
+$duration: .8s;
+$login-button-size: 140px;
+$login-button-hor-position: -150px;
+$navigation-margin-bottom: 120px;
+$book-button-hor: 52%;
+$book-button-ver: calc(45% - #{$navigation-margin-bottom/2});
+$book-button-size: 170px;
+
+.Navigation {
+  height: 100%;
+  margin-bottom: $navigation-margin-bottom;
+  position: relative;
+  width: 50%;
+  min-width: 480px;
+  box-sizing: border-box;
+  transition: width $duration, margin-left $duration, left $duration, top $duration, display 0 0.8s;
+  margin-right: 10%;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .StatisticButton {
+    position: absolute;
+    height: 120px;
+    width: 120px;
+    bottom: 0;
+    left: 0;
+    font-size: 18px;
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+  }
+
+
+
+  .BookButton {
+    position: absolute;
+    right: $book-button-hor;
+    margin-right: -85px;
+    bottom: $book-button-ver;
+    height: $book-button-size;
+    width: $book-button-size;
+    color: white;
+    font-weight: bold;
+
+    > div {
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      transition: width .4s, height .4s;
+      margin: auto;
+
+      &:hover {
+        width: 105%;
+        height: 105%;
+      }
+
+      > span {
+        margin-top: 90%;
+      }
+    }
+  }
+}
+
+.GameButton {
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  margin-right: -50px;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0;
+  background: white;
+  //background: radial-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0) 72%);
+
+  > div {
+    transition: width .4s, height .4s;
+    position: relative;
+
+    &:hover {
+      width: 105%;
+      height: 105%;
+
+      > span {
+        visibility: visible;
+        opacity: 1;
+        transition: visibility 0s 0s, opacity .4s;
+      }
+    }
+
+    > span {
+      position: absolute;
+      left: 100%;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s .4s, opacity .4s;
+      color: white;
+      font-size: 20px;
+    }
+  }
+
+  &.Savannah {
+    bottom: calc(#{$book-button-ver} + #{$book-button-size} + 30px);
+    right: calc(#{$book-button-hor} + 40px);
+
+    > div {
+      > span {
+        top: -10px;
+      }
+    }
+  }
+
+  &.Audiocall {
+    bottom: calc(#{$book-button-ver} + #{$book-button-size} + 5px);
+    right: calc(#{$book-button-hor} - 80px);
+
+    > div {
+      border-bottom-left-radius: 50%;
+      border-bottom-right-radius: 50%;
+    }
+  }
+
+  &.Sprint {
+    bottom: calc(#{$book-button-ver} + #{$book-button-size} - 83px);
+    right: calc(#{$book-button-hor} - 167px);
+
+    > div {
+      background-position: -8px;
+    }
+  }
+
+  &.Puzzle {
+    bottom: calc(#{$book-button-ver} + #{$book-button-size} - 203px);
+    right: calc(#{$book-button-hor} - 160px);
+
+    > div {
+      margin-top: -5px;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 105%;
+
+      &:hover {
+        width: 100%;
+        height: 110%;
+      }
+
+    }
+  }
+}
+
+.AuthBlock {
+  z-index: 10;
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 100px;
+  .LoginButton {
+    height: $login-button-size;
+    width: $login-button-size;
+    top: 0;
+    left: $login-button-hor-position;
+    position: absolute;
+    font-weight: bold;
+    z-index: 2;
+    transition: width .5s, height .5s, padding .5s, top .5s, left .5s, opacity .5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+
+    > div {
+      height: 120%;
+      width: 120%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      color: white;
+
+      > span {
+        margin-top: 115%;
+      }
+    }
+
+    &.Active {
+      height: 400px;
+      width: 400px;
+      padding: 100px;
+      top: -50px;
+      left: $login-button-hor-position - 50px;
+      opacity: 0;
+      visibility: hidden;
+      transition: width .5s,
+      height .5s,
+      padding .5s,
+      top .5s,
+      left .5s,
+      opacity .5s,
+      visibility 0s .5s;
+    }
+  }
+
+
+  .AuthModal {
+    z-index: 1;
+    background: radial-gradient(#76d3d5, #40BFC1);
+    position: absolute;
+    height: $login-button-size;
+    width: $login-button-size;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 0;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.25),
+    0 4px 8px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: width .5s,
+    visibility 0s 0.5s,
+    height .5s,
+    padding .5s,
+    opacity .5s,
+    top .5s,
+    left .5s;
+    top: 0;
+    left: $login-button-hor-position;
+
+    > * {
+      visibility: hidden;
+    }
+
+    &.Active {
+
+      height: 400px;
+      width: 400px;
+      padding: 30px;
+      z-index: 1;
+      top: -50px;
+      left: $login-button-hor-position - 50px;
+      opacity: 1;
+      visibility: visible;
+      transition: width .5s,
+      visibility 0s 0s,
+      height .5s,
+      padding .5s,
+      opacity .5s,
+      top .5s,
+      left .5s;
+
+      > * {
+        visibility: visible;
+        transition: visibility 0s .3s;
+      }
+
+      h3 {
+        font-size: 30px;
+
+        margin: 0 0 40px 0;
+      }
+
+      .LoadingOverlay {
+        border-radius: 50%;
+      }
+    }
+
+    .AuthForm {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .AuthInput {
+        width: 80%;
+        margin-bottom: 15px;
+
+        input {
+          height: 25px;
+          background-color: transparent;
+          outline: none;
+          border: none;
+          border-bottom: 2px solid white;
+          text-align: center;
+          font-family: inherit;
+          font-size: 18px;
+          width: 75%;
+          color: #d43d1e;
+        }
+
+        label {
+          display: block;
+          width: 25%;
+          font-size: 18px;
+          text-align: right;
+        }
+      }
+
+      .AuthButtonSet {
+        margin-top: 15px;
+
+        .SignInButton {
+          border: 2px solid white;
+          padding: 10px 15px;
+          border-radius: 10px;
+          margin-right: 20px;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #d43d1e;
+          }
+
+        }
+
+        .SignUpButton {
+          box-shadow: 0 0 0 0 #d43d1e;
+          transition: color .5s, box-shadow .5s;
+
+          &:hover {
+            color: #d43d1e;
+            box-shadow: 0 2px 0 0 #d43d1e;
+          }
+        }
+      }
+    }
+
+    .CloseButton {
+      position: absolute;
+      top: 10px;
+      left: -10px;
+      font-size: 40px;
+      transition: color .4s;
+    }
+  }
+
+
+  .Avatar {
+    top: 0;
+    left: $login-button-hor-position;
+    position: absolute;
+    font-size: 60px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: $login-button-size;
+    width: $login-button-size;
+
+    > div {
+      font-size: inherit;
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+
+.BubbleButton {
+  height: $bubbleButtonDefSize;
+  width: $bubbleButtonDefSize;
+  font-family: Rubik, sans-serif;
+  font-size: 25px;
+  border-radius: 50%;
+  z-index: 4;
+  background-size: cover;
+}
+
+
+@media screen and (max-width: 850px) {
+  $login-button-size: $login-button-size - 30px;
+  $login-button-hor-position: $login-button-hor-position + 40px;
+  $login-button-ver-position: -165px;
+
+  .Navigation {
+    margin: 250px auto 0 auto;
+    width: 50%;
+    min-width: 480px;
+  }
+
+  .AuthBlock {
+    .LoginButton {
+      height: $login-button-size;
+      width: $login-button-size;
+      left: $login-button-hor-position;
+      top: $login-button-ver-position;
+      &.Active {
+        left: $login-button-hor-position - 50px;
+        top: $login-button-ver-position - 50px;
+      }
+    }
+
+    .Avatar{
+      height: $login-button-size;
+      width: $login-button-size;
+      left: $login-button-hor-position;
+      top: $login-button-ver-position;
+    }
+
+
+    .AuthModal{
+      height: $login-button-size;
+      width: $login-button-size;
+      left: $login-button-hor-position;
+      top: $login-button-ver-position;
+      &.Active{
+        left: $login-button-hor-position - 50px;
+        top: $login-button-ver-position - 50px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 650px) {
+  $login-button-size: $login-button-size - 40px;
+  $login-button-hor-position: $login-button-hor-position + 140px;
+
+  .AuthBlock {
+    .LoginButton {
+      height: $login-button-size;
+      width: $login-button-size;
+      left: $login-button-hor-position;
+
+      &.Active {
+        left: $login-button-hor-position - 50px;
+      }
+    }
+
+    .Avatar{
+      height: $login-button-size;
+      width: $login-button-size;
+      left: $login-button-hor-position;
+    }
+
+
+    .AuthModal{
+      height: $login-button-size;
+      width: $login-button-size;
+      left: $login-button-hor-position;
+      &.Active{
+        left: $login-button-hor-position - 50px;
+      }
+    }
+  }
+
+  .GameButton {
+    font-weight: bold;
+
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      > span {
+        left: 0;
+        position: relative;
+        font-size: 16px;
+        color: #333;
+        background-color: white;
+        padding: 5px;
+        border-radius: 10px;
+      }
+    }
+
+    &.Savannah{
+      > div {
+        > span {
+          top: 0;
+        }
+      }
+    }
+  }
+}
+
+
+.BubbleButton {
+  height: $bubbleButtonDefSize;
+  width: $bubbleButtonDefSize;
+  font-family: Rubik, sans-serif;
+  font-size: 25px;
+  border-radius: 50%;
+  z-index: 4;
+  background-size: cover;
+}
+

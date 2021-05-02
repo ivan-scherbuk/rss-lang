@@ -3,7 +3,7 @@ import { getUserWords } from "./actions.user"
 import { syncUserWords } from "./actions.words"
 import { authRequest, tokenRequest, userDataRequest, userSettingsRequest } from "../helpers/requsts.server"
 import { LOADING, LOG_OUT, SIGN_IN } from "./types"
-import { TOKEN_EXPIRE_TIME, TOKEN_START_REFRESH } from "./config.store"
+import { TOKEN_EXPIRE_TIME, TOKEN_START_REFRESH } from "../settings/settings"
 
 const setLoading = status => ({type: LOADING, payload: status ?? true})
 const setUser = userData => ({type: SIGN_IN, payload: userData})

@@ -1,17 +1,11 @@
-import {
-  SET_LEVEL,
-  SET_GAME_STATUS,
-  SET_GAME_STATISTICS, GET_GAME_STATISTICS, RESET_GAME_STATISTICS
-} from "./action-types";
+import { SET_GAME_STATISTICS, GET_GAME_STATISTICS, RESET_GAME_STATISTICS } from "./action-types";
 
 const initialState = {
   statusGame: '',
   level: 1,
   gameStatistics: {
     learnedWords: 0,
-    optional: {
-      savannah: null,
-    },
+    optional: {},
   },
   isUpdating: false,
   isFetching: false,
@@ -24,16 +18,6 @@ const gameReducer = (state = initialState, action) => {
   } = action;
 
   switch (type) {
-    case SET_GAME_STATUS:
-      return {
-        ...state,
-        ...payload,
-      };
-    case SET_LEVEL:
-      return {
-        ...state,
-        ...payload,
-      };
     case GET_GAME_STATISTICS.START:
       return {
         ...state,

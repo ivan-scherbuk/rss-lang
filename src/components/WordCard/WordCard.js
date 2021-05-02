@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import classesCss from "./WordCard.module.scss";
-import { useUserWordUpdate } from "../../hooks/hooks.user";
+import { MODE_VOCABULARY, SETTINGS, VOCABULARY_MODE_DIFFICULT, WORD_HARD } from "../../settings/settings";
+import SoundButton from "../Buttons/SoundButton";
+import FastAverageColor from "fast-average-color";
+import ButtonsBlock from "./ButtonsBlock";
+import cx from "classnames";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
 
-export default function WordCard(props) {
-  let {
-    id,
-    group,
-    page,
+const fac = new FastAverageColor();
+
+export default function WordCard({cardInfo}){
+  const {
+    optional,
     word,
     image,
     audio,
@@ -18,21 +24,28 @@ export default function WordCard(props) {
     wordTranslate,
     textMeaningTranslate,
     textExampleTranslate,
-  } = props.cardInfo;
-  // let {failedCounter, successCounter} = props.optional
-  const { update, updatedWord, onError } = useUserWordUpdate();
-  const audioPlayer = new Audio();
-  audioPlayer.volume = 0.1;
-  const [isForceOpened, setForceOpened] = useState(false);
+  } = cardInfo;
+
+  const [averageColorData, setAverageColorData] = useState(null);
+  const [failCounter, setFailedCounter] = useState(0);
+  const [successCounter, setSuccessCounter] = useState(0);
+  const {isLogged} = useSelector(store => store.user);
+  const {isTranslateVisible, mode, vocabularyMode} = useSelector(store => store.book)
+
+  const {sectionVocabulary} = useParams();
+
   let notification;
-  if (props.cardInfo.optional?.difficulty === "hard") {
+  if (optional?.difficulty === WORD_HARD) {
     notification = "notification_important";
   } else {
     notification = "";
   }
 
-  function playAudio(url, phase) {
-    audioPlayer.src = url;
+  const audioPlayer = new Audio();
+  audioPlayer.volume = 0.5;
+
+  function playAudio(url, phase){
+    audioPlayer.src = `${SETTINGS.SERVER}/${url}`;
     audioPlayer.load();
     audioPlayer.play();
 
@@ -53,76 +66,105 @@ export default function WordCard(props) {
       return;
     }
 
-    let playNextAudio = function () {
+    let playNextAudio = function(){
       audioPlayer.removeEventListener("ended", playNextAudio);
       playAudio(nextAudio, nextPhase);
     };
     audioPlayer.addEventListener("ended", playNextAudio);
   }
 
-  if (props.cardInfo.optional?.deleted && !isForceOpened) {
-    return (
-      <div className={classesCss["WordCardContainer"]}>
-        <div
-          className={classesCss["WordText"]}
-          onClick={() => setForceOpened(true)}
-        >
-          {word}
-        </div>
-      </div>
-    );
+  useEffect(() => {
+    if (cardInfo.optional) {
+      setFailedCounter(cardInfo.optional.failCounter);
+      setSuccessCounter(cardInfo.optional.successCounter);
+    }
+  }, []);
+
+  if (!averageColorData) {
+    fac
+    .getColorAsync(`${SETTINGS.SERVER}/${image}`)
+    .then((color) => {
+      setAverageColorData({
+        color: color.rgb,
+        isLight: color.isLight,
+      });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
   }
 
+  const isWordHard = cardInfo.difficulty === WORD_HARD
+  const isHardMode = mode === MODE_VOCABULARY && vocabularyMode === VOCABULARY_MODE_DIFFICULT
+  const isWordDeleted = cardInfo.optional?.deleted
+  const isShowHardStyle = isWordHard && !isHardMode && !isWordDeleted
   return (
-    <div className={classesCss["WordCardContainer"]}>
-      {/* <img src={image}/> */}
+    <div
+      style={!isShowHardStyle && !isWordDeleted ? {background: averageColorData?.color || "white"} : null}
+      className={cx(
+        classesCss.Card,
+        {
+          [classesCss.Hard]: isShowHardStyle,
+          [classesCss.Deleted]: isWordDeleted,
+        },
+      )
+      }
+    >
       <div
-        className={classesCss["WordImg"]}
-        style={{ backgroundImage: `url(${image})` }}
-      ></div>
-      <div>
-        <div className={classesCss["Icon"]} onClick={() => playAudio(audio)}>
-          volume_up
-        </div>
+        style={{
+          backgroundImage: `${isWordDeleted ? "linear-gradient(black, black)," : ""}
+                                  url(${SETTINGS.SERVER}/${image})`,
+        }}
+        className={cx(classesCss.HeaderBlock)}
+      >
         <div
-          className={classesCss["Icon"]}
-          onClick={() => update(props.cardInfo, { difficulty: "hard" })}
+          className={classesCss.Overlay}
+          style={!isShowHardStyle && !isWordDeleted ? {
+            background:
+              `linear-gradient(transparent, ${averageColorData?.color})` ||
+              "transparent",
+          } : null}
         >
-          add_alert
-        </div>
-        <div
-          className={classesCss["Icon"]}
-          onClick={() => update(props.cardInfo, { deleted: true })}
-        >
-          delete_forever
-        </div>
-      </div>
-      <div className={classesCss["ContetntWrapper"]}>
-        <div className={classesCss["WordText"]}>{word}</div>
-        <div className={classesCss["WordText"]}>{transcription}</div>
-        <div className={classesCss["WordText"]}>{wordTranslate}</div>
-        <div
-          dangerouslySetInnerHTML={{ __html: textMeaning }}
-          className={classesCss["WordContent"]}
-        ></div>
-        <div className={classesCss["WordContent"]}>{textMeaningTranslate}</div>
-        <div
-          dangerouslySetInnerHTML={{ __html: textExample }}
-          className={classesCss["WordContent"]}
-        ></div>
-        <div className={classesCss["WordContent"]}>{textExampleTranslate}</div>
-      </div>
-      <div className={classesCss["NotificationWrapper"]}>
-        <div className={classesCss["Icon"]}>{notification}</div>
-        <div className={classesCss["ResultContainer"]}>
-          <div className={classesCss["ResultWrapper"]}>
-            {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-succsess']}`}>thumb_up_off_alt</span><span className={classesCss['result-counter']}>{`:${successCounter}`}</span> */}
-          </div>
-
-          <div className={classesCss["ResultWrapper"]}>
-            {/* <span className={`${classesCss['Icon']} ${classesCss['Icon-failture']}`}>thumb_down_off_alt</span><span className={classesCss['result-counter']}>{`:${failedCounter}`}</span> */}
+          {isLogged && (
+            <ButtonsBlock
+              audio={audio}
+              cardInfo={cardInfo}
+              successCounter={successCounter}
+              failCounter={failCounter}
+              notification={notification}
+              sectionVocabulary={sectionVocabulary}
+            />
+          )}
+          <div className={cx(classesCss.WordBlock)}>
+            <div className={classesCss.PrimaryBlock}>
+              <h3>{word}</h3>
+            </div>
+            <div className={classesCss.SecondaryBlock}>
+              {isTranslateVisible && (<div>{wordTranslate}</div>)}
+              <div>{transcription}</div>
+              <SoundButton
+                onClick={() => playAudio(audio)}
+                file={`${SETTINGS.SERVER}/${audio}`}
+                className={cx(classesCss.SoundButton, classesCss.Button)}
+              />
+            </div>
           </div>
         </div>
+      </div>
+      <div className={classesCss.CardContent}>
+        <div className={classesCss.WordBlock}>
+          <div dangerouslySetInnerHTML={{__html: textMeaning}}/>
+          <div
+            dangerouslySetInnerHTML={{__html: textExample}}
+            className={classesCss.Example}
+          />
+        </div>
+        {isTranslateVisible && (
+          <div className={classesCss.WordBlock}>
+            <div>{textMeaningTranslate}</div>
+            <div className={classesCss.Example}>{textExampleTranslate}</div>
+          </div>
+        )}
       </div>
     </div>
   );

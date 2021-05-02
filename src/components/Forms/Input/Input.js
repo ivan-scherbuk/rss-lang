@@ -1,22 +1,7 @@
 import React from "react"
 import classesCss from "./style/Input.module.scss"
 
-export default function Input(props) {
-
-	const {
-		autoComplete,
-		blockStyle,
-		className,
-		dataAttr,
-		id,
-		label,
-		name,
-		onChange,
-		placeholder,
-		type,
-		style,
-		value,
-	} = props
+export default function Input({blockStyle, className, dataAttr, id, label, name, ...props}) {
 
 	const dataProps = {}
 	for (let attrName in dataAttr) {
@@ -31,13 +16,9 @@ export default function Input(props) {
 			<label htmlFor={id || `inputId${name}`}>{label}</label>
 			<input
 				id={id || `inputId${name}`}
-				autoComplete={autoComplete}
-				style={style}
-				name={name}
-				type={type}
-				value={value}
-				onChange={onChange}
-				placeholder={placeholder}
+        name={name}
+
+        {...props}
 				{...dataProps}
 			/>
 		</div>

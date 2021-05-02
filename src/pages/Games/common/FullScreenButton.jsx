@@ -1,8 +1,9 @@
 import React, {useState, useCallback} from 'react';
+import cx from "classnames";
 import {makeStyles} from "@material-ui/core";
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 
-const FullScreenButton = () => {
+const FullScreenButton = ({className}) => {
     const classes = useStyles();
     const [fullScreenEnabled, setFullScreenEnabled] = useState(false);
 
@@ -17,7 +18,7 @@ const FullScreenButton = () => {
 
     return (
         <button
-            className={classes.fullScreenBtn}
+            className={cx(classes.fullScreenBtn, className)}
             onClick={handleFullScreen}
             type="button"
         >
@@ -35,15 +36,6 @@ const useStyles = makeStyles({
         transition: 'all 0.5s ease-out',
         "&:active": {
             transform: 'scale(0.8)',
-            "& svg": {
-                color: '#60dca8',
-            },
-        },
-        "&:hover": {
-            "& svg": {
-                transition: 'all 0.5s ease-out',
-                color: '#e0eed4',
-            },
         },
     },
     icon: {

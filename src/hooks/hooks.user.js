@@ -11,12 +11,12 @@ import {useWords, useWordsGroup} from "./hooks.words"
 //Usage
 // const { update, updatedWord, onError } = useUserWordUpdate()
 // update(word, data)
-// update get word object from words array (not user array) and additional data
+// word - word from book
 // data = {
 //  difficulty: weak | normal | hard,
 //	successCounter: Number,
 //	failCounter: Number,
-//  deleted: boolean,
+//  succeed: boolean
 // }
 //
 
@@ -25,57 +25,47 @@ export function useUserWordUpdate(){
 	const dispatch = useDispatch()
 	const [updatedWord, setUpdatedWord] = useState(null)
 	const [onError, setOnError] = useState(null)
-  console.log(user)
 
 	const update = useCallback(async (word, data = {}) => {
 
-    const localData = {
-      difficulty: data.difficulty,
-      optional: {...data}
-    }
-    delete localData.optional.difficulty
-    if(localData.optional.succeed === true){
-      localData.optional.successCounter = 1
-      localData.optional.failCounter = 0
-      delete localData.optional.succeed
-    } else if(localData.optional.failed === true){
-      localData.optional.failCounter = 1
-      localData.optional.successCounter = 0
-      delete localData.optional.failed
+    const {difficulty, succeed, failed, ...optional} = data
+
+    if(typeof succeed === "boolean"){
+      optional.successCounter = Number(succeed)
+      optional.failCounter = Number(!succeed)
     }
 
 		if (user.words[word.group] && user.words[word.group][word.page]) {
-			const wordForUpdate = user.words[word.group][word.page].find(userWord => userWord.wordId === word.id)
-			if (wordForUpdate) {
-        if(wordForUpdate.optional?.successCounter){
-          localData.successCounter = wordForUpdate.optional.successCounter + localData.optional.successCounter
+			const currentWord = user.words[word.group][word.page].find(userWord => userWord.wordId === word.id)
+			if (currentWord) {
+        if(currentWord.optional?.successCounter && optional.successCounter >= 0){
+          optional.successCounter = currentWord.optional.successCounter + optional.successCounter
         }
-        if(wordForUpdate.optional?.failCounter){
-          localData.failCounter = wordForUpdate.optional.failCounter + localData.optional.failCounter
+        if(currentWord.optional?.failCounter  && optional.failCounter >= 0){
+          optional.failCounter = currentWord.optional.failCounter + optional.failCounter
         }
-				const updateWord = {
-					...wordForUpdate,
-					difficulty: data.difficulty || wordForUpdate.difficulty || "normal",
+
+				const wordForUpdate = {
+					...currentWord,
+					difficulty: difficulty || currentWord.difficulty || "normal",
 					optional: {
-						...wordForUpdate.optional,
-						...localData,
+						...currentWord.optional,
+						...optional,
 					},
 				}
-				return dispatch(updateExistingUserWord(updateWord)).then(() => {
+				return dispatch(updateExistingUserWord(wordForUpdate)).then( updatedWord => {
 					setUpdatedWord(updatedWord)
+          return updatedWord
 				}).catch(e => {
-					setOnError({
-						word: updateWord,
-						e
-					})
+					setOnError({word: wordForUpdate, e})
+					return wordForUpdate
 				})
 			}
 		}
 
-		if(!localData.difficulty) localData.difficulty = "normal"
-    console.log(localData)
-		return dispatch(addUserWord(word, localData)).then((word) => {
+		return dispatch(addUserWord(word, {difficulty: difficulty || "normal", optional})).then((word) => {
 			setUpdatedWord(word)
+      return word
 		}).catch(e => setOnError({word, e}))
 	}, [user, dispatch, updatedWord])
 	return { update, updatedWord, onError }
@@ -83,15 +73,7 @@ export function useUserWordUpdate(){
 
 
 //Usage
-//const {currentUserWords, getUserWordsChunk, subscribedUserWords, onLoading} = useUserWords()
-//currentUserWords -
-// if user and words array have words in requested words - will be set immediately
-// getUserWordsChunk return this value too
-// if user have, but words array doesn't have requested words - will be set after response come from server
-// and getUserWordsChunk return Promise
-// if user doesn't have requested words - will never set for this group-page
-// and getUserWordsChunk return False
-// BUT when user get at least one word on this page, value will be set in subscribedUserWords
+//const {currentUserWords, getUserWordsChunk, onLoading} = useUserWords()
 
 export function useUserWords(){
 	const user = useSelector(store => store.user)
@@ -100,7 +82,6 @@ export function useUserWords(){
 	const {getWordsChunk} = useWords()
 	const [onLoading, setOnLoading] = useState(false)
 	const [currentUserWords, setCurrentUserWords] = useState(null)
-	const [subscribedUserWords, setSubscribedUserWords] = useState(null)
  	const [subscription, setSubscription] = useState(null)
 
 	const getUserWordsChunk = useCallback((group, page, filters = {}) => {
@@ -116,23 +97,25 @@ export function useUserWords(){
             setCurrentUserWords(
               getUserWordsChunkHelper(resWords, user.words[group][page], filters)
             )
+            return resWords
           })
         }
       } else {
-        setSubscription({group, page})
+        setSubscription({group, page, filters})
         return false
       }
     } else {
 	    console.log("User is not logged in")
     }
-	}, [user.words, words, getWordsChunk])
+	}, [user.words, words, getWordsChunk, user.isLogged])
 
 	useEffect(() => {
-		if(subscription && user.words[subscription.group] && user.words[subscription.group][subscription.page]){
-			setSubscribedUserWords(user.words[subscription.group][subscription.page])
-			setSubscription(null)
-		}
-	}, [user.words, subscription])
+    if(subscription && user.words[subscription.group] && user.words[subscription.group][subscription.page]){
+      const {group, page, filters} = subscription
+      getUserWordsChunk(group, page, filters)
+      setSubscription(null)
+    }
+	}, [user.words, subscription, getUserWordsChunk])
 
 	useEffect(() => {
 		if(onLoading && currentUserWords){
@@ -140,18 +123,17 @@ export function useUserWords(){
 		}
 	}, [currentUserWords, onLoading])
 
-return {currentUserWords, getUserWordsChunk, subscribedUserWords}
+return {currentUserWords, getUserWordsChunk, onLoading}
 }
 
 //Usage
-//const {getUserWordsGroup, subscribedUserWordsGroup, onLoading, currentUserWordsGroup} = useUserWordsGroup()
+//const {getUserWordsGroup, onLoading, currentUserWordsGroup} = useUserWordsGroup()
 export function useUserWordsGroup(){
 	const user = useSelector(store => store.user)
 	const words = useSelector(store => store.words)
 	const {getWordsGroup} = useWordsGroup()
 	const [currentUserWordsGroup, setCurrentUserWordsGroup] = useState(null)
 	const [onLoading, setOnLoading] = useState(false)
-	//const [subscribedUserWordsGroup, setSubscribedUserWordsGroup] = useState(null)
 	const [subscription, setSubscription] = useState(null)
 
 
@@ -167,6 +149,7 @@ export function useUserWordsGroup(){
 					setCurrentUserWordsGroup(
 						getUserWordsGroupHelper(resGroup, user.words[group], filters)
 					)
+          return resGroup
 				})
 			}
 		} else {

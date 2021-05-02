@@ -1,0 +1,166 @@
+@import "../../styles/settings";
+.AboutPage {
+  width: 100%;
+  background-image: radial-gradient($light-blue, $dark-blue);
+  background-attachment: fixed;
+
+  > .Section {
+    width: 100%;
+    min-height: 800px;
+    position: relative;
+
+    > svg {
+      position: absolute;
+      right: 0;
+      z-index: 0;
+      height: auto;
+      top: 0;
+      width: 100%;
+    }
+
+    .Content {
+      position: relative;
+      box-sizing: border-box;
+      display: flex;
+      z-index: 3;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      padding: 40px 40px 0 40px;
+
+      h2 {
+        width: 100%;
+        color: white;
+        margin: 0 0 45px 0;
+        font-size: 90px;
+      }
+    }
+
+    .RowContent {
+      display: flex;
+    }
+
+    .CardsContainer {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: space-evenly;
+    }
+
+
+    &.Special {
+      > svg {
+        min-width: 800px;
+      }
+
+      .Content {
+        h2 {
+          text-align: right;
+          margin-right: 50px;
+        }
+      }
+
+      .Asset {
+        margin: 150px 100px 0 0;
+        > div {
+          padding-top: 122%;
+        }
+      }
+    }
+
+
+    &.Team {
+      > svg {
+        height: 1100px;
+      }
+      .Asset {
+        width: 450px;
+        margin: 250px 30px 0 50px;
+        > div {
+          padding-top: 80%;
+        }
+      }
+    }
+
+    .Asset {
+      width: 400px;
+      min-width: 300px;
+
+      > div {
+        background-size: cover;
+        box-sizing: border-box;
+      }
+    }
+  }
+}
+
+
+.CloseLink{
+  z-index: 5;
+  position: fixed;
+}
+
+
+@media screen and (max-width: 1300px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .Asset {
+          margin: 150px 0 0 0;
+          > div {
+            padding-top: 122%;
+          }
+        }
+      }
+      &.Team {
+        .RowContent{
+          flex-direction: column;
+          align-items: center;
+        }
+        .Asset {
+          width: 450px;
+          margin: 0 0 40px 0;
+          > div {
+            padding-top: 80%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .RowContent{
+          flex-direction: column-reverse;
+        }
+        .Asset {
+          margin: 0 auto;
+          > div {
+            padding-top: 122%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 670px) {
+  .AboutPage{
+    >.Section{
+      &.Special {
+        .Content{
+          h2{
+            width: 100%;
+            margin-right: 0;
+            text-align: center;
+            font-size: 60px;
+          }
+        }
+      }
+    }
+  }
+}

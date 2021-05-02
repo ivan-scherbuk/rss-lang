@@ -33,28 +33,25 @@ function toRel(objRect){
 
 
 export function checkCollision(staticObj, mobileObj){
-  const mobileHorizontalCenter = mobileObj.right - mobileObj.width/2
+  const mobileHorizontalCenter = mobileObj.right - mobileObj.width / 2
   const relStatic = toRel(staticObj)
 
   return mobileHorizontalCenter < relStatic.right
-  && mobileHorizontalCenter > relStatic.left
-  && mobileObj.top > relStatic.bottom
-  && mobileObj.top - mobileObj.height < relStatic.top
-
+    && mobileHorizontalCenter > relStatic.left
+    && mobileObj.top > relStatic.bottom
+    && mobileObj.top - mobileObj.height < relStatic.top
 }
 
-export const populateStatistics = (key, totalStatistics, gameStatistics) => {
-  try {
-    const statistics = JSON.parse(totalStatistics.optional[key]);
-    statistics.push(gameStatistics);
-    totalStatistics.optional[key] = JSON.stringify(statistics);
-    // for null data
-    //totalStatistics.optional[key] = JSON.stringify([]);
-    delete totalStatistics.id;
-  } catch (e) {}
-  return totalStatistics;
+export const populateStatistics = (key, {id, ...totalStatistics}, gameStatistics) => {
+  const savedGameStatistic = totalStatistics.optional[key] ? JSON.parse(totalStatistics.optional[key]) : []
+  savedGameStatistic.push(gameStatistics);
+  return {...totalStatistics, optional: {...totalStatistics.optional, [key]: JSON.stringify(savedGameStatistic)}};
 };
 
 export const getUserData = () => {
   return JSON.parse(localStorage.getItem("userData")) || {};
 };
+
+export function setFirstLetterToCapital(word){
+  return word[0].toUpperCase() + word.slice(1)
+}
