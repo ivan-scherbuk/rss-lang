@@ -33,30 +33,3 @@ export const GAMES = {
 }
 
 export const GAMES_ARRAY = Object.values(GAMES)
-
-export const TEAM = [
-  {
-    name: "Антон",
-    github:"heyheyjude",
-    image: "anton.jpg",
-    about: "Тимлид, разработал архитектуру приложения и руководил командой. Разработал дизайн приложения, настроил аутентификацию, участвовал в разработке учебника, разработал игру Пазл."
-  },
-  {
-    name: "Анна",
-    github:"AnnaDavydenko",
-    image: "ann.png",
-    about: "Разработала игры Саванна и Спринт, сделала страницу статистики."
-  },
-  {
-    name: "Иван",
-    github:"ivan-scherbuk",
-    image: "van.png",
-    about: "Разработал страницы словаря и учебника, написал Unit-тесты."
-  },
-  {
-    name: "Татьяна",
-    github:"pannage",
-    image: "tn.png",
-    about: "Сделала игру Аудиовызов, написала логику для карточек слов."
-  }
-]

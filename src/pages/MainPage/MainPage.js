@@ -1,6 +1,5 @@
 import React from "react"
 import classesCss from "./MainPage.module.scss"
-import Footer from "./Footer";
 import NavigationBar from "./Navigation/NavigationBar";
 import DescriptionBlock from "./DescriptionBlock";
 
@@ -19,7 +18,6 @@ export default function MainPage(){
         </div>
         <div className={classesCss.Wave} />
         <DescriptionBlock />
-        <Footer  />
       </div>
     </div>
   )

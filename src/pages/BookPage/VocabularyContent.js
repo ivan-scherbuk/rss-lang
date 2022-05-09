@@ -144,7 +144,7 @@ export default function VocabularyContent({
         fail: 0,
         learned: 0,
       };
-      wordsToRender[page].forEach(({ optional, difficulty }) => {
+      wordsToRender[page]?.forEach(({ optional, difficulty }) => {
         if (
           (optional?.successCounter + optional?.failCounter ||
             difficulty === WORD_HARD) &&

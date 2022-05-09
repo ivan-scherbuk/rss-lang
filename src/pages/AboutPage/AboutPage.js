@@ -1,13 +1,11 @@
 import React from "react"
 import cx from "classnames"
-import Footer from "../MainPage/Footer";
 import CloseLink from "../../components/Buttons/CloseLink";
 import SvgWave from "../../components/Effects/SvgWave";
 import AboutCard from "../../components/AboutCard/AboutCard";
-import { GAMES_ARRAY, TEAM } from "../../settings/data";
+import { GAMES_ARRAY } from "../../settings/data";
 import { WAVES } from "../../settings/waves";
 import classesCss from "./AboutPage.module.scss"
-import GitHubButton from "../../components/Buttons/GitHubButton";
 
 const wavesColors = ["#ff8758", "#d43d1e"]
 
@@ -77,33 +75,5 @@ export default function AboutPage(){
         </SvgWave>
 
       </div>
-      <div id={"team"} className={cx(classesCss.Section, classesCss.Team)}>
-        <div className={classesCss.Content}>
-          <h2>Наша команда</h2>
-          <div className={classesCss.RowContent}>
-            <div className={classesCss.Asset}>
-              <div style={{backgroundImage: `url(${process.env.PUBLIC_URL}/static/team.png)`,}}/>
-            </div>
-            <div className={classesCss.CardsContainer}>
-              {
-                TEAM.map(({image, name, about, github}) => {
-                  return(
-                    <AboutCard
-                      cardImageRound
-                      image={image}
-                      head={<GitHubButton nickName={github} label={name}/>}
-                      text={about}
-                    />
-                  )
-                })
-              }
-            </div>
-          </div>
-        </div>
-        <SvgWave colors={wavesColors}>
-          <path d={WAVES[2]}/>
-        </SvgWave>
-      </div>
-      <Footer />
     </div>)
 }

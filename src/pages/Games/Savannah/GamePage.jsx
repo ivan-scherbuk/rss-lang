@@ -183,7 +183,7 @@ const playSound = (isCorrect, soundOn) => {
     const correctSound = document.querySelector("#correctSound");
     const errorSound = document.querySelector("#errorSound");
     if (soundOn) {
-        isCorrect ? correctSound.play() : errorSound.play();
+        isCorrect ? correctSound?.play() : errorSound?.play();
     }
 };
 

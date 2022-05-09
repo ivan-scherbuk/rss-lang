@@ -29,7 +29,7 @@ $gradientRotate: 90;
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
-    min-height: 680px;
+    min-height: 650px;
     background: radial-gradient($light-blue, $dark-blue);
 
 
@@ -83,7 +83,7 @@ $gradientRotate: 90;
   left: 8%;
   width: 29%;
   min-width: 320px;
-  min-height: 400px;
+  min-height: 350px;
   top: 32%;
   z-index: $description-z-index;
   display: flex;
@@ -154,78 +154,6 @@ $gradientRotate: 90;
 
         &:last-child {
           margin-left: 20px;
-        }
-      }
-    }
-  }
-}
-
-
-.Footer {
-  background-color: transparent;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 5px 20px 5px 10px;
-  color: #333;
-
-  .Authors {
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    align-items: flex-end;
-    color: #333333;
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .GHButton {
-      font-size: 18px;
-      transition: color .4s;
-      display: flex;
-      flex-direction: row-reverse;
-
-      &:hover {
-        color: white;
-      }
-
-      span {
-        margin-right: 5px;
-      }
-    }
-  }
-
-  .RSSData {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    height: 100%;
-
-    font-size: 26px;
-
-    .FooterDate {
-      margin-left: 5px;
-    }
-
-    .RSSLink {
-      display: block;
-      height: 40px;
-      width: 110px;
-      margin-right: 20px;
-      margin-bottom: 5px;
-
-      svg {
-        transition: fill .4s;
-        fill: #333333;
-      }
-
-      &:hover {
-        svg {
-          fill: white;
         }
       }
     }
